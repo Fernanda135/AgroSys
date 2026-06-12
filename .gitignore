@@ -1,0 +1,79 @@
+# Dependências
+node_modules/
+/frontend/node_modules/
+/backend/node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build e dist
+dist/
+dist-ssr/
+build/
+/backend/dist/
+/frontend/dist/
+*.local
+
+# Arquivos de cache
+.cache/
+.parcel-cache/
+.next/
+out/
+.nuxt/
+
+# Editor e IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testes
+coverage/
+.nyc_output/
+.cypress/
+cypress/videos/
+cypress/screenshots/
+
+# TypeScript
+*.tsbuildinfo
+
+# Arquivos de configuração de pacotes
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+/frontend/package-lock.json
+/backend/package-lock.json
+
+# Banco de dados
+*.sqlite
+*.db
+*.db-journal
+
+# Migrações (se quiser ignorar)
+# /backend/migrations/
+# /backend/seeders/
+
+# Arquivos temporários do sistema
+*.tmp
+.temp/
