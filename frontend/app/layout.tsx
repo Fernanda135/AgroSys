@@ -19,6 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <link rel="shortcut icon" href="/RS-icon.png" type="image/x-icon" />
       <body className={manrope.className}>
         <ToastProvider />
         {children}
