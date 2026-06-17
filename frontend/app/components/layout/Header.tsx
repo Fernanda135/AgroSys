@@ -44,10 +44,10 @@ export default function Header() {
     }, []);
 
     return (
-        <div className='flex items-center justify-between w-full px-8 py-4 bg-white border-b-2 border-b-(--gray)'>
+        <div className='flex items-center justify-between w-full px-8 py-4 bg-white border border-b-(--gray)'>
             <Image
                 src="/RS-logo.png"
-                alt="AgroSys"
+                alt="RuralSys logo"
                 width={120}
                 height={48}
                 className="object-contain"

@@ -9,7 +9,7 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: "RuralSys",
-  description: "Sistema de gerenciamento para agricultores",
+  description: "Sistema de gestão rural",
 };
 
 export default function RootLayout({

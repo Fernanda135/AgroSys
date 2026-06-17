@@ -3,8 +3,12 @@
 :root {
   --black: #0D121C;
   --gray: #F3F3F3;
+  --gray-2: #8A919D;
   --green-500: #16A34A;
   --green-50: #F0FDF4;
+  --bg-accent: #F4F6F8;
+
+  --danger: #C62626;
 }
 
 html,
@@ -28,4 +32,13 @@ body {
   background-repeat: no-repeat;
   background-position: center bottom;
   background-size: cover;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
