@@ -42,7 +42,7 @@ export default function Login() {
       <div className="bg-white w-full max-w-md rounded-3xl shadow-lg px-10 py-8 text-center">
         <Image
           src="/RS-logo.png"
-          alt="AgroSys"
+          alt="RuralSys"
           width={200}
           height={80}
           className="mx-auto"
