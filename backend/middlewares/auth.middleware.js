@@ -9,15 +9,20 @@ const catchError = (err, res) => {
     if (err instanceof TokenExpiredError) {
         return res.status(401).send({ message: "Unauthorized! Access Token expired!" });
     }
-    return res.sendStatus(401).send({ message: "Unauthorized!" });
+    return res.status(401).send({ message: "Unauthorized!" });
 };
 
 
 const verifyToken = (req, res, next) => {
-    let token = req.headers["authorization"];
-    if (!token) {
-        return res.status(403).send({ message: "No token provided!" });
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+        return res.status(403).send({
+            message: "No token provided!"
+        });
     }
+
+    const token = authHeader.split(' ')[1];
 
     jwt.verify(token, jwtDataOptions.secret, (err, decoded) => {
         if (err) {

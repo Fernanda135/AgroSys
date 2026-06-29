@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Plantations.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        as: 'user'
+      });
     }
   }
   Plantations.init({
@@ -18,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     culture: DataTypes.STRING,
     plantingDate: DataTypes.DATE,
-    harvestDate: DataTypes.DATE
+    harvestDate: DataTypes.DATE,
+    isHarvested: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'Plantations',

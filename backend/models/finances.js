@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Finances.belongsTo(models.User, {
+        foreignKey: 'user_id',
+        as: 'user'
+      });
     }
   }
   Finances.init({
@@ -18,8 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     isIncome: DataTypes.BOOLEAN,
     description: DataTypes.STRING,
     amount: DataTypes.DECIMAL,
-    transactionDate: DataTypes.DATE,
-    category: DataTypes.STRING
+    transactionDate: DataTypes.DATE
   }, {
     sequelize,
     modelName: 'Finances',

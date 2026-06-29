@@ -29,7 +29,7 @@ export default function Header() {
 
             const response = await api.get("/profile", {
                 headers: {
-                    Authorization: token,
+                    Authorization: `Bearer ${token}`,
                 },
             });
 
