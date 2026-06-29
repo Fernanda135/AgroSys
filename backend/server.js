@@ -18,12 +18,32 @@ const auditLogRoute = require('./routes/auditLog.routes.js');
 // Importação dos middlewares
 const { verifyToken } = require('./middlewares/auth.middleware');
 const { auditLog } = require('./middlewares/audit.middleware.js');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./docs/swagger');
 
 // Middlewares globais
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// SWAGGER
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+    explorer: true,
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'RuralSys API Docs',
+    swaggerOptions: {
+        persistAuthorization: true,
+    }
+}));
+
+// Rota para JSON do Swagger
+app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
+
+// Rotas públicas
+app.use('/api/auth', authRoute);
 app.use('/api', authRoute);
 
 // Rotas protegidas com auditoria
@@ -69,4 +89,5 @@ app.listen(port, () => {
     console.log(`  GET  /api/finances`);
     console.log(`  GET  /api/audit-logs`);
     console.log(`  GET  /health`);
+    console.log(`  GET  /api-docs`);
 });
