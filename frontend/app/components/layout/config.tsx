@@ -74,7 +74,6 @@ export default function NavItems() {
             label: 'Sair',
             path: '/logout',
             icon: <LogOut size={20} />,
-            active: isNavItemActive(pathname, '/logout'),
             position: 'bottom'
         },
     ];

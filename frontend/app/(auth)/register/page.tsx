@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import api from "../../services/api";
+import { authService } from "@/app/services/authService";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -21,7 +21,7 @@ export default function Register() {
     toast.info("Validando dados...");
 
     try {
-      await api.post("/sign-up", {
+      await authService.register({
         name,
         email,
         password,

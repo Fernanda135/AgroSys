@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import api from "../../services/api";
+
+import { authService } from "@/app/services/authService";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -19,14 +20,13 @@ export default function Login() {
     toast.info("Validando dados...");
 
     try {
-      const response = await api.post("/sign-in", {
+      const data = await authService.login({
         email,
         password,
       });
 
-      localStorage.setItem("accessToken", response.data.accessToken);
-
-      localStorage.setItem("refreshToken", response.data.refreshToken);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
 
       toast.success("Login realizado com sucesso!");
 
