@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { authService } from "@/app/services/authService";
+import { authService } from "@/app/services/auth.service";
 
 export default function Register() {
   const [name, setName] = useState("");
