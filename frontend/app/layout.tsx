@@ -10,6 +10,9 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "RuralSys",
   description: "Sistema de gestão rural",
+  icons: {
+    icon: "/RS-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -19,7 +22,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <link rel="shortcut icon" href="/RS-icon.png" type="image/x-icon" />
       <body className={manrope.className}>
         <ToastProvider />
         {children}

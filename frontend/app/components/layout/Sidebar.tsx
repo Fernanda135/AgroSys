@@ -22,7 +22,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="w-50 shrink-0 h-full bg-white border-r border-gray-200">
+    <div className="shrink-0 h-full bg-white border-r border-gray-200">
       <aside className="flex h-full flex-col w-full overflow-y-auto">
         <div className="flex-1">
           <div className="flex flex-col space-y-1">
