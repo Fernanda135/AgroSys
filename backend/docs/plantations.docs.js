@@ -92,10 +92,6 @@
  *             required:
  *               - name
  *             properties:
- *               name:
- *                 type: string
- *                 description: Nome da plantação
- *                 example: Fazenda São José
  *               culture:
  *                 type: string
  *                 description: Cultura plantada
@@ -199,9 +195,6 @@
  *           schema:
  *             type: object
  *             properties:
- *               name:
- *                 type: string
- *                 example: Fazenda São José - Soja
  *               culture:
  *                 type: string
  *                 example: Soja

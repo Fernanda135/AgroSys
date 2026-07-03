@@ -253,9 +253,6 @@
  *         user_id:
  *           type: integer
  *           example: 1
- *         name:
- *           type: string
- *           example: Fazenda São José
  *         culture:
  *           type: string
  *           example: Soja

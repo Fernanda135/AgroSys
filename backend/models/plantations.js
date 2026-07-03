@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
   }
   Plantations.init({
     user_id: DataTypes.INTEGER,
-    name: DataTypes.STRING,
     culture: DataTypes.STRING,
     plantingDate: DataTypes.DATE,
     harvestDate: DataTypes.DATE,

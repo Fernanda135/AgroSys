@@ -2,18 +2,16 @@ const db = require('../models');
 
 exports.create = async (req, res) => {
     try {
-        const { name, culture, plantingDate, harvestDate } = req.body;
+        const { culture, plantingDate, harvestDate } = req.body;
 
-        if (!name || name.trim().length === 0) {
+        if (!culture || culture.trim().length === 0) {
             return res.status(400).json({
                 message: 'O nome da plantação é obrigatório'
             });
         }
 
-
         const plantation = await db.Plantations.create({
             user_id: req.user.id,
-            name,
             culture,
             plantingDate,
             harvestDate,
@@ -47,7 +45,7 @@ exports.findAll = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, culture, plantingDate, harvestDate } = req.body;
+        const { culture, plantingDate, harvestDate } = req.body;
 
         const plantation = await db.Plantations.findOne({
             where: {
@@ -64,17 +62,13 @@ exports.update = async (req, res) => {
 
         const updateData = {};
 
-        if (name !== undefined) {
-            if (!name || name.trim().length === 0) {
+        if (culture !== undefined) {
+            if (!culture || culture.trim().length === 0) {
                 return res.status(400).json({
                     message: 'O nome da plantação não pode ser vazio'
                 });
             }
-            updateData.name = name.trim();
-        }
-
-        if (culture !== undefined) {
-            updateData.culture = culture || null;
+            updateData.culture = culture.trim();
         }
 
         if (plantingDate !== undefined) {
