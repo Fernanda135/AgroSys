@@ -5,7 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 import NavItems from "./config";
-import LogoutModal from "../logout/logoutModal";
 import { authService } from "@/app/services/auth.service";
 
 export default function Sidebar() {
@@ -16,8 +15,11 @@ export default function Sidebar() {
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
   function handleLogout() {
+    const confirmed = window.confirm("Tem certeza que deseja sair?");
+
+    if (!confirmed) return;
+
     authService.logout();
-    setOpenLogoutModal(false);
     router.push("/login");
   }
 
@@ -54,7 +56,7 @@ export default function Sidebar() {
                   key={index}
                   label={item.label}
                   icon={item.icon}
-                  onClick={() => setOpenLogoutModal(true)}
+                  onClick={handleLogout}
                 />
               );
             }
@@ -72,11 +74,6 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      <LogoutModal
-        isOpen={openLogoutModal}
-        onClose={() => setOpenLogoutModal(false)}
-        onConfirm={handleLogout}
-      />
     </div>
   );
 }
