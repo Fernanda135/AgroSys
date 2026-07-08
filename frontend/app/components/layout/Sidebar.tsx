@@ -12,7 +12,6 @@ export default function Sidebar() {
   const router = useRouter();
   const navItems = NavItems();
 
-  const [openLogoutModal, setOpenLogoutModal] = useState(false);
 
   function handleLogout() {
     const confirmed = window.confirm("Tem certeza que deseja sair?");

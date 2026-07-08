@@ -1,31 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ClipboardList, Clock, CircleCheckBig } from "lucide-react";
+import { ClipboardList, Clock, CircleCheckBig, Trash2, SquarePen } from "lucide-react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
-import { Todo, todoService } from "@/app/services/todo.service";
-import { useTodoFilters } from "@/app/hooks/useTodo";
+import { useTodos } from "@/app/hooks/useTodo";
 import SummaryCard from "@/app/components/SummaryCard";
 
 export default function ToDo() {
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const { pendingCount, completedCount, totalCount, completionRate } = useTodoFilters(todos);
-
-  useEffect(() => {
-    async function loadData() {
-      try {
-        const todosData = await todoService.getAll();
-        setTodos(todosData);
-
-      } catch (error) {
-        console.error("Erro ao carregar tarefass:", error);
-      }
-    }
-
-    loadData();
-  }, []);
+  const {
+    todos,
+    totalCount,
+    pendingCount,
+    completedCount,
+  } = useTodos();
 
 
   return (
@@ -57,49 +46,65 @@ export default function ToDo() {
           />
         </div>
 
-        <div className="overflow-hidden rounded-xl border border-(--gray) bg-white">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-(--gray-2)">
-                <th className="px-4 py-3 text-left text-sm font-semibold text-(--black)">
-                  Nome
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-(--black)">
-                  Descrição
-                </th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-(--black)">
-                  Status
-                </th>
+        <table className="w-full mt-8 bg-white rounded-lg overflow-hidden shadow">
+          <thead>
+            <tr className="bg-(--gray-2) text-(--black)">
+              <th className="text-left px-4 py-3">
+                Nome
+              </th>
+              <th className="text-left px-4 py-3">
+                Descrição
+              </th>
+              <th className="text-left px-4 py-3">
+                Status
+              </th>
+              <th className="text-left px-4 py-3">
+                Ações
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {todos.map((t) => (
+              <tr
+                key={t.id}
+                className="border-t border-(--gray) hover:bg-(--gray-1) transition-colors"
+              >
+                <td className="px-4 py-3 text-(--black) font-semibold">
+                  {t.title}
+                </td>
+                <td className="px-4 py-3 text-(--black) font-semibold">
+                  {t.description}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${t.completed
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                      }`}
+                  >
+                    {t.completed ? "Concluída" : "Pendente"}
+                  </span>
+                </td>
+                <td className="px-4 py-3">
+                  <div className="flex justify-center gap-3">
+
+                    <button className="text-(--green-500) cursor-pointer hover:text-green-700">
+                      <CircleCheckBig size={20} />
+                    </button>
+
+                    <button className="text-(--info) cursor-pointer hover:text-blue-900">
+                      <SquarePen size={20} />
+                    </button>
+
+                    <button className="text-(--danger) cursor-pointer hover:text-red-80">
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {todos.map((t) => (
-                <tr
-                  key={t.id}
-                  className="border-t border-(--gray) hover:bg-(--gray-1) transition-colors"
-                >
-                  <td className="px-4 py-3 text-(--black) font-medium">
-                    {t.title}
-                  </td>
-                  <td className="px-4 py-3 text-(--black)">
-                    {t.description}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${t.completed
-                        ? "bg-green-100 text-green-700"
-                        : "bg-yellow-100 text-yellow-700"
-                        }`}
-                    >
-                      {t.completed ? "Concluída" : "Pendente"}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        
+            ))}
+          </tbody>
+        </table>
       </div>
 
     </ProtectedRoute>

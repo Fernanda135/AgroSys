@@ -121,13 +121,13 @@ export default function Dashboard() {
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="bg-(--gray-2)">
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-(--black)">
+                        <th className="px-4 py-3 text-left text-sm font-bold text-(--black)">
                           Nome
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-(--black)">
+                        <th className="px-4 py-3 text-left text-sm font-bold text-(--black)">
                           Descrição
                         </th>
-                        <th className="px-4 py-3 text-left text-sm font-semibold text-(--black)">
+                        <th className="px-4 py-3 text-left text-sm font-bold text-(--black)">
                           Status
                         </th>
                       </tr>
@@ -139,11 +139,11 @@ export default function Dashboard() {
                           key={t.id}
                           className="border-t border-(--gray) hover:bg-(--gray-1) transition-colors"
                         >
-                          <td className="px-4 py-3 text-(--black) font-medium">
+                          <td className="px-4 py-3 text-(--black) font-semibold">
                             {t.title}
                           </td>
 
-                          <td className="px-4 py-3 text-(--black)">
+                          <td className="px-4 py-3 text-(--black) font-semibold">
                             {t.description}
                           </td>
 
@@ -186,11 +186,11 @@ export default function Dashboard() {
                       key={item.id}
                       className="flex justify-between items-center border-b border-(--gray) px-4 py-3"
                     >
-                      <p className="text-(--black) font-medium">
+                      <p className="text-(--black) font-semibold">
                         {item.product_name}
                       </p>
 
-                      <p className="text-(--black)">
+                      <p className="text-(--black) font-semibold">
                         {item.quantity}
                       </p>
                     </li>

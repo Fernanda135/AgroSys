@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface SummaryCardProps {
-    value: number;
+    value: string | number;
     title: string;
     icon: ReactNode;
 }
@@ -11,15 +11,18 @@ export default function SummaryCard({
     title,
     icon,
 }: SummaryCardProps) {
+    const displayValue =
+        typeof value === "number"
+            ? value < 10
+                ? `0${value}`
+                : value
+            : value;
+
     return (
         <div className="flex h-40 items-center justify-between rounded-2xl border border-(--gray) bg-white px-6 shadow-sm transition-shadow hover:shadow-md">
             <div className="flex flex-col">
                 <h2 className="text-5xl font-bold text-(--black)">
-                    {value < 10 ? (
-                        `0${value}`
-                    ) : (
-                        value
-                    )}
+                    {displayValue}
                 </h2>
 
                 <p className="mt-2 whitespace-pre-line text-xl font-medium text-(--gray-2)">
