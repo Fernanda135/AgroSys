@@ -11,4 +11,9 @@ export const profileService = {
         const { data } = await api.get<User>("/profile");
         return data;
     },
+
+    async updateProfile(body: Pick<User, "name" | "email">) {
+        const { data } = await api.put<User>("/profile", body);
+        return data;
+    },
 };
