@@ -103,11 +103,11 @@ export default function page() {
                         <CircleCheckBig size={20} />
                       </button>
 
-                      <button className="text-(--info) cursor-pointer hover:text-blue-900">
+                      <button className="text-(--info) cursor-pointer hover:text-blue-800">
                         <SquarePen size={20} />
                       </button>
 
-                      <button className="text-(--danger) cursor-pointer hover:text-red-80">
+                      <button className="text-(--danger) cursor-pointer hover:text-red-800">
                         <Trash2 size={20} />
                       </button>
                     </div>

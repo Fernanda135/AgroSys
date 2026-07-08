@@ -30,7 +30,7 @@ export default function FinancePage() {
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">Financeiro</h1>
 
-          <button className="bg-(--green-500) text-white py-2 px-4 rounded-md hover:bg-green-700">
+          <button className="bg-(--green-500) text-white py-2 px-4 rounded-md hover:bg-green-700 cursor-pointer">
             Nova Transação
           </button>
         </div>
@@ -46,12 +46,12 @@ export default function FinancePage() {
           <SummaryCard
             value={formatCurrency(totalExpense)}
             title={"Despesas"}
-            icon={<ArrowDownCircle size={52} className="text-(--warning)" />}
+            icon={<ArrowDownCircle size={52} className="text-(--danger)" />}
           />
 
           <SummaryCard
             value={formatCurrency(balance)}
-            title={"Saldo\ntotal"}
+            title={"Saldo total"}
             icon={<Wallet size={52} className="text-(--green-500)" />}
           />
 
@@ -122,11 +122,11 @@ export default function FinancePage() {
 
                     <td>
                       <div className="flex justify-center gap-4">
-                        <button className="text-blue-600 hover:text-blue-800">
+                        <button className="text-(--info) hover:text-blue-800 cursor-pointer">
                           <SquarePen size={20} />
                         </button>
 
-                        <button className="text-red-600 hover:text-red-800">
+                        <button className="text-(--danger) hover:text-red-800 cursor-pointer">
                           <Trash2 size={20} />
                         </button>
                       </div>
