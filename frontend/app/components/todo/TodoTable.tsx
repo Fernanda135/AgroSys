@@ -6,22 +6,24 @@ import EmptyContainer from "../EmptyContainer";
 
 interface TodoTableProps {
     todos: Todo[];
-    onComplete: (id: number) => void;
-    onEdit: (todo: Todo) => void;
-    onDelete: (id: number) => void;
+    onComplete?: (id: number) => void;
+    onEdit?: (todo: Todo) => void;
+    onDelete?: (id: number) => void;
+    showActions?: boolean;
 }
 
 export default function TodoTable({
     todos,
     onComplete,
     onEdit,
-    onDelete
+    onDelete,
+    showActions = true
 }: TodoTableProps) {
     if (todos.length === 0) {
         return (
             <div className="mt-8 rounded-xl bg-white p-12 text-center shadow-lg">
                 <EmptyContainer
-                    title="Nehuma tarefa encontrada"
+                    title="Nenhuma tarefa encontrada"
                     description='Clique em "Adicionar Tarefa" para começar'
                     icon={<ClipboardList className="text-(--green-500)" size={52} />}
                 />
@@ -34,22 +36,24 @@ export default function TodoTable({
             <div className="overflow-x-auto">
                 <table className="w-full">
                     <thead>
-                        <tr className="border-b border-gray-200 bg-gray-50">
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                        <tr className="border-b border-(--gray-2) bg-(--gray)">
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
                                 Título
                             </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
                                 Descrição
                             </th>
-                            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
                                 Status
                             </th>
-                            <th className="px-6 py-4 text-center text-sm font-semibold text-gray-600">
-                                Ações
-                            </th>
+                            {showActions && (
+                                <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
+                                    Ações
+                                </th>
+                            )}
                         </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-100">
+                    <tbody className="divide-y divide-(--gray)">
                         {todos.map((todo) => (
                             <tr
                                 key={todo.id}
@@ -58,14 +62,14 @@ export default function TodoTable({
                             >
                                 <td
                                     className={`px-6 py-4 text-sm ${todo.completed
-                                        ? "text-gray-400 line-through"
-                                        : "font-medium text-gray-900"
+                                        ? "text-(--gray-2) line-through"
+                                        : "font-medium text-(--black)"
                                         }`}
                                 >
                                     {todo.title}
                                 </td>
                                 <td
-                                    className={`px-6 py-4 text-sm ${todo.completed ? "text-gray-400" : "text-gray-600"
+                                    className={`px-6 py-4 text-sm ${todo.completed ? "text-(--gray-2)" : "text-(--black)"
                                         }`}
                                 >
                                     {todo.description}
@@ -80,35 +84,37 @@ export default function TodoTable({
                                         {todo.completed ? "Concluída" : "Pendente"}
                                     </span>
                                 </td>
-                                <td className="px-6 py-4">
-                                    <div className="flex items-center justify-center gap-2">
-                                        <button
-                                            onClick={() => onComplete(todo.id)}
-                                            disabled={todo.completed}
-                                            className={`rounded-lg p-2 transition-all cursor-pointer ${todo.completed
-                                                ? "cursor-not-allowed text-gray-300"
-                                                : "text-(--green-500) hover:bg-green-50 hover:text-green-900"
-                                                }`}
-                                            title="Concluir tarefa"
-                                        >
-                                            <CircleCheckBig size={20} />
-                                        </button>
-                                        <button
-                                            onClick={() => onEdit(todo)}
-                                            className="rounded-lg p-2 text-(--info) transition-all hover:bg-blue-50 hover:text-blue-900 cursor-pointer"
-                                            title="Editar tarefa"
-                                        >
-                                            <SquarePen size={20} />
-                                        </button>
-                                        <button
-                                            onClick={() => onDelete(todo.id)}
-                                            className="rounded-lg p-2 text-(--danger) transition-all hover:bg-red-50 hover:text-red-900 cursor-pointer"
-                                            title="Excluir tarefa"
-                                        >
-                                            <Trash2 size={20} />
-                                        </button>
-                                    </div>
-                                </td>
+                                {showActions && (
+                                    <td className="px-6 py-4">
+                                        <div className="flex items-center justify-center gap-2">
+                                            <button
+                                                onClick={() => onComplete?.(todo.id)}
+                                                disabled={todo.completed}
+                                                className={`rounded-lg p-2 transition-all cursor-pointer ${todo.completed
+                                                    ? "cursor-not-allowed text-gray-300"
+                                                    : "text-(--green-500) hover:bg-green-50 hover:text-green-900"
+                                                    }`}
+                                                title="Concluir tarefa"
+                                            >
+                                                <CircleCheckBig size={20} />
+                                            </button>
+                                            <button
+                                                onClick={() => onEdit?.(todo)}
+                                                className="rounded-lg p-2 text-(--info) transition-all hover:bg-blue-50 hover:text-blue-900 cursor-pointer"
+                                                title="Editar tarefa"
+                                            >
+                                                <SquarePen size={20} />
+                                            </button>
+                                            <button
+                                                onClick={() => onDelete?.(todo.id)}
+                                                className="rounded-lg p-2 text-(--danger) transition-all hover:bg-red-50 hover:text-red-900 cursor-pointer"
+                                                title="Excluir tarefa"
+                                            >
+                                                <Trash2 size={20} />
+                                            </button>
+                                        </div>
+                                    </td>
+                                )}
                             </tr>
                         ))}
                     </tbody>

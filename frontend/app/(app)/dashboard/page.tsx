@@ -8,6 +8,7 @@ import { Sprout, ClipboardList, Warehouse, Wallet } from "lucide-react";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import EmptyContainer from "../../components/EmptyContainer";
 import SummaryCard from "../../components/SummaryCard";
+import TodoTable from "@/app/components/todo/TodoTable";
 
 import { Plantation, plantationService } from "@/app/services/plantation.service";
 import { Todo, todoService } from "@/app/services/todo.service";
@@ -109,59 +110,17 @@ export default function Dashboard() {
             {todos && todos.length > 0 ? (
               <div className="flex flex-col rounded-2xl border border-(--gray) bg-white px-6 shadow-sm transition-shadow hover:shadow-md p-5 ">
 
-                <div className="flex items-center justify-between w-full mb-4">
+                <div className="flex items-center justify-between w-full">
                   <h2 className="font-bold text-(--black) text-2xl" >Tarefas</h2>
                   <Link href="/todo"
                     className="text-(--black) text-[18px]"
                   >Ver tudo</Link>
                 </div>
 
-                <div className="overflow-hidden rounded-xl border border-(--gray) bg-white">
-
-                  <table className="w-full border-collapse">
-                    <thead>
-                      <tr className="bg-(--gray-2)">
-                        <th className="px-4 py-3 text-left text-sm font-bold text-(--black)">
-                          Nome
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-bold text-(--black)">
-                          Descrição
-                        </th>
-                        <th className="px-4 py-3 text-left text-sm font-bold text-(--black)">
-                          Status
-                        </th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-                      {todos.map((t) => (
-                        <tr
-                          key={t.id}
-                          className="border-t border-(--gray) hover:bg-(--gray-1) transition-colors"
-                        >
-                          <td className="px-4 py-3 text-(--black) font-semibold">
-                            {t.title}
-                          </td>
-
-                          <td className="px-4 py-3 text-(--black) font-semibold">
-                            {t.description}
-                          </td>
-
-                          <td className="px-4 py-3">
-                            <span
-                              className={`rounded-full px-3 py-1 text-xs font-semibold ${t.completed
-                                ? "bg-green-100 text-green-700"
-                                : "bg-yellow-100 text-yellow-700"
-                                }`}
-                            >
-                              {t.completed ? "Concluída" : "Pendente"}
-                            </span>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <TodoTable
+                  todos={todos}
+                  showActions={false}
+                  />
 
               </div>
             ) : (
