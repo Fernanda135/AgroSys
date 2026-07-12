@@ -44,22 +44,22 @@ export default function Header() {
     }, []);
 
     return (
-        <div className='flex items-center justify-between w-full px-8 py-4 bg-white border border-b-(--gray)'>
+        <div className='flex items-center justify-between w-full px-8 py-4 bg-(--black)'>
             <Image
-                src="/RS-logo.png"
+                src="/rs-logo.png"
                 alt="RuralSys logo"
-                width={120}
-                height={48}
+                width={170}
+                height={50}
                 className="object-contain"
                 priority
             />
 
             <div className='flex items-center gap-3'>
                 <div className='flex flex-col items-end leading-tight'>
-                    <span className='text-xs text-gray-500 font-medium'>
+                    <span className='text-xs text-gray-50 font-medium'>
                         Bem Vindo,
                     </span>
-                    <span className='text-sm font-semibold text-gray-800'>
+                    <span className='text-sm font-semibold text-white'>
                         {user ? user.name : "Carregando..."}
                     </span>
                 </div>

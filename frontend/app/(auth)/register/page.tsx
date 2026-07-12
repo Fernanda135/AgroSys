@@ -38,19 +38,31 @@ export default function Register() {
   return (
     <div className="login-container flex items-center justify-center min-h-screen">
       <div className="bg-white w-full max-w-md rounded-3xl shadow-lg px-10 py-8 text-center">
-        <Image
-          src="/RS-logo.png"
-          alt="RuralSys"
-          width={200}
-          height={80}
-          className="mx-auto"
-        />
+        
+        <div className="flex items-center justify-center gap-2 mb-5">
+                  <Image
+                    src="/rs-icon.png"
+                    alt="RuralSys Icon"
+                    width={90}
+                    height={50}
+                    className="object-contain"
+                    priority
+                  />
+                  <Image
+                    src="/rs-text.png"
+                    alt="RuralSys"
+                    width={140}
+                    height={50}
+                    className="object-contain"
+                    priority
+                  />
+                </div>
 
-        <h1 className="text-[36px] font-bold text-(--black) mb-2">
+        <h1 className="text-[36px] font-bold text-(--black)">
           Crie sua conta
         </h1>
 
-        <p className="text-base text-(--black) mb-10">
+        <p className="text-base text-(--black) mb-5">
           Preencha os dados para se cadastrar
         </p>
 
@@ -65,7 +77,7 @@ export default function Register() {
               type="text"
               required
               placeholder="Digite seu nome"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-200 outline-none focus:border-(--green-500)"
+              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-300 outline-none focus:border-(--green-500)"
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -80,7 +92,7 @@ export default function Register() {
               type="email"
               required
               placeholder="Digite seu e-mail"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-200 outline-none focus:border-(--green-500)"
+              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-300 outline-none focus:border-(--green-500)"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -95,7 +107,7 @@ export default function Register() {
               type="password"
               required
               placeholder="Digite sua senha"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-200 outline-none focus:border-(--green-500)"
+              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-300 outline-none focus:border-(--green-500)"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>

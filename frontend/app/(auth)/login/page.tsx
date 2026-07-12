@@ -38,27 +38,39 @@ export default function Login() {
   }
 
   return (
-    <div className="login-container flex items-center justify-center min-h-screen">
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-lg px-10 py-8 text-center">
-        <Image
-          src="/RS-logo.png"
-          alt="RuralSys"
-          width={200}
-          height={80}
-          className="mx-auto"
-        />
+    <div className="login-container flex items-center justify-center min-h-screen bg-black">
+      <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl px-10 py-8 text-center">
 
-        <h1 className="text-[36px] font-bold text-(--black) mb-2">
+        <div className="flex items-center justify-center gap-2 mb-5">
+          <Image
+            src="/rs-icon.png"
+            alt="RuralSys Icon"
+            width={90}
+            height={50}
+            className="object-contain"
+            priority
+          />
+          <Image
+            src="/rs-text.png"
+            alt="RuralSys"
+            width={140}
+            height={50}
+            className="object-contain"
+            priority
+          />
+        </div>
+
+        <h1 className="text-[36px] font-bold text-gray-900 mb-2">
           Bem-vindo de volta!
         </h1>
 
-        <p className="text-base text-(--black) mb-10">
+        <p className="text-base text-gray-600 mb-10">
           Faça login para acessar sua conta
         </p>
 
         <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
           <div className="text-left">
-            <label htmlFor="email" className="block mb-2 font-semibold">
+            <label htmlFor="email" className="block mb-2 font-semibold text-gray-800">
               E-mail
             </label>
 
@@ -67,13 +79,13 @@ export default function Login() {
               type="email"
               required
               placeholder="Digite seu e-mail"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-200 outline-none focus:border-(--green-500)"
+              className="w-full h-12 px-4 rounded-xl bg-gray-50 border border-gray-300 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition text-gray-900 placeholder-gray-500"
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
           <div className="text-left">
-            <label htmlFor="password" className="block mb-2 font-semibold">
+            <label htmlFor="password" className="block mb-2 font-semibold text-gray-800">
               Senha
             </label>
 
@@ -82,24 +94,24 @@ export default function Login() {
               type="password"
               required
               placeholder="Digite sua senha"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-200 outline-none focus:border-(--green-500)"
+              className="w-full h-12 px-4 rounded-xl bg-gray-50 border border-gray-300 outline-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition text-gray-900 placeholder-gray-500"
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
 
           <button
             type="submit"
-            className="cursor-pointer mt-4 h-12 bg-(--green-500) hover:bg-green-700 text-white font-semibold rounded-xl transition"
+            className="cursor-pointer mt-4 h-12 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold rounded-xl transition duration-200 shadow-md hover:shadow-lg"
           >
             Entrar
           </button>
         </form>
 
-        <p className="mt-5 text-sm text-(--black)">
+        <p className="mt-5 text-sm text-gray-700">
           Não tem conta?{" "}
           <Link
             href="/register"
-            className="text-(--green-500) font-medium hover:underline"
+            className="text-green-600 font-semibold hover:text-green-700 hover:underline transition"
           >
             Cadastre-se
           </Link>

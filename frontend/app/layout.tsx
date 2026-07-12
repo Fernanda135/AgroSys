@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "RuralSys",
   description: "Sistema de gestão rural",
   icons: {
-    icon: "/RS-icon.png",
+    icon: "/rs-icon.png",
   },
 };
 

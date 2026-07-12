@@ -19,7 +19,7 @@ export default function SummaryCard({
             : value;
 
     return (
-        <div className="flex h-40 items-center justify-between rounded-2xl border border-(--gray) bg-white px-6 shadow-sm transition-shadow hover:shadow-md">
+        <div className="flex h-40 items-center justify-between rounded-2xl border-(--gray) bg-white px-6 shadow-sm">
             <div className="flex flex-col">
                 <h2 className="text-5xl font-bold text-(--black)">
                     {displayValue}

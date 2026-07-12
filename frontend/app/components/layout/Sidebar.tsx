@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 
 import NavItems from "./config";
 import { authService } from "@/app/services/auth.service";
@@ -23,7 +22,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="shrink-0 h-full bg-white border-r border-gray-200">
+    <div className="shrink-0 h-full bg-(--black) border-r border-gray-200">
       <aside className="flex h-full flex-col w-full overflow-y-auto">
         <div className="flex-1">
           <div className="flex flex-col space-y-1">
@@ -86,10 +85,10 @@ export const SideNavItem: React.FC<{
 }> = ({ label, icon, path, active, onClick }) => {
   const className = `flex items-center w-full transition-colors duration-200 cursor-pointer ${
     label === "Sair"
-      ? "text-(--danger) hover:bg-red-50"
+      ? "text-(--danger) hover:text-red-800"
       : active
-        ? "bg-(--green-50) text-(--green-500) border-l-4 border-l-(--green-500)"
-        : "text-(--gray-2) hover:bg-gray-100 hover:text-(--green-500)"
+        ? "bg-(--green-500) text-white"
+        : "text-(--gray-2) hover:text-(--green-500)"
   }`;
 
   if (onClick) {
