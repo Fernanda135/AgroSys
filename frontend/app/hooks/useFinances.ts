@@ -21,6 +21,53 @@ export function useFinances() {
     }
   }
 
+  async function addFinance(data: { isIncome: boolean; description: string; amount: number; transactionDate: string; }) {
+              try {
+                  const newFinance = await financeService.create({
+                      isIncome: data.isIncome,
+                      description: data.description,
+                      amount: data.amount,
+                      transactionDate: data.transactionDate,
+                  });
+                  setFinances((prev) => [newFinance, ...prev]);
+                  return newFinance;
+              } catch (err) {
+                  console.error(err);
+                  setError("Erro ao adicionar item no estoque.");
+                  throw err;
+              }
+          }
+      
+          async function updateFinance(id: number, data: { isIncome: boolean; description: string; amount: number; transactionDate: string; }) {
+              try {
+                  const updateFinance = await financeService.update(id, {
+                      isIncome: data.isIncome,
+                      description: data.description,
+                      amount: data.amount,
+                      transactionDate: data.transactionDate,
+                  });
+                  setFinances((prev) =>
+                      prev.map((todo) => (todo.id === id ? updateFinance : todo))
+                  );
+                  return updateFinance;
+              } catch (err) {
+                  console.error(err);
+                  setError("Erro ao atualizar item do estoque.");
+                  throw err;
+              }
+          }
+      
+          async function deleteFinance(id: number) {
+              try {
+                  await financeService.delete(id);
+                  setFinances((prev) => prev.filter((todo) => todo.id !== id));
+              } catch (err) {
+                  console.error(err);
+                  setError("Erro ao deletar item do estoque.");
+                  throw err;
+              }
+          }
+
   useEffect(() => {
     loadFinances();
   }, []);
@@ -63,6 +110,10 @@ export function useFinances() {
     loading,
     error,
     reload: loadFinances,
+
+    addFinance,
+    updateFinance,
+    deleteFinance,
 
     incomes,
     expenses,
