@@ -45,7 +45,7 @@ exports.findAll = async (req, res) => {
 exports.update = async (req, res) => {
     try {
         const { id } = req.params;
-        const { culture, plantingDate, harvestDate } = req.body;
+        const { culture, plantingDate, harvestDate, isHarvested } = req.body;
 
         const plantation = await db.Plantations.findOne({
             where: {
@@ -77,6 +77,10 @@ exports.update = async (req, res) => {
 
         if (harvestDate !== undefined) {
             updateData.harvestDate = harvestDate || null;
+        }
+
+        if (isHarvested !== undefined) {
+            updateData.isHarvested = isHarvested;
         }
 
         await plantation.update(updateData);

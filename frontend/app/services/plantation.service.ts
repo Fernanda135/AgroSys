@@ -3,7 +3,6 @@ import api from "./api";
 export interface Plantation {
     id: number;
     user_id: number;
-    name: string;
     culture: string;
     plantingDate: string;
     harvestDate: string;
@@ -17,7 +16,6 @@ export const plantationService = {
     },
 
     async create(plantation: {
-        name: string;
         culture: string;
         plantingDate: string;
         harvestDate: string;
@@ -29,10 +27,10 @@ export const plantationService = {
     async update(
         id: number,
         plantation: Partial<{
-            name: string;
             culture: string;
             plantingDate: string;
             harvestDate: string;
+            isHarvested: boolean;
         }>
     ) {
         const { data } = await api.put(`/plantations/${id}`, plantation);

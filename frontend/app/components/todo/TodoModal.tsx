@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import { ClipboardList, X } from "lucide-react";
 import { Todo } from "@/app/services/todo.service";
 import { toast } from "react-toastify";
 
@@ -40,7 +40,10 @@ export default function TodoModal({
     if (!isOpen) return null;
 
     const validate = () => {
-        const newErrors: { title?: string; description?: string } = {};
+        const newErrors: { 
+            title?: string; 
+            description?: string 
+        } = {};
         if (!title.trim()) newErrors.title = "Título é obrigatório";
         if (!description.trim()) newErrors.description = "Descrição é obrigatória";
         setErrors(newErrors);
@@ -67,9 +70,14 @@ export default function TodoModal({
             >
 
                 <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-                    <h2 className="text-xl font-bold text-(--black)">
-                        {mode === "add" ? "Nova Tarefa" : "Editar Tarefa"}
-                    </h2>
+                    <div className="flex items-center gap-3">
+                        <div className="rounded-full bg-(--green-50) p-2">
+                            <ClipboardList className="text-(--green-500)" size={24} />
+                        </div>
+                        <h2 className="text-xl font-bold text-(--black)">
+                            {mode === "add" ? "Nova Plantação" : "Editar Plantação"}
+                        </h2>
+                    </div>
                     <button
                         onClick={onClose}
                         className="rounded-lg p-1.5 text-(--gray-2) transition-all hover:bg-(--gray) hover:text-(--black) cursor-pointer"
