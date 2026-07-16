@@ -2,16 +2,16 @@
  * @swagger
  * tags:
  *   - name: Stocks
- *     description: 📦 Gerenciamento de estoque
+ *     description: Gerenciamento de estoque
  */
 
 /**
  * @swagger
  * /api/stocks:
  *   get:
- *     summary: 📦 Listar todos os itens do estoque
+ *     summary: Listar todos os itens do estoque
  *     tags: [Stocks]
- *     description: Retorna todos os itens do estoque do usuário autenticado
+ *     description: Retorna todos os itens do estoque do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -20,13 +20,13 @@
  *         schema:
  *           type: integer
  *           default: 1
- *         description: Número da página
+ *         description: Numero da pagina
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
- *         description: Itens por página
+ *         description: Itens por pagina
  *       - in: query
  *         name: category
  *         schema:
@@ -41,15 +41,15 @@
  *         name: minQuantity
  *         schema:
  *           type: integer
- *         description: Quantidade mínima
+ *         description: Quantidade minima
  *       - in: query
  *         name: maxQuantity
  *         schema:
  *           type: integer
- *         description: Quantidade máxima
+ *         description: Quantidade maxima
  *     responses:
  *       200:
- *         description: ✅ Lista de itens do estoque
+ *         description: Lista de itens do estoque
  *         content:
  *           application/json:
  *             schema:
@@ -69,22 +69,22 @@
  *                   items:
  *                     $ref: '#/components/schemas/Stock'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   post:
- *     summary: ➕ Adicionar item ao estoque
+ *     summary: Adicionar item ao estoque
  *     tags: [Stocks]
- *     description: Adiciona um novo item ao estoque do usuário autenticado
+ *     description: Adiciona um novo item ao estoque do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -98,31 +98,31 @@
  *               summary: Adicionar trator
  *               value:
  *                 product_name: Trator
- *                 category: Máquinas
+ *                 category: Maquinas
  *                 quantity: 2
  *                 unit_price: 150000.00
  *                 unit: un
  *     responses:
  *       201:
- *         description: ✅ Item adicionado com sucesso
+ *         description: Item adicionado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Stock'
  *       400:
- *         description: ❌ Dados inválidos
+ *         description: Dados invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -133,9 +133,9 @@
  * @swagger
  * /api/stocks/{id}:
  *   get:
- *     summary: 🔍 Buscar item do estoque por ID
+ *     summary: Buscar item do estoque por ID
  *     tags: [Stocks]
- *     description: Retorna um item específico do estoque
+ *     description: Retorna um item especifico do estoque
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -147,32 +147,32 @@
  *         description: ID do item
  *     responses:
  *       200:
- *         description: ✅ Item encontrado
+ *         description: Item encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Stock'
  *       404:
- *         description: ❌ Item não encontrado
+ *         description: Item nao encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   put:
- *     summary: ✏️ Atualizar item do estoque
+ *     summary: Atualizar item do estoque
  *     tags: [Stocks]
  *     description: Atualiza um item existente no estoque
  *     security:
@@ -192,32 +192,32 @@
  *             $ref: '#/components/schemas/CreateStockRequest'
  *     responses:
  *       200:
- *         description: ✅ Item atualizado com sucesso
+ *         description: Item atualizado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Stock'
  *       404:
- *         description: ❌ Item não encontrado
+ *         description: Item nao encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   delete:
- *     summary: 🗑️ Remover item do estoque
+ *     summary: Remover item do estoque
  *     tags: [Stocks]
  *     description: Remove um item do estoque
  *     security:
@@ -231,25 +231,25 @@
  *         description: ID do item
  *     responses:
  *       200:
- *         description: ✅ Item removido com sucesso
+ *         description: Item removido com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       404:
- *         description: ❌ Item não encontrado
+ *         description: Item nao encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -260,9 +260,9 @@
  * @swagger
  * /api/stocks/{id}/add-quantity:
  *   patch:
- *     summary: ➕ Adicionar quantidade ao estoque
+ *     summary: Adicionar quantidade ao estoque
  *     tags: [Stocks]
- *     description: Adiciona uma quantidade específica a um item do estoque
+ *     description: Adiciona uma quantidade especifica a um item do estoque
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -287,31 +287,31 @@
  *                 example: 5
  *     responses:
  *       200:
- *         description: ✅ Quantidade adicionada com sucesso
+ *         description: Quantidade adicionada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Stock'
  *       400:
- *         description: ❌ Quantidade inválida
+ *         description: Quantidade invalida
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: ❌ Item não encontrado
+ *         description: Item nao encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -322,7 +322,7 @@
  * @swagger
  * /api/stocks/low-stock:
  *   get:
- *     summary: ⚠️ Listar itens com baixo estoque
+ *     summary: Listar itens com baixo estoque
  *     tags: [Stocks]
  *     description: Retorna itens com quantidade abaixo do limite definido
  *     security:
@@ -333,10 +333,10 @@
  *         schema:
  *           type: integer
  *           default: 10
- *         description: Limite mínimo de quantidade
+ *         description: Limite minimo de quantidade
  *     responses:
  *       200:
- *         description: ✅ Lista de itens com baixo estoque
+ *         description: Lista de itens com baixo estoque
  *         content:
  *           application/json:
  *             schema:
@@ -344,13 +344,13 @@
  *               items:
  *                 $ref: '#/components/schemas/Stock'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -361,14 +361,14 @@
  * @swagger
  * /api/stocks/categories:
  *   get:
- *     summary: 📊 Listar categorias com contagem
+ *     summary: Listar categorias com contagem
  *     tags: [Stocks]
  *     description: Retorna todas as categorias com contagem de itens e quantidade total
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Lista de categorias
+ *         description: Lista de categorias
  *         content:
  *           application/json:
  *             schema:
@@ -378,7 +378,7 @@
  *                 properties:
  *                   category:
  *                     type: string
- *                     example: Máquinas
+ *                     example: Maquinas
  *                   count:
  *                     type: integer
  *                     example: 5
@@ -386,13 +386,13 @@
  *                     type: integer
  *                     example: 12
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -403,14 +403,14 @@
  * @swagger
  * /api/stocks/total-value:
  *   get:
- *     summary: 💰 Calcular valor total do estoque
+ *     summary: Calcular valor total do estoque
  *     tags: [Stocks]
- *     description: Retorna o valor total do estoque (quantidade * preço unitário)
+ *     description: Retorna o valor total do estoque (quantidade * preco unitario)
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Valor total do estoque
+ *         description: Valor total do estoque
  *         content:
  *           application/json:
  *             schema:
@@ -421,13 +421,13 @@
  *                   format: float
  *                   example: 350000.00
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:

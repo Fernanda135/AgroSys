@@ -2,16 +2,16 @@
  * @swagger
  * tags:
  *   - name: Finances
- *     description: 💰 Gerenciamento financeiro
+ *     description: Gerenciamento financeiro
  */
 
 /**
  * @swagger
  * /api/finances:
  *   get:
- *     summary: 💰 Listar todas as transações
+ *     summary: Listar todas as transacoes
  *     tags: [Finances]
- *     description: Retorna todas as transações financeiras do usuário autenticado
+ *     description: Retorna todas as transacoes financeiras do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -20,13 +20,13 @@
  *         schema:
  *           type: integer
  *           default: 1
- *         description: Número da página
+ *         description: Numero da pagina
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
- *         description: Itens por página
+ *         description: Itens por pagina
  *       - in: query
  *         name: isIncome
  *         schema:
@@ -37,16 +37,16 @@
  *         schema:
  *           type: string
  *           format: date
- *         description: Data inicial do período
+ *         description: Data inicial do periodo
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
  *           format: date
- *         description: Data final do período
+ *         description: Data final do periodo
  *     responses:
  *       200:
- *         description: ✅ Lista de transações
+ *         description: Lista de transacoes
  *         content:
  *           application/json:
  *             schema:
@@ -81,22 +81,22 @@
  *                   items:
  *                     $ref: '#/components/schemas/Finance'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   post:
- *     summary: ➕ Criar nova transação
+ *     summary: Criar nova transacao
  *     tags: [Finances]
- *     description: Cria uma nova transação financeira (receita ou despesa)
+ *     description: Cria uma nova transacao financeira (receita ou despesa)
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -116,43 +116,43 @@
  *                 example: true
  *               description:
  *                 type: string
- *                 description: Descrição da transação
+ *                 description: Descricao da transacao
  *                 example: Venda de soja
  *               amount:
  *                 type: number
  *                 format: float
- *                 description: Valor da transação
+ *                 description: Valor da transacao
  *                 example: 15000.00
  *               category:
  *                 type: string
- *                 description: Categoria da transação
+ *                 description: Categoria da transacao
  *                 example: Vendas
  *               transactionDate:
  *                 type: string
  *                 format: date
- *                 description: Data da transação
+ *                 description: Data da transacao
  *                 example: 2024-06-15
  *     responses:
  *       201:
- *         description: ✅ Transação criada com sucesso
+ *         description: Transacao criada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Finance'
  *       400:
- *         description: ❌ Dados inválidos
+ *         description: Dados invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -163,9 +163,9 @@
  * @swagger
  * /api/finances/{id}:
  *   get:
- *     summary: 🔍 Buscar transação por ID
+ *     summary: Buscar transacao por ID
  *     tags: [Finances]
- *     description: Retorna uma transação específica do usuário autenticado
+ *     description: Retorna uma transacao especifica do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -174,37 +174,37 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da transação
+ *         description: ID da transacao
  *     responses:
  *       200:
- *         description: ✅ Transação encontrada
+ *         description: Transacao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Finance'
  *       404:
- *         description: ❌ Transação não encontrada
+ *         description: Transacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   put:
- *     summary: ✏️ Atualizar transação
+ *     summary: Atualizar transacao
  *     tags: [Finances]
- *     description: Atualiza uma transação existente do usuário autenticado
+ *     description: Atualiza uma transacao existente do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -213,7 +213,7 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da transação
+ *         description: ID da transacao
  *     requestBody:
  *       required: true
  *       content:
@@ -240,34 +240,34 @@
  *                 example: 2024-06-20
  *     responses:
  *       200:
- *         description: ✅ Transação atualizada com sucesso
+ *         description: Transacao atualizada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Finance'
  *       404:
- *         description: ❌ Transação não encontrada
+ *         description: Transacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   delete:
- *     summary: 🗑️ Deletar transação
+ *     summary: Deletar transacao
  *     tags: [Finances]
- *     description: Remove uma transação do usuário autenticado
+ *     description: Remove uma transacao do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -276,28 +276,28 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da transação
+ *         description: ID da transacao
  *     responses:
  *       200:
- *         description: ✅ Transação removida com sucesso
+ *         description: Transacao removida com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       404:
- *         description: ❌ Transação não encontrada
+ *         description: Transacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -308,7 +308,7 @@
  * @swagger
  * /api/finances/summary:
  *   get:
- *     summary: 📊 Resumo financeiro
+ *     summary: Resumo financeiro
  *     tags: [Finances]
  *     description: Retorna um resumo com totais de receitas, despesas e saldo
  *     security:
@@ -319,28 +319,28 @@
  *         schema:
  *           type: string
  *           format: date
- *         description: Data inicial do período
+ *         description: Data inicial do periodo
  *       - in: query
  *         name: endDate
  *         schema:
  *           type: string
  *           format: date
- *         description: Data final do período
+ *         description: Data final do periodo
  *     responses:
  *       200:
- *         description: ✅ Resumo financeiro
+ *         description: Resumo financeiro
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/FinanceSummary'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -351,9 +351,9 @@
  * @swagger
  * /api/finances/categories:
  *   get:
- *     summary: 📊 Transações por categoria
+ *     summary: Transacoes por categoria
  *     tags: [Finances]
- *     description: Retorna transações agrupadas por categoria
+ *     description: Retorna transacoes agrupadas por categoria
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -364,7 +364,7 @@
  *         description: Filtrar por tipo (true=receita, false=despesa)
  *     responses:
  *       200:
- *         description: ✅ Transações por categoria
+ *         description: Transacoes por categoria
  *         content:
  *           application/json:
  *             schema:
@@ -383,13 +383,13 @@
  *                     type: integer
  *                     example: 5
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -400,9 +400,9 @@
  * @swagger
  * /api/finances/period:
  *   get:
- *     summary: 📅 Transações por período
+ *     summary: Transacoes por periodo
  *     tags: [Finances]
- *     description: Retorna transações de um mês/ano específico
+ *     description: Retorna transacoes de um mes/ano especifico
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -413,16 +413,16 @@
  *           minimum: 1
  *           maximum: 12
  *         required: true
- *         description: Mês (1-12)
+ *         description: Mes (1-12)
  *       - in: query
  *         name: year
  *         schema:
  *           type: integer
  *         required: true
- *         description: Ano (ex: 2024)
+ *         description: "Ano (ex: 2024)"
  *     responses:
  *       200:
- *         description: ✅ Transações do período
+ *         description: Transacoes do periodo
  *         content:
  *           application/json:
  *             schema:
@@ -430,19 +430,19 @@
  *               items:
  *                 $ref: '#/components/schemas/Finance'
  *       400:
- *         description: ❌ Parâmetros inválidos
+ *         description: Parametros invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:

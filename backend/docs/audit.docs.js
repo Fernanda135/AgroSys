@@ -2,16 +2,16 @@
  * @swagger
  * tags:
  *   - name: Audit Logs
- *     description: 📋 Gerenciamento de logs de auditoria
+ *     description: Gerenciamento de logs de auditoria
  */
 
 /**
  * @swagger
  * /api/audit-logs:
  *   get:
- *     summary: 📋 Listar todos os logs de auditoria
+ *     summary: Listar todos os logs de auditoria
  *     tags: [Audit Logs]
- *     description: Retorna todos os logs de auditoria do usuário autenticado
+ *     description: Retorna todos os logs de auditoria do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -20,13 +20,13 @@
  *         schema:
  *           type: integer
  *           default: 1
- *         description: Número da página
+ *         description: Numero da pagina
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 20
- *         description: Itens por página
+ *         description: Itens por pagina
  *       - in: query
  *         name: table_name
  *         schema:
@@ -37,7 +37,7 @@
  *         schema:
  *           type: string
  *           enum: [CREATE, UPDATE, DELETE]
- *         description: Filtrar por ação
+ *         description: Filtrar por acao
  *       - in: query
  *         name: startDate
  *         schema:
@@ -52,7 +52,7 @@
  *         description: Data final
  *     responses:
  *       200:
- *         description: ✅ Lista de logs
+ *         description: Lista de logs
  *         content:
  *           application/json:
  *             schema:
@@ -72,13 +72,13 @@
  *                   items:
  *                     $ref: '#/components/schemas/AuditLog'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -89,9 +89,9 @@
  * @swagger
  * /api/audit-logs/{id}:
  *   get:
- *     summary: 🔍 Buscar log por ID
+ *     summary: Buscar log por ID
  *     tags: [Audit Logs]
- *     description: Retorna um log de auditoria específico
+ *     description: Retorna um log de auditoria especifico
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -103,25 +103,25 @@
  *         description: ID do log
  *     responses:
  *       200:
- *         description: ✅ Log encontrado
+ *         description: Log encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/AuditLog'
  *       404:
- *         description: ❌ Log não encontrado
+ *         description: Log nao encontrado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -132,9 +132,9 @@
  * @swagger
  * /api/audit-logs/table/{table_name}:
  *   get:
- *     summary: 📋 Buscar logs por tabela
+ *     summary: Buscar logs por tabela
  *     tags: [Audit Logs]
- *     description: Retorna logs de auditoria de uma tabela específica
+ *     description: Retorna logs de auditoria de uma tabela especifica
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -143,15 +143,15 @@
  *         schema:
  *           type: string
  *         required: true
- *         description: Nome da tabela (ex: Todos, Stocks)
+ *         description: "Nome da tabela (ex: Todos, Stocks)"
  *       - in: query
  *         name: record_id
  *         schema:
  *           type: integer
- *         description: ID do registro específico
+ *         description: ID do registro especifico
  *     responses:
  *       200:
- *         description: ✅ Logs encontrados
+ *         description: Logs encontrados
  *         content:
  *           application/json:
  *             schema:
@@ -159,13 +159,13 @@
  *               items:
  *                 $ref: '#/components/schemas/AuditLog'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -176,9 +176,9 @@
  * @swagger
  * /api/audit-logs/action/{action}:
  *   get:
- *     summary: 📋 Buscar logs por ação
+ *     summary: Buscar logs por acao
  *     tags: [Audit Logs]
- *     description: Retorna logs de auditoria de uma ação específica
+ *     description: Retorna logs de auditoria de uma acao especifica
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,10 +188,10 @@
  *           type: string
  *           enum: [CREATE, UPDATE, DELETE]
  *         required: true
- *         description: Tipo de ação
+ *         description: Tipo de acao
  *     responses:
  *       200:
- *         description: ✅ Logs encontrados
+ *         description: Logs encontrados
  *         content:
  *           application/json:
  *             schema:
@@ -199,13 +199,13 @@
  *               items:
  *                 $ref: '#/components/schemas/AuditLog'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -216,14 +216,14 @@
  * @swagger
  * /api/audit-logs/stats:
  *   get:
- *     summary: 📊 Estatísticas de auditoria
+ *     summary: Estatisticas de auditoria
  *     tags: [Audit Logs]
- *     description: Retorna estatísticas sobre os logs de auditoria
+ *     description: Retorna estatisticas sobre os logs de auditoria
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Estatísticas de auditoria
+ *         description: Estatisticas de auditoria
  *         content:
  *           application/json:
  *             schema:
@@ -259,13 +259,13 @@
  *                   items:
  *                     $ref: '#/components/schemas/AuditLog'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -276,7 +276,7 @@
  * @swagger
  * /api/audit-logs/clean:
  *   delete:
- *     summary: 🗑️ Limpar logs antigos (Admin)
+ *     summary: Limpar logs antigos (Admin)
  *     tags: [Audit Logs]
  *     description: Remove logs de auditoria mais antigos que X dias (apenas admin)
  *     security:
@@ -287,10 +287,10 @@
  *         schema:
  *           type: integer
  *           default: 30
- *         description: Dias de retenção (logs mais antigos serão removidos)
+ *         description: Dias de retencao (logs mais antigos serao removidos)
  *     responses:
  *       200:
- *         description: ✅ Logs removidos com sucesso
+ *         description: Logs removidos com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -306,19 +306,19 @@
  *                   type: integer
  *                   example: 50
  *       403:
- *         description: ❌ Acesso negado (apenas admin)
+ *         description: Acesso negado (apenas admin)
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:

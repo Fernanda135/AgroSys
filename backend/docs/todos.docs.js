@@ -2,16 +2,16 @@
  * @swagger
  * tags:
  *   - name: Todos
- *     description: 📋 Gerenciamento de tarefas
+ *     description: Gerenciamento de tarefas
  */
 
 /**
  * @swagger
  * /api/todos:
  *   get:
- *     summary: 📋 Listar todas as tarefas
+ *     summary: Listar todas as tarefas
  *     tags: [Todos]
- *     description: Retorna todas as tarefas do usuário autenticado
+ *     description: Retorna todas as tarefas do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -20,13 +20,13 @@
  *         schema:
  *           type: integer
  *           default: 1
- *         description: Número da página
+ *         description: Numero da pagina
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
- *         description: Itens por página
+ *         description: Itens por pagina
  *       - in: query
  *         name: completed
  *         schema:
@@ -36,10 +36,10 @@
  *         name: search
  *         schema:
  *           type: string
- *         description: Buscar por título
+ *         description: Buscar por titulo
  *     responses:
  *       200:
- *         description: ✅ Lista de tarefas
+ *         description: Lista de tarefas
  *         content:
  *           application/json:
  *             schema:
@@ -59,22 +59,22 @@
  *                   items:
  *                     $ref: '#/components/schemas/Todo'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   post:
- *     summary: ✨ Criar nova tarefa
+ *     summary: Criar nova tarefa
  *     tags: [Todos]
- *     description: Cria uma nova tarefa para o usuário autenticado
+ *     description: Cria uma nova tarefa para o usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -91,31 +91,31 @@
  *                 description: Comprar 50kg de fertilizante NPK
  *     responses:
  *       201:
- *         description: ✅ Tarefa criada com sucesso
+ *         description: Tarefa criada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Todo'
  *       400:
- *         description: ❌ Dados inválidos
+ *         description: Dados invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               titulo_obrigatorio:
- *                 summary: Título é obrigatório
+ *                 summary: Titulo e obrigatorio
  *                 value:
  *                   success: false
- *                   message: O título é obrigatório
+ *                   message: O titulo e obrigatorio
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -126,9 +126,9 @@
  * @swagger
  * /api/todos/{id}:
  *   get:
- *     summary: 🔍 Buscar tarefa por ID
+ *     summary: Buscar tarefa por ID
  *     tags: [Todos]
- *     description: Retorna uma tarefa específica do usuário autenticado
+ *     description: Retorna uma tarefa especifica do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -140,37 +140,37 @@
  *         description: ID da tarefa
  *     responses:
  *       200:
- *         description: ✅ Tarefa encontrada
+ *         description: Tarefa encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Todo'
  *       404:
- *         description: ❌ Tarefa não encontrada
+ *         description: Tarefa nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
  *               success: false
- *               message: Tarefa não encontrada
+ *               message: Tarefa nao encontrada
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   put:
- *     summary: ✏️ Atualizar tarefa
+ *     summary: Atualizar tarefa
  *     tags: [Todos]
- *     description: Atualiza uma tarefa existente do usuário autenticado
+ *     description: Atualiza uma tarefa existente do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -188,41 +188,41 @@
  *             $ref: '#/components/schemas/UpdateTodoRequest'
  *           examples:
  *             exemplo1:
- *               summary: Atualizar título e status
+ *               summary: Atualizar titulo e status
  *               value:
- *                 title: Comprar fertilizantes orgânicos
- *                 description: Comprar 50kg de fertilizante orgânico
+ *                 title: Comprar fertilizantes organicos
+ *                 description: Comprar 50kg de fertilizante organico
  *                 completed: true
  *     responses:
  *       200:
- *         description: ✅ Tarefa atualizada com sucesso
+ *         description: Tarefa atualizada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Todo'
  *       404:
- *         description: ❌ Tarefa não encontrada
+ *         description: Tarefa nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   delete:
- *     summary: 🗑️ Deletar tarefa
+ *     summary: Deletar tarefa
  *     tags: [Todos]
- *     description: Remove uma tarefa do usuário autenticado
+ *     description: Remove uma tarefa do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -234,7 +234,7 @@
  *         description: ID da tarefa
  *     responses:
  *       200:
- *         description: ✅ Tarefa deletada com sucesso
+ *         description: Tarefa deletada com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -243,19 +243,19 @@
  *               success: true
  *               message: Tarefa removida com sucesso
  *       404:
- *         description: ❌ Tarefa não encontrada
+ *         description: Tarefa nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -266,9 +266,9 @@
  * @swagger
  * /api/todos/{id}/toggle:
  *   patch:
- *     summary: 🔄 Alternar status da tarefa
+ *     summary: Alternar status da tarefa
  *     tags: [Todos]
- *     description: Alterna o status de conclusão da tarefa (completed true/false)
+ *     description: Alterna o status de conclusao da tarefa (completed true/false)
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -280,25 +280,25 @@
  *         description: ID da tarefa
  *     responses:
  *       200:
- *         description: ✅ Status alterado com sucesso
+ *         description: Status alterado com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Todo'
  *       404:
- *         description: ❌ Tarefa não encontrada
+ *         description: Tarefa nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:

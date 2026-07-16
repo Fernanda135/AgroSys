@@ -7,17 +7,22 @@
  *       properties:
  *         id:
  *           type: integer
- *           description: ID do usuário
+ *           description: ID do usuario
  *           example: 1
  *         name:
  *           type: string
- *           description: Nome do usuário
- *           example: João Silva
+ *           description: Nome do usuario
+ *           example: Joao Silva
  *         email:
  *           type: string
  *           format: email
- *           description: Email do usuário
+ *           description: Email do usuario
  *           example: joao@email.com
+ *         role:
+ *           type: string
+ *           enum: [user, admin]
+ *           description: Papel do usuario
+ *           example: user
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -36,22 +41,22 @@
  *       properties:
  *         name:
  *           type: string
- *           description: Nome completo do usuário
- *           example: João Silva
+ *           description: Nome completo do usuario
+ *           example: Joao Silva
  *         email:
  *           type: string
  *           format: email
- *           description: Email do usuário
+ *           description: Email do usuario
  *           example: joao@email.com
  *         password:
  *           type: string
  *           format: password
- *           description: Senha (mínimo 6 caracteres)
+ *           description: Senha (minimo 6 caracteres)
  *           example: 123456
  *         confirmPassword:
  *           type: string
  *           format: password
- *           description: Confirmação da senha
+ *           description: Confirmacao da senha
  *           example: 123456
  *     
  *     LoginRequest:
@@ -63,12 +68,12 @@
  *         email:
  *           type: string
  *           format: email
- *           description: Email do usuário
+ *           description: Email do usuario
  *           example: joao@email.com
  *         password:
  *           type: string
  *           format: password
- *           description: Senha do usuário
+ *           description: Senha do usuario
  *           example: 123456
  *     
  *     RefreshTokenRequest:
@@ -78,7 +83,7 @@
  *       properties:
  *         refreshToken:
  *           type: string
- *           description: Token de atualização
+ *           description: Token de atualizacao
  *           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *     
  *     AuthResponse:
@@ -107,7 +112,7 @@
  *         message:
  *           type: string
  *           description: Mensagem de erro
- *           example: Credenciais inválidas
+ *           example: Credenciais invalidas
  *         error:
  *           type: string
  *           description: Detalhes do erro (em desenvolvimento)
@@ -122,7 +127,7 @@
  *         message:
  *           type: string
  *           description: Mensagem de sucesso
- *           example: Operação realizada com sucesso
+ *           example: Operacao realizada com sucesso
  *     
  *     Todo:
  *       type: object
@@ -158,11 +163,11 @@
  *       properties:
  *         title:
  *           type: string
- *           description: Título da tarefa
+ *           description: Titulo da tarefa
  *           example: Comprar fertilizantes
  *         description:
  *           type: string
- *           description: Descrição da tarefa
+ *           description: Descricao da tarefa
  *           example: Comprar 50kg de fertilizante NPK
  *     
  *     UpdateTodoRequest:
@@ -170,12 +175,12 @@
  *       properties:
  *         title:
  *           type: string
- *           description: Título da tarefa
- *           example: Comprar fertilizantes orgânicos
+ *           description: Titulo da tarefa
+ *           example: Comprar fertilizantes organicos
  *         description:
  *           type: string
- *           description: Descrição da tarefa
- *           example: Comprar 50kg de fertilizante orgânico
+ *           description: Descricao da tarefa
+ *           example: Comprar 50kg de fertilizante organico
  *         completed:
  *           type: boolean
  *           description: Status da tarefa
@@ -195,7 +200,7 @@
  *           example: Trator
  *         category:
  *           type: string
- *           example: Máquinas
+ *           example: Maquinas
  *         quantity:
  *           type: integer
  *           example: 2
@@ -229,7 +234,7 @@
  *         category:
  *           type: string
  *           description: Categoria do produto
- *           example: Máquinas
+ *           example: Maquinas
  *         quantity:
  *           type: integer
  *           description: Quantidade em estoque
@@ -237,7 +242,7 @@
  *         unit_price:
  *           type: number
  *           format: float
- *           description: Preço unitário
+ *           description: Preco unitario
  *           example: 150000.00
  *         unit:
  *           type: string
@@ -351,7 +356,7 @@
  *         action:
  *           type: string
  *           enum: [CREATE, UPDATE, DELETE]
- *           description: Ação realizada
+ *           description: Acao realizada
  *           example: CREATE
  *         old_values:
  *           type: object
@@ -363,7 +368,7 @@
  *           example: { title: "Nova tarefa", completed: false }
  *         ip_address:
  *           type: string
- *           description: IP do usuário
+ *           description: IP do usuario
  *           example: 127.0.0.1
  *         user_agent:
  *           type: string
@@ -373,4 +378,23 @@
  *           type: string
  *           format: date-time
  *           example: 2024-01-01T00:00:00.000Z
+ *     
+ *     PaginationResponse:
+ *       type: object
+ *       properties:
+ *         total:
+ *           type: integer
+ *           description: Total de registros
+ *           example: 100
+ *         page:
+ *           type: integer
+ *           description: Pagina atual
+ *           example: 1
+ *         totalPages:
+ *           type: integer
+ *           description: Total de paginas
+ *           example: 10
+ *         data:
+ *           type: array
+ *           description: Dados da pagina
  */

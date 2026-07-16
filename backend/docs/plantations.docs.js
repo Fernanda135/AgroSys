@@ -2,16 +2,16 @@
  * @swagger
  * tags:
  *   - name: Plantations
- *     description: 🌱 Gerenciamento de plantações
+ *     description: Gerenciamento de plantacoes
  */
 
 /**
  * @swagger
  * /api/plantations:
  *   get:
- *     summary: 🌱 Listar todas as plantações
+ *     summary: Listar todas as plantacoes
  *     tags: [Plantations]
- *     description: Retorna todas as plantações do usuário autenticado
+ *     description: Retorna todas as plantacoes do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -20,13 +20,13 @@
  *         schema:
  *           type: integer
  *           default: 1
- *         description: Número da página
+ *         description: Numero da pagina
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
  *           default: 10
- *         description: Itens por página
+ *         description: Itens por pagina
  *       - in: query
  *         name: culture
  *         schema:
@@ -45,7 +45,7 @@
  *         description: Filtrar por status (ativa/colhida)
  *     responses:
  *       200:
- *         description: ✅ Lista de plantações
+ *         description: Lista de plantacoes
  *         content:
  *           application/json:
  *             schema:
@@ -65,22 +65,22 @@
  *                   items:
  *                     $ref: '#/components/schemas/Plantation'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   post:
- *     summary: 🌱 Criar nova plantação
+ *     summary: Criar nova plantacao
  *     tags: [Plantations]
- *     description: Cria uma nova plantação para o usuário autenticado
+ *     description: Cria uma nova plantacao para o usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -108,25 +108,25 @@
  *                 example: 2024-06-15
  *     responses:
  *       201:
- *         description: ✅ Plantação criada com sucesso
+ *         description: Plantacao criada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Plantation'
  *       400:
- *         description: ❌ Dados inválidos
+ *         description: Dados invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -137,9 +137,9 @@
  * @swagger
  * /api/plantations/{id}:
  *   get:
- *     summary: 🔍 Buscar plantação por ID
+ *     summary: Buscar plantacao por ID
  *     tags: [Plantations]
- *     description: Retorna uma plantação específica do usuário autenticado
+ *     description: Retorna uma plantacao especifica do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -148,37 +148,37 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da plantação
+ *         description: ID da plantacao
  *     responses:
  *       200:
- *         description: ✅ Plantação encontrada
+ *         description: Plantacao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Plantation'
  *       404:
- *         description: ❌ Plantação não encontrada
+ *         description: Plantacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   put:
- *     summary: ✏️ Atualizar plantação
+ *     summary: Atualizar plantacao
  *     tags: [Plantations]
- *     description: Atualiza uma plantação existente do usuário autenticado
+ *     description: Atualiza uma plantacao existente do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -187,7 +187,7 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da plantação
+ *         description: ID da plantacao
  *     requestBody:
  *       required: true
  *       content:
@@ -208,34 +208,34 @@
  *                 example: 2024-06-15
  *     responses:
  *       200:
- *         description: ✅ Plantação atualizada com sucesso
+ *         description: Plantacao atualizada com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Plantation'
  *       404:
- *         description: ❌ Plantação não encontrada
+ *         description: Plantacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *   
  *   delete:
- *     summary: 🗑️ Deletar plantação
+ *     summary: Deletar plantacao
  *     tags: [Plantations]
- *     description: Remove uma plantação do usuário autenticado
+ *     description: Remove uma plantacao do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -244,28 +244,28 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da plantação
+ *         description: ID da plantacao
  *     responses:
  *       200:
- *         description: ✅ Plantação removida com sucesso
+ *         description: Plantacao removida com sucesso
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/SuccessResponse'
  *       404:
- *         description: ❌ Plantação não encontrada
+ *         description: Plantacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -276,9 +276,9 @@
  * @swagger
  * /api/plantations/{id}/harvest:
  *   patch:
- *     summary: 🌾 Marcar plantação como colhida
+ *     summary: Marcar plantacao como colhida
  *     tags: [Plantations]
- *     description: Marca uma plantação como colhida e atualiza a data de colheita
+ *     description: Marca uma plantacao como colhida e atualiza a data de colheita
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -287,10 +287,10 @@
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID da plantação
+ *         description: ID da plantacao
  *     responses:
  *       200:
- *         description: ✅ Plantação marcada como colhida
+ *         description: Plantacao marcada como colhida
  *         content:
  *           application/json:
  *             schema:
@@ -301,29 +301,29 @@
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Plantação marcada como colhida com sucesso
+ *                   example: Plantacao marcada como colhida com sucesso
  *                 plantation:
  *                   $ref: '#/components/schemas/Plantation'
  *       400:
- *         description: ❌ Data de colheita inválida
+ *         description: Data de colheita invalida
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
- *         description: ❌ Plantação não encontrada
+ *         description: Plantacao nao encontrada
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -334,14 +334,14 @@
  * @swagger
  * /api/plantations/active:
  *   get:
- *     summary: 🌱 Listar plantações ativas
+ *     summary: Listar plantacoes ativas
  *     tags: [Plantations]
- *     description: Retorna apenas as plantações que ainda não foram colhidas
+ *     description: Retorna apenas as plantacoes que ainda nao foram colhidas
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Lista de plantações ativas
+ *         description: Lista de plantacoes ativas
  *         content:
  *           application/json:
  *             schema:
@@ -349,13 +349,13 @@
  *               items:
  *                 $ref: '#/components/schemas/Plantation'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -366,14 +366,14 @@
  * @swagger
  * /api/plantations/harvested:
  *   get:
- *     summary: 🌾 Listar plantações colhidas
+ *     summary: Listar plantacoes colhidas
  *     tags: [Plantations]
- *     description: Retorna apenas as plantações que já foram colhidas
+ *     description: Retorna apenas as plantacoes que ja foram colhidas
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Lista de plantações colhidas
+ *         description: Lista de plantacoes colhidas
  *         content:
  *           application/json:
  *             schema:
@@ -381,13 +381,13 @@
  *               items:
  *                 $ref: '#/components/schemas/Plantation'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -398,14 +398,14 @@
  * @swagger
  * /api/plantations/statistics:
  *   get:
- *     summary: 📊 Estatísticas das plantações
+ *     summary: Estatisticas das plantacoes
  *     tags: [Plantations]
- *     description: Retorna estatísticas sobre as plantações do usuário
+ *     description: Retorna estatisticas sobre as plantacoes do usuario
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Estatísticas das plantações
+ *         description: Estatisticas das plantacoes
  *         content:
  *           application/json:
  *             schema:
@@ -413,15 +413,15 @@
  *               properties:
  *                 total:
  *                   type: integer
- *                   description: Total de plantações
+ *                   description: Total de plantacoes
  *                   example: 8
  *                 active:
  *                   type: integer
- *                   description: Plantações ativas
+ *                   description: Plantacoes ativas
  *                   example: 5
  *                 harvested:
  *                   type: integer
- *                   description: Plantações colhidas
+ *                   description: Plantacoes colhidas
  *                   example: 3
  *                 topCultures:
  *                   type: array
@@ -436,13 +436,13 @@
  *                         type: integer
  *                         example: 4
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:
@@ -453,9 +453,9 @@
  * @swagger
  * /api/plantations/culture/{culture}:
  *   get:
- *     summary: 🔍 Buscar plantações por cultura
+ *     summary: Buscar plantacoes por cultura
  *     tags: [Plantations]
- *     description: Retorna plantações que correspondem a uma cultura específica
+ *     description: Retorna plantacoes que correspondem a uma cultura especifica
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -464,10 +464,10 @@
  *         schema:
  *           type: string
  *         required: true
- *         description: Nome da cultura (ex: Soja, Milho, Café)
+ *         description: "Nome da cultura (ex: Soja, Milho, Cafe)"
  *     responses:
  *       200:
- *         description: ✅ Lista de plantações da cultura
+ *         description: Lista de plantacoes da cultura
  *         content:
  *           application/json:
  *             schema:
@@ -475,13 +475,13 @@
  *               items:
  *                 $ref: '#/components/schemas/Plantation'
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno
+ *         description: Erro interno
  *         content:
  *           application/json:
  *             schema:

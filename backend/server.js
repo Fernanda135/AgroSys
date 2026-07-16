@@ -79,15 +79,4 @@ app.listen(port, () => {
     console.log(`Server running on port: ${port}`);
     console.log(`http://localhost:${port}`);
     console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log('\nRotas disponíveis:');
-    console.log(`  POST /api/auth/login`);
-    console.log(`  POST /api/auth/register`);
-    console.log(`  GET  /api/profile`);
-    console.log(`  GET  /api/todos`);
-    console.log(`  GET  /api/stocks`);
-    console.log(`  GET  /api/plantations`);
-    console.log(`  GET  /api/finances`);
-    console.log(`  GET  /api/audit-logs`);
-    console.log(`  GET  /health`);
-    console.log(`  GET  /api-docs`);
 });

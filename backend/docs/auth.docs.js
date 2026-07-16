@@ -2,16 +2,16 @@
  * @swagger
  * tags:
  *   - name: Auth
- *     description: 🔐 Autenticação e gerenciamento de usuários
+ *     description: Autenticacao e gerenciamento de usuarios
  */
 
 /**
  * @swagger
  * /api/auth/register:
  *   post:
- *     summary: 📝 Registrar um novo usuário
+ *     summary: Registrar um novo usuario
  *     tags: [Auth]
- *     description: Cria uma nova conta de usuário no sistema
+ *     description: Cria uma nova conta de usuario no sistema
  *     requestBody:
  *       required: true
  *       content:
@@ -22,13 +22,13 @@
  *             exemplo1:
  *               summary: Exemplo de registro
  *               value:
- *                 name: João Silva
+ *                 name: Joao Silva
  *                 email: joao@email.com
  *                 password: 123456
  *                 confirmPassword: 123456
  *     responses:
  *       201:
- *         description: ✅ Usuário criado com sucesso
+ *         description: Usuario criado com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -39,29 +39,29 @@
  *               refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *               user:
  *                 id: 1
- *                 name: João Silva
+ *                 name: Joao Silva
  *                 email: joao@email.com
  *                 createdAt: 2024-01-01T00:00:00.000Z
  *                 updatedAt: 2024-01-01T00:00:00.000Z
  *       400:
- *         description: ❌ Dados inválidos
+ *         description: Dados invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               email_ja_existe:
- *                 summary: Email já cadastrado
+ *                 summary: Email ja cadastrado
  *                 value:
  *                   success: false
- *                   message: Email já está em uso
+ *                   message: Email ja esta em uso
  *               senha_invalida:
  *                 summary: Senha muito curta
  *                 value:
  *                   success: false
  *                   message: A senha deve ter pelo menos 6 caracteres
  *       500:
- *         description: 💥 Erro interno do servidor
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
@@ -72,9 +72,9 @@
  * @swagger
  * /api/auth/login:
  *   post:
- *     summary: 🔑 Login do usuário
+ *     summary: Login do usuario
  *     tags: [Auth]
- *     description: Autentica o usuário e retorna os tokens de acesso
+ *     description: Autentica o usuario e retorna os tokens de acesso
  *     requestBody:
  *       required: true
  *       content:
@@ -89,7 +89,7 @@
  *                 password: 123456
  *     responses:
  *       200:
- *         description: ✅ Login realizado com sucesso
+ *         description: Login realizado com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -100,21 +100,21 @@
  *               refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *               user:
  *                 id: 1
- *                 name: João Silva
+ *                 name: Joao Silva
  *                 email: joao@email.com
  *                 createdAt: 2024-01-01T00:00:00.000Z
  *                 updatedAt: 2024-01-01T00:00:00.000Z
  *       401:
- *         description: ❌ Credenciais inválidas
+ *         description: Credenciais invalidas
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
  *               success: false
- *               message: Credenciais inválidas
+ *               message: Credenciais invalidas
  *       500:
- *         description: 💥 Erro interno do servidor
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
@@ -125,7 +125,7 @@
  * @swagger
  * /api/auth/refresh-token:
  *   post:
- *     summary: 🔄 Atualizar token de acesso
+ *     summary: Atualizar token de acesso
  *     tags: [Auth]
  *     description: Gera um novo token de acesso usando o refresh token
  *     requestBody:
@@ -141,7 +141,7 @@
  *                 refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *     responses:
  *       200:
- *         description: ✅ Token atualizado com sucesso
+ *         description: Token atualizado com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -157,16 +157,16 @@
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *       401:
- *         description: ❌ Token inválido ou expirado
+ *         description: Token invalido ou expirado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
  *               success: false
- *               message: Refresh token inválido ou expirado
+ *               message: Refresh token invalido ou expirado
  *       500:
- *         description: 💥 Erro interno do servidor
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
@@ -177,14 +177,14 @@
  * @swagger
  * /api/auth/logout:
  *   post:
- *     summary: 🚪 Logout do usuário
+ *     summary: Logout do usuario
  *     tags: [Auth]
- *     description: Invalida o refresh token do usuário
+ *     description: Invalida o refresh token do usuario
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Logout realizado com sucesso
+ *         description: Logout realizado com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -193,13 +193,13 @@
  *               success: true
  *               message: Logout realizado com sucesso
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno do servidor
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
@@ -210,32 +210,32 @@
  * @swagger
  * /api/auth/me:
  *   get:
- *     summary: 👤 Obter dados do usuário logado
+ *     summary: Obter dados do usuario logado
  *     tags: [Auth]
- *     description: Retorna os dados do usuário autenticado
+ *     description: Retorna os dados do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: ✅ Dados do usuário
+ *         description: Dados do usuario
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/User'
  *             example:
  *               id: 1
- *               name: João Silva
+ *               name: Joao Silva
  *               email: joao@email.com
  *               createdAt: 2024-01-01T00:00:00.000Z
  *               updatedAt: 2024-01-01T00:00:00.000Z
  *       401:
- *         description: ❌ Não autorizado
+ *         description: Nao autorizado
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
- *         description: 💥 Erro interno do servidor
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:
@@ -246,9 +246,9 @@
  * @swagger
  * /api/auth/change-password:
  *   put:
- *     summary: 🔒 Alterar senha do usuário
+ *     summary: Alterar senha do usuario
  *     tags: [Auth]
- *     description: Altera a senha do usuário autenticado
+ *     description: Altera a senha do usuario autenticado
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -275,11 +275,11 @@
  *               confirmNewPassword:
  *                 type: string
  *                 format: password
- *                 description: Confirmação da nova senha
+ *                 description: Confirmacao da nova senha
  *                 example: 654321
  *     responses:
  *       200:
- *         description: ✅ Senha alterada com sucesso
+ *         description: Senha alterada com sucesso
  *         content:
  *           application/json:
  *             schema:
@@ -288,24 +288,24 @@
  *               success: true
  *               message: Senha alterada com sucesso
  *       400:
- *         description: ❌ Dados inválidos
+ *         description: Dados invalidos
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             examples:
  *               senhas_diferentes:
- *                 summary: Senhas não coincidem
+ *                 summary: Senhas nao coincidem
  *                 value:
  *                   success: false
- *                   message: As senhas não coincidem
+ *                   message: As senhas nao coincidem
  *               senha_fraca:
  *                 summary: Senha muito curta
  *                 value:
  *                   success: false
  *                   message: A nova senha deve ter pelo menos 6 caracteres
  *       401:
- *         description: ❌ Senha atual incorreta
+ *         description: Senha atual incorreta
  *         content:
  *           application/json:
  *             schema:
@@ -314,7 +314,7 @@
  *               success: false
  *               message: Senha atual incorreta
  *       500:
- *         description: 💥 Erro interno do servidor
+ *         description: Erro interno do servidor
  *         content:
  *           application/json:
  *             schema:

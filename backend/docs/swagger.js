@@ -1,4 +1,3 @@
-// backend/swagger.js
 const swaggerJsdoc = require('swagger-jsdoc');
 
 const options = {
@@ -6,13 +5,8 @@ const options = {
         openapi: '3.0.0',
         info: {
             title: 'RuralSys API',
-            description: '🚜 API para sistema de gerenciamento rural',
+            description: 'API para sistema de gerenciamento rural',
             version: '1.0.0',
-            // contact: {
-            //     name: 'Suporte RuralSys',
-            //     email: 'suporte@ruralsys.com',
-            //     url: 'https://ruralsys.com'
-            // },
             license: {
                 name: 'MIT',
                 url: 'https://opensource.org/licenses/MIT'
@@ -21,12 +15,12 @@ const options = {
         servers: [
             {
                 url: 'http://localhost:3001',
-                description: '🛠️ Servidor de Desenvolvimento'
+                description: 'Servidor de Desenvolvimento'
             },
-            {
-                url: 'https://api.ruralsys.com',
-                description: '🚀 Servidor de Produção'
-            }
+            // {
+            //     url: 'https://api.ruralsys.com',
+            //     description: 'Servidor de Produção'
+            // }
         ],
         components: {
             securitySchemes: {
@@ -34,7 +28,7 @@ const options = {
                     type: 'http',
                     scheme: 'bearer',
                     bearerFormat: 'JWT',
-                    description: '🔑 Insira o token JWT para autenticação'
+                    description: 'Insira o token JWT para autenticação'
                 }
             }
         },
