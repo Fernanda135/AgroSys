@@ -6,40 +6,97 @@ export interface Finance {
     isIncome: boolean;
     description: string;
     amount: number;
+    category?: string;
     transactionDate: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface CreateFinanceData {
+    isIncome: boolean;
+    description: string;
+    amount: number;
+    category?: string;
+    transactionDate?: string;
+}
+
+export interface UpdateFinanceData {
+    isIncome?: boolean;
+    description?: string;
+    amount?: number;
+    category?: string;
+    transactionDate?: string;
+}
+
+export interface FinanceSummary {
+    totalIncome: number;
+    totalExpense: number;
+    balance: number;
+}
+
+export interface FinanceResponse {
+    success: boolean;
+    data: Finance[];
+    summary?: FinanceSummary;
+}
+
+export interface SingleFinanceResponse {
+    success: boolean;
+    data: Finance;
+}
+
+export interface DeleteFinanceResponse {
+    success: boolean;
+    message: string;
 }
 
 export const financeService = {
+
     async getAll() {
-        const { data } = await api.get<Finance[]>("/finances");
+        const { data } = await api.get<FinanceResponse>("/finances");
         return data;
     },
 
-    async create(finance: {
-        isIncome: boolean;
-        description: string;
-        amount: number;
-        transactionDate: string;
-    }) {
-        const { data } = await api.post("/finances", finance);
+    async getById(id: number) {
+        const { data } = await api.get<SingleFinanceResponse>(`/finances/${id}`);
         return data;
     },
 
-    async update(
-        id: number,
-        finance: Partial<{
-            isIncome: boolean;
-            description: string;
-            amount: number;
-            transactionDate: string;
-        }>
-    ) {
-        const { data } = await api.put(`/finances/${id}`, finance);
+    async create(finance: CreateFinanceData) {
+        const { data } = await api.post<SingleFinanceResponse>("/finances", finance);
+        return data;
+    },
+
+    async update(id: number, finance: UpdateFinanceData) {
+        const { data } = await api.put<SingleFinanceResponse>(`/finances/${id}`, finance);
         return data;
     },
 
     async delete(id: number) {
-        const { data } = await api.delete(`/finances/${id}`);
+        const { data } = await api.delete<DeleteFinanceResponse>(`/finances/${id}`);
         return data;
     },
+
+    async getSummary() {
+        const { data } = await api.get<{ success: boolean; data: FinanceSummary }>("/finances/summary");
+        return data;
+    },
+
+    async getByPeriod(month: number, year: number) {
+        const { data } = await api.get<FinanceResponse>(`/finances/period?month=${month}&year=${year}`);
+        return data;
+    },
+
+    async getByType(isIncome: boolean) {
+        const { data } = await api.get<FinanceResponse>(`/finances?isIncome=${isIncome}`);
+        return data;
+    },
+
+    async getByCategory(isIncome?: boolean) {
+        const url = isIncome !== undefined
+            ? `/finances/categories?isIncome=${isIncome}`
+            : "/finances/categories";
+        const { data } = await api.get(url);
+        return data;
+    }
 };

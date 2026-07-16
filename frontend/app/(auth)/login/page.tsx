@@ -29,11 +29,12 @@ export default function Login() {
       localStorage.setItem("refreshToken", data.refreshToken);
 
       toast.success("Login realizado com sucesso!");
-
       router.push("/dashboard");
-    } catch (error) {
+
+    } catch (error: any) {
       console.error(error);
-      toast.error("Email ou senha inválidos!");
+      const errorMessage = error.response?.data?.message || "Email ou senha inválidos!";
+      toast.error(errorMessage);
     }
   }
 

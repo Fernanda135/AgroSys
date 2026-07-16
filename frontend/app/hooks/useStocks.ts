@@ -9,10 +9,14 @@ export function useStocks() {
     async function loadStocks() {
         try {
             setLoading(true);
-
-            const data = await stockService.getAll();
-            setStocks(data);
-            setError(null);
+            const response = await stockService.getAll();
+            
+            if (response.success) {
+                setStocks(response.data);
+                setError(null);
+            } else {
+                setError("Erro ao carregar estoque");
+            }
         } catch (err) {
             console.error(err);
             setError("Erro ao carregar o estoque.");
@@ -21,54 +25,94 @@ export function useStocks() {
         }
     }
 
-    async function addStock(data: { product_name: string; category: string; quantity: number; unit_price: number; unit: string; }) {
-            try {
-                const newStock = await stockService.create({
-                    product_name: data.product_name,
-                    category: data.category,
-                    quantity: data.quantity,
-                    unit_price: data.unit_price,
-                    unit: data.unit,
-                });
-                setStocks((prev) => [newStock, ...prev]);
-                return newStock;
-            } catch (err) {
-                console.error(err);
-                setError("Erro ao adicionar item no estoque.");
-                throw err;
+    async function addStock(data: {
+        product_name: string;
+        category?: string;
+        quantity: number;
+        unit_price: number;
+        unit?: string;
+    }) {
+        try {
+            const response = await stockService.create({
+                product_name: data.product_name,
+                category: data.category,
+                quantity: data.quantity,
+                unit_price: data.unit_price,
+                unit: data.unit || "un",
+            });
+            
+            if (response.success) {
+                setStocks((prev) => [response.data, ...prev]);
+                return response.data;
             }
+            throw new Error("Erro ao adicionar item");
+        } catch (err) {
+            console.error(err);
+            setError("Erro ao adicionar item no estoque.");
+            throw err;
         }
-    
-        async function updateStock(id: number, data: { product_name: string; category: string; quantity: number; unit_price: number; unit: string; }) {
-            try {
-                const updateStock = await stockService.update(id, {
-                    product_name: data.product_name,
-                    category: data.category,
-                    quantity: data.quantity,
-                    unit_price: data.unit_price,
-                    unit: data.unit,
-                });
+    }
+
+    async function updateStock(id: number, data: {
+        product_name?: string;
+        category?: string;
+        quantity?: number;
+        unit_price?: number;
+        unit?: string;
+    }) {
+        try {
+            const response = await stockService.update(id, {
+                product_name: data.product_name,
+                category: data.category,
+                quantity: data.quantity,
+                unit_price: data.unit_price,
+                unit: data.unit,
+            });
+            
+            if (response.success) {
                 setStocks((prev) =>
-                    prev.map((todo) => (todo.id === id ? updateStock : todo))
+                    prev.map((stock) => (stock.id === id ? response.data : stock))
                 );
-                return updateStock;
-            } catch (err) {
-                console.error(err);
-                setError("Erro ao atualizar item do estoque.");
-                throw err;
+                return response.data;
             }
+            throw new Error("Erro ao atualizar item");
+        } catch (err) {
+            console.error(err);
+            setError("Erro ao atualizar item do estoque.");
+            throw err;
         }
-    
-        async function deleteStock(id: number) {
-            try {
-                await stockService.delete(id);
-                setStocks((prev) => prev.filter((todo) => todo.id !== id));
-            } catch (err) {
-                console.error(err);
-                setError("Erro ao deletar item do estoque.");
-                throw err;
+    }
+
+    async function addQuantity(id: number, quantity: number) {
+        try {
+            const response = await stockService.addQuantity(id, quantity);
+            
+            if (response.success) {
+                setStocks((prev) =>
+                    prev.map((stock) => (stock.id === id ? response.data : stock))
+                );
+                return response.data;
             }
+            throw new Error("Erro ao adicionar quantidade");
+        } catch (err) {
+            console.error(err);
+            setError("Erro ao adicionar quantidade ao estoque.");
+            throw err;
         }
+    }
+
+    async function deleteStock(id: number) {
+        try {
+            const response = await stockService.delete(id);
+            if (response.success) {
+                setStocks((prev) => prev.filter((stock) => stock.id !== id));
+            }
+        } catch (err) {
+            console.error(err);
+            setError("Erro ao deletar item do estoque.");
+            throw err;
+        }
+    }
 
     useEffect(() => {
         loadStocks();
@@ -78,6 +122,11 @@ export function useStocks() {
 
     const totalQuantity = useMemo(
         () => stocks.reduce((total, stock) => total + stock.quantity, 0),
+        [stocks]
+    );
+
+    const totalValue = useMemo(
+        () => stocks.reduce((total, stock) => total + (stock.quantity * stock.unit_price), 0),
         [stocks]
     );
 
@@ -91,6 +140,13 @@ export function useStocks() {
         [stocks]
     );
 
+    const categories = useMemo(() => {
+        const uniqueCategories = new Set(
+            stocks.map(s => s.category).filter(Boolean)
+        );
+        return Array.from(uniqueCategories);
+    }, [stocks]);
+
     return {
         stocks,
         setStocks,
@@ -100,15 +156,20 @@ export function useStocks() {
 
         addStock,
         updateStock,
+        addQuantity,
         deleteStock,
 
         totalProducts,
         totalQuantity,
+        totalValue,
 
         lowStockProducts,
         lowStockCount: lowStockProducts.length,
 
         emptyStockProducts,
         emptyStockCount: emptyStockProducts.length,
+
+        categories,
+        categoryCount: categories.length,
     };
 }

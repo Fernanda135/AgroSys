@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ClipboardList, Clock, CircleCheckBig } from "lucide-react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
-import { useTodos } from "@/app/hooks/useTodo";
+import { useTodos } from "@/app/hooks/useTodos";
 import { Todo } from "@/app/services/todo.service";
 import SummaryCard from "@/app/components/SummaryCard";
 import TodoModal from "@/app/components/todo/TodoModal";

@@ -5,7 +5,7 @@ export interface AuditLog {
     user_id: number;
     table_name: string;
     record_id: number;
-    action: string;
+    action: 'CREATE' | 'UPDATE' | 'DELETE';
     old_values: any;
     new_values: any;
     ip_address: string;
@@ -14,9 +14,27 @@ export interface AuditLog {
     updatedAt: string;
 }
 
+export interface AuditLogResponse {
+    success: boolean;
+    data: AuditLog[];
+    total?: number;
+    page?: number;
+    totalPages?: number;
+}
+
+
 export const auditService = {
-    async getAll() {
-        const { data } = await api.get<AuditLog[]>("/auditlogs");
+
+    async getAll(params?: {
+        page?: number;
+        limit?: number;
+        table_name?: string;
+        action?: string;
+        startDate?: string;
+        endDate?: string;
+    }) {
+        const { data } = await api.get<AuditLogResponse>("/audit-logs", { params });
         return data;
     }
+
 };

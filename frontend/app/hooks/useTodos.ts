@@ -9,9 +9,14 @@ export function useTodos() {
     async function loadTodos() {
         try {
             setLoading(true);
-            const data = await todoService.getAll();
-            setTodos(data);
-            setError(null);
+            const response = await todoService.getAll();
+            
+            if (response.success) {
+                setTodos(response.data);
+                setError(null);
+            } else {
+                setError("Erro ao carregar tarefas");
+            }
         } catch (err) {
             console.error(err);
             setError("Erro ao carregar tarefas.");
@@ -20,14 +25,18 @@ export function useTodos() {
         }
     }
 
-    async function addTodo(data: { title: string; description: string }) {
+    async function addTodo(data: { title: string; description?: string }) {
         try {
-            const newTodo = await todoService.create({
+            const response = await todoService.create({
                 title: data.title,
-                description: data.description,
+                description: data.description || "",
             });
-            setTodos((prev) => [newTodo, ...prev]);
-            return newTodo;
+            
+            if (response.success) {
+                setTodos((prev) => [response.data, ...prev]);
+                return response.data;
+            }
+            throw new Error("Erro ao criar tarefa");
         } catch (err) {
             console.error(err);
             setError("Erro ao criar tarefa.");
@@ -35,16 +44,20 @@ export function useTodos() {
         }
     }
 
-    async function updateTodo(id: number, data: { title: string; description: string }) {
+    async function updateTodo(id: number, data: { title?: string; description?: string }) {
         try {
-            const updatedTodo = await todoService.update(id, {
+            const response = await todoService.update(id, {
                 title: data.title,
                 description: data.description,
             });
-            setTodos((prev) =>
-                prev.map((todo) => (todo.id === id ? updatedTodo : todo))
-            );
-            return updatedTodo;
+            
+            if (response.success) {
+                setTodos((prev) =>
+                    prev.map((todo) => (todo.id === id ? response.data : todo))
+                );
+                return response.data;
+            }
+            throw new Error("Erro ao atualizar tarefa");
         } catch (err) {
             console.error(err);
             setError("Erro ao atualizar tarefa.");
@@ -54,16 +67,15 @@ export function useTodos() {
 
     async function toggleTodo(id: number) {
         try {
-            const todo = todos.find((t) => t.id === id);
-            if (!todo) throw new Error("Tarefa não encontrada");
-
-            const updatedTodo = await todoService.update(id, {
-                completed: !todo.completed,
-            });
-            setTodos((prev) =>
-                prev.map((t) => (t.id === id ? updatedTodo : t))
-            );
-            return updatedTodo;
+            const response = await todoService.toggleStatus(id);
+            
+            if (response.success) {
+                setTodos((prev) =>
+                    prev.map((t) => (t.id === id ? response.data : t))
+                );
+                return response.data;
+            }
+            throw new Error("Erro ao alternar status");
         } catch (err) {
             console.error(err);
             setError("Erro ao alternar status da tarefa.");
@@ -73,8 +85,10 @@ export function useTodos() {
 
     async function deleteTodo(id: number) {
         try {
-            await todoService.delete(id);
-            setTodos((prev) => prev.filter((todo) => todo.id !== id));
+            const response = await todoService.delete(id);
+            if (response.success) {
+                setTodos((prev) => prev.filter((todo) => todo.id !== id));
+            }
         } catch (err) {
             console.error(err);
             setError("Erro ao deletar tarefa.");
@@ -82,11 +96,9 @@ export function useTodos() {
         }
     }
 
-
     useEffect(() => {
         loadTodos();
     }, []);
-
 
     const pendingTodos = useMemo(
         () => todos.filter(todo => !todo.completed),
