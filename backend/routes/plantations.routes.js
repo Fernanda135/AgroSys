@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const plantationController = require('../controllers/plantations.controller');
 
-const { verifyToken } = require('../middlewares/auth.middleware');
-const plantationsController = require('../controllers/plantations.controller');
-
-
-router.post('/plantations', verifyToken, plantationsController.create);
-router.get('/plantations', verifyToken, plantationsController.findAll);
-router.put('/plantations/:id', verifyToken, plantationsController.update);
-router.delete('/plantations/:id', verifyToken, plantationsController.delete);
+router.get('/', plantationController.findAll);
+router.post('/', plantationController.create);
+router.put('/:id', plantationController.update);
+router.delete('/:id', plantationController.delete);
 
 module.exports = router;

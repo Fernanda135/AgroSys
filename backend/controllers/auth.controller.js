@@ -1,114 +1,170 @@
-const db = require('../models/index.js');
+const db = require('../models');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const AppError = require('../utils/AppError');
 
 const { createToken, verifyExpiration } = db.authToken;
 
-const registerUser = async (req, res) => {
+exports.registerUser = async (req, res, next) => {
     try {
-        const { name, email, password } = req.body;
-        // Check if the email exists
-        const userExists = await db.User.findOne({
-            where: {email}
-        });
+        const { name, email, password, confirmPassword } = req.body;
+
+        if (!name || name.trim().length === 0) {
+            throw AppError.validation('Nome é obrigatório', [
+                { field: 'name', message: 'Nome é obrigatório' }
+            ]);
+        }
+
+        if (!email) {
+            throw AppError.validation('Email é obrigatório', [
+                { field: 'email', message: 'Email é obrigatório' }
+            ]);
+        }
+
+        if (!password || password.length < 6) {
+            throw AppError.validation('Senha deve ter pelo menos 6 caracteres', [
+                { field: 'password', message: 'Senha deve ter pelo menos 6 caracteres' }
+            ]);
+        }
+
+        if (password !== confirmPassword) {
+            throw AppError.validation('Senhas não coincidem', [
+                { field: 'confirmPassword', message: 'Senhas não coincidem' }
+            ]);
+        }
+
+        const userExists = await db.User.findOne({ where: { email } });
         if (userExists) {
-            return res.status(400).send('Email is already associated with an account');
+            throw AppError.conflict('Email já está associado a uma conta', { field: 'email' });
         }
 
-
-        await db.User.create({
-            name,
-            email,
-            password: await bcrypt.hash(password, 15),
+        const user = await db.User.create({
+            name: name.trim(),
+            email: email.toLowerCase().trim(),
+            password: await bcrypt.hash(password, 10)
         });
-        return res.status(200).send('Registration successful');
-    } catch (err) {
-        return res.status(500).send('Error in registering user');
-    }
-}
 
-
-const signInUser = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await db.User.findOne({
-            where: {email}
-        });
-        if (!user) {
-            return res.status(404).json('Email not found');
-        }
-
-
-        // Verify password
-        const passwordValid = await bcrypt.compare(password, user.password);
-        if (!passwordValid) {
-            return res.status(404).json('Incorrect email and password combination');
-        }
-
-
-        // Authenticate user with jwt
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRATION
-        });
+        const token = jwt.sign(
+            { id: user.id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: process.env.JWT_EXPIRATION || '1d' }
+        );
 
         let refreshToken = await createToken(user);
 
-        res.status(200).send({
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            accessToken: token,
-            refreshToken
+        res.status(201).json({
+            success: true,
+            message: 'Registro realizado com sucesso',
+            data: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                accessToken: token,
+                refreshToken
+            }
         });
 
-    } catch (err) {
-        console.error(err);
-        return res.status(500).json(err.message);
+    } catch (error) {
+        next(error);
     }
 };
 
-
-const refreshToken = async (req, res) => {
-    const { refreshToken: requestToken } = req.body;
-    if (requestToken == null) {
-        return res.status(403).send("Refresh Token is required!");
-    }
-
+exports.signInUser = async (req, res, next) => {
     try {
-        let refreshToken = await db.authToken.findOne({ where: { token: requestToken } });
-        if (!refreshToken) {
-            res.status(403).send("Invalid refresh token");
-            return;
+        const { email, password } = req.body;
+
+        if (!email) {
+            throw AppError.validation('Email é obrigatório', [
+                { field: 'email', message: 'Email é obrigatório' }
+            ]);
         }
+
+        if (!password) {
+            throw AppError.validation('Senha é obrigatória', [
+                { field: 'password', message: 'Senha é obrigatória' }
+            ]);
+        }
+
+        const user = await db.User.findOne({ where: { email: email.toLowerCase().trim() } });
+        
+        if (!user) {
+            throw AppError.unauthorized('Email ou senha incorretos');
+        }
+
+        const passwordValid = await bcrypt.compare(password, user.password);
+        if (!passwordValid) {
+            throw AppError.unauthorized('Email ou senha incorretos');
+        }
+
+        const token = jwt.sign(
+            { id: user.id }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: process.env.JWT_EXPIRATION || '1d' }
+        );
+
+        let refreshToken = await createToken(user);
+
+        res.status(200).json({
+            success: true,
+            data: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                accessToken: token,
+                refreshToken
+            }
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.refreshToken = async (req, res, next) => {
+    try {
+        const { refreshToken: requestToken } = req.body;
+
+        if (!requestToken) {
+            throw AppError.badRequest('Refresh token é obrigatório');
+        }
+
+        let refreshToken = await db.authToken.findOne({ 
+            where: { token: requestToken } 
+        });
+
+        if (!refreshToken) {
+            throw AppError.unauthorized('Refresh token inválido');
+        }
+
         if (verifyExpiration(refreshToken)) {
-            db.authToken.destroy({ where: { id: refreshToken.id } });
-            res.status(403).send("Refresh token was expired. Please make a new sign in request");
-            return;
+            await db.authToken.destroy({ where: { id: refreshToken.id } });
+            throw AppError.unauthorized('Refresh token expirado. Faça login novamente');
         }
 
         const user = await db.User.findOne({
-            where: {id: refreshToken.user},
-            attributes: {
-                exclude: ['password']
+            where: { id: refreshToken.user },
+            attributes: { exclude: ['password'] }
+        });
+
+        if (!user) {
+            throw AppError.unauthorized('Usuário não encontrado');
+        }
+
+        let newAccessToken = jwt.sign(
+            { id: user.id }, 
+            process.env.JWT_SECRET,
+            { expiresIn: process.env.JWT_EXPIRATION || '1d' }
+        );
+
+        res.status(200).json({
+            success: true,
+            data: {
+                accessToken: newAccessToken,
+                refreshToken: refreshToken.token
             }
         });
-        let newAccessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-            expiresIn: process.env.JWT_EXPIRATION,
-        });
 
-        return res.status(200).json({
-            accessToken: newAccessToken,
-            refreshToken: refreshToken.token,
-        });
-    } catch (err) {
-        console.log('err', err);
-        return res.status(500).send('Internal server error');
+    } catch (error) {
+        next(error);
     }
-};
-
-
-module.exports = {
-    registerUser,
-    signInUser,
-    refreshToken
 };

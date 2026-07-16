@@ -1,76 +1,68 @@
 const db = require('../models');
+const AppError = require('../utils/AppError');
+const validators = require('../utils/validators');
 
 
-exports.create = async (req, res) => {
+exports.create = async (req, res, next) => {
     try {
         const { title, description } = req.body;
 
-        if (!title || title.trim().length === 0) {
-            return res.status(400).json({
-                message: 'O título é obrigatório'
-            });
-        }
+        validators.required(title, 'título');
+        validators.lengthBetween(title, 'título', 3, 255);
 
         const todo = await db.ToDo.create({
             user_id: req.user.id,
-            title,
-            description,
+            title: title.trim(),
+            description: description?.trim() || null,
             completed: false
         });
 
-        return res.status(201).json(todo);
+        res.status(201).json({
+            success: true,
+            data: todo
+        });
 
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };
 
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
     try {
-        const todos = await db.ToDo.findAll({
-            where: {
-                user_id: req.user.id,
-            }
-        });
-        return res.status(200).json(todos);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
-    }
-};
+        const { completed, search } = req.query;
+        const where = { user_id: req.user.id };
 
-exports.update = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const todo = await db.ToDo.findOne({
-            where: {
-                id,
-                user_id: req.user.id
-            }
-        });
-
-        if (!todo) {
-            return res.status(404).json({
-                message: 'Tarefa não encontrada'
-            });
+        if (completed !== undefined) {
+            where.completed = completed === 'true';
         }
 
-        await todo.update(req.body);
-        return res.status(200).json(todo);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
-    }
+        if (search) {
+            where.title = { [db.Sequelize.Op.like]: `%${search}%` };
+        }
 
+        const todos = await db.ToDo.findAll({
+            where,
+            order: [['createdAt', 'DESC']]
+        });
+
+        const total = todos.length;
+        const completedCount = todos.filter(t => t.completed).length;
+        const pendingCount = total - completedCount;
+
+        res.status(200).json({
+            success: true,
+            data: todos,
+            stats: { total, completed: completedCount, pending: pendingCount }
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
-exports.delete = async (req, res) => {
+exports.findOne = async (req, res, next) => {
     try {
         const { id } = req.params;
+
         const todo = await db.ToDo.findOne({
             where: {
                 id,
@@ -79,19 +71,100 @@ exports.delete = async (req, res) => {
         });
 
         if (!todo) {
-            return res.status(404).json({
-                message: 'Tarefa não encontrada'
-            });
+            throw AppError.notFound('Tarefa não encontrada', { id });
+        }
+
+        res.status(200).json({
+            success: true,
+            data: todo
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.update = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { title, description, completed } = req.body;
+
+        const todo = await db.ToDo.findOne({
+            where: { id, user_id: req.user.id }
+        });
+
+        if (!todo) {
+            throw AppError.notFound('Tarefa não encontrada', { id });
+        }
+
+        if (title !== undefined) {
+            validators.required(title, 'título');
+            validators.lengthBetween(title, 'título', 3, 255);
+        }
+        if (completed !== undefined) {
+            validators.validBoolean(completed, 'status');
+        }
+
+        const updateData = {};
+        if (title !== undefined) updateData.title = title.trim();
+        if (description !== undefined) updateData.description = description?.trim() || null;
+        if (completed !== undefined) updateData.completed = completed;
+
+        await todo.update(updateData);
+
+        res.status(200).json({
+            success: true,
+            data: todo
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.delete = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const todo = await db.ToDo.findOne({
+            where: { id, user_id: req.user.id }
+        });
+
+        if (!todo) {
+            throw AppError.notFound('Tarefa não encontrada', { id });
         }
 
         await todo.destroy();
 
-        return res.status(200).json({
+        res.status(200).json({
+            success: true,
             message: 'Tarefa removida com sucesso'
         });
+
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
+        next(error);
+    }
+};
+
+exports.toggleStatus = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const todo = await db.ToDo.findOne({
+            where: { id, user_id: req.user.id }
         });
+
+        if (!todo) {
+            throw AppError.notFound('Tarefa não encontrada', { id });
+        }
+
+        await todo.update({ completed: !todo.completed });
+
+        res.status(200).json({
+            success: true,
+            data: todo
+        });
+
+    } catch (error) {
+        next(error);
     }
 };

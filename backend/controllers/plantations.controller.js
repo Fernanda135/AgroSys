@@ -1,123 +1,140 @@
 const db = require('../models');
+const AppError = require('../utils/AppError');
+const validators = require('../utils/validators');
 
-exports.create = async (req, res) => {
+exports.create = async (req, res, next) => {
     try {
         const { culture, plantingDate, harvestDate } = req.body;
 
-        if (!culture || culture.trim().length === 0) {
-            return res.status(400).json({
-                message: 'O nome da plantação é obrigatório'
-            });
+        validators.required(culture, 'cultura');
+        validators.validDate(plantingDate, 'data de plantio');
+        validators.validDate(harvestDate, 'data de colheita');
+
+        if (plantingDate && harvestDate) {
+            const plant = new Date(plantingDate);
+            const harvest = new Date(harvestDate);
+            if (harvest < plant) {
+                throw AppError.validation('Data de colheita deve ser após a data de plantio', [
+                    { field: 'harvestDate', message: 'Data de colheita deve ser após o plantio' }
+                ]);
+            }
         }
 
         const plantation = await db.Plantations.create({
             user_id: req.user.id,
-            culture,
-            plantingDate,
-            harvestDate,
+            culture: culture.trim(),
+            plantingDate: plantingDate || null,
+            harvestDate: harvestDate || null,
             isHarvested: false
         });
 
-        return res.status(201).json(plantation);
+        res.status(201).json({
+            success: true,
+            data: plantation
+        });
 
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };
 
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
     try {
         const plantations = await db.Plantations.findAll({
-            where: {
-                user_id: req.user.id,
-            },
+            where: { user_id: req.user.id },
+            order: [['plantingDate', 'DESC']]
         });
-        return res.status(200).json(plantations);
+
+        const total = plantations.length;
+        const active = plantations.filter(p => !p.isHarvested).length;
+        const harvested = plantations.filter(p => p.isHarvested).length;
+
+        res.status(200).json({
+            success: true,
+            data: plantations,
+            stats: { total, active, harvested }
+        });
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };
 
-exports.update = async (req, res) => {
+exports.update = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { culture, plantingDate, harvestDate, isHarvested } = req.body;
 
         const plantation = await db.Plantations.findOne({
-            where: {
-                id,
-                user_id: req.user.id
-            }
+            where: { id, user_id: req.user.id }
         });
 
         if (!plantation) {
-            return res.status(404).json({
-                message: 'Plantação não encontrada'
-            });
+            throw AppError.notFound('Plantação não encontrada', { id });
+        }
+
+        if (culture !== undefined) {
+            validators.required(culture, 'cultura');
+        }
+        if (plantingDate !== undefined) {
+            validators.validDate(plantingDate, 'data de plantio');
+        }
+        if (harvestDate !== undefined) {
+            validators.validDate(harvestDate, 'data de colheita');
+        }
+        if (isHarvested !== undefined) {
+            validators.validBoolean(isHarvested, 'status de colheita');
+        }
+
+        const finalPlantingDate = plantingDate || plantation.plantingDate;
+        const finalHarvestDate = harvestDate || plantation.harvestDate;
+        if (finalPlantingDate && finalHarvestDate) {
+            const plant = new Date(finalPlantingDate);
+            const harvest = new Date(finalHarvestDate);
+            if (harvest < plant) {
+                throw AppError.validation('Data de colheita deve ser após a data de plantio', [
+                    { field: 'harvestDate', message: 'Data de colheita deve ser após o plantio' }
+                ]);
+            }
         }
 
         const updateData = {};
-
-        if (culture !== undefined) {
-            if (!culture || culture.trim().length === 0) {
-                return res.status(400).json({
-                    message: 'O nome da plantação não pode ser vazio'
-                });
-            }
-            updateData.culture = culture.trim();
-        }
-
-        if (plantingDate !== undefined) {
-            updateData.plantingDate = plantingDate || null;
-        }
-
-        if (harvestDate !== undefined) {
-            updateData.harvestDate = harvestDate || null;
-        }
-
-        if (isHarvested !== undefined) {
-            updateData.isHarvested = isHarvested;
-        }
+        if (culture !== undefined) updateData.culture = culture.trim();
+        if (plantingDate !== undefined) updateData.plantingDate = plantingDate;
+        if (harvestDate !== undefined) updateData.harvestDate = harvestDate;
+        if (isHarvested !== undefined) updateData.isHarvested = isHarvested;
 
         await plantation.update(updateData);
-        return res.status(200).json(plantation);
+
+        res.status(200).json({
+            success: true,
+            data: plantation
+        });
 
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };
 
-exports.delete = async (req, res) => {
+exports.delete = async (req, res, next) => {
     try {
         const { id } = req.params;
-        
+
         const plantation = await db.Plantations.findOne({
-            where: {
-                id,
-                user_id: req.user.id
-            }
+            where: { id, user_id: req.user.id }
         });
 
         if (!plantation) {
-            return res.status(404).json({
-                message: 'Plantação não encontrada'
-            });
+            throw AppError.notFound('Plantação não encontrada', { id });
         }
 
         await plantation.destroy();
 
-        return res.status(200).json({
+        res.status(200).json({
+            success: true,
             message: 'Plantação removida com sucesso'
         });
+
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };

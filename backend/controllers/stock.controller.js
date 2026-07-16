@@ -1,144 +1,169 @@
 const db = require('../models');
+const AppError = require('../utils/AppError');
+const validators = require('../utils/validators');
 
-
-exports.create = async (req, res) => {
+exports.create = async (req, res, next) => {
     try {
         const { product_name, category, quantity, unit_price, unit } = req.body;
 
-        if (!product_name || product_name.trim().length === 0) {
-            return res.status(400).json({
-                message: 'O nome do produto é obrigatório'
-            });
-        }
-
-        if (!quantity || quantity < 0) {
-            return res.status(400).json({
-                message: 'A quantidade deve ser um número positivo'
-            });
-        }
-
-        if (!unit_price || unit_price < 0) {
-            return res.status(400).json({
-                message: 'O preço unitário deve ser um valor positivo'
-            });
-        }
+        validators.required(product_name, 'nome do produto');
+        validators.positiveNumber(quantity, 'quantidade');
+        validators.positiveNumber(unit_price, 'preço unitário');
 
         const stock = await db.Stock.create({
             user_id: req.user.id,
-            product_name,
-            category,
-            quantity,
-            unit_price,
-            unit
+            product_name: product_name.trim(),
+            category: category?.trim() || null,
+            quantity: parseInt(quantity),
+            unit_price: parseFloat(unit_price),
+            unit: unit?.trim() || 'un'
         });
 
-        return res.status(201).json(stock);
+        res.status(201).json({
+            success: true,
+            data: stock
+        });
 
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };
 
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
     try {
         const stocks = await db.Stock.findAll({
-            where: {
-                user_id: req.user.id,
-            }
+            where: { user_id: req.user.id },
+            order: [['product_name', 'ASC']]
         });
-        return res.status(200).json(stocks);
+
+        const totalValue = stocks.reduce((sum, item) => {
+            return sum + (item.quantity * item.unit_price);
+        }, 0);
+
+        res.status(200).json({
+            success: true,
+            data: stocks,
+            totalValue: totalValue
+        });
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
-        });
+        next(error);
     }
 };
 
-exports.update = async (req, res) => {
+exports.update = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const { product_name, category, quantity, unit_price, unit } = req.body;
+
         const stock = await db.Stock.findOne({
-            where: {
-                id,
-                user_id: req.user.id
-            }
+            where: { id, user_id: req.user.id }
         });
 
         if (!stock) {
-            return res.status(404).json({
-                message: 'Item não encontrado'
-            });
+            throw AppError.notFound('Item não encontrado', { id });
+        }
+
+        if (product_name !== undefined) {
+            validators.required(product_name, 'nome do produto');
+        }
+        if (quantity !== undefined) {
+            validators.positiveNumber(quantity, 'quantidade');
+        }
+        if (unit_price !== undefined) {
+            validators.positiveNumber(unit_price, 'preço unitário');
         }
 
         const updateData = {};
+        if (product_name !== undefined) updateData.product_name = product_name.trim();
+        if (category !== undefined) updateData.category = category?.trim() || null;
+        if (quantity !== undefined) updateData.quantity = parseInt(quantity);
+        if (unit_price !== undefined) updateData.unit_price = parseFloat(unit_price);
+        if (unit !== undefined) updateData.unit = unit?.trim() || 'un';
 
-        if (product_name !== undefined) {
-            if (!product_name || product_name.trim().length === 0) {
-                return res.status(400).json({
-                    message: 'O nome do produto não pode ser vazio'
-                });
-            }
-            updateData.product_name = product_name.trim();
-        }
+        await stock.update(updateData);
 
-        if (category !== undefined) {
-            updateData.category = category ? category.trim() : null;
-        }
-
-        if (quantity !== undefined) {
-            if (quantity < 0) {
-                return res.status(400).json({
-                    message: 'A quantidade deve ser um número positivo'
-                });
-            }
-            updateData.quantity = parseInt(quantity);
-        }
-
-        if (unit_price !== undefined) {
-            if (unit_price < 0) {
-                return res.status(400).json({
-                    message: 'O preço unitário deve ser um valor positivo'
-                });
-            }
-            updateData.unit_price = parseFloat(unit_price);
-        }
-
-        await stock.update(req.body);
-        return res.status(200).json(stock);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
+        res.status(200).json({
+            success: true,
+            data: stock
         });
-    }
 
+    } catch (error) {
+        next(error);
+    }
 };
 
-exports.delete = async (req, res) => {
+exports.delete = async (req, res, next) => {
     try {
         const { id } = req.params;
+
         const stock = await db.Stock.findOne({
-            where: {
-                id,
-                user_id: req.user.id
-            }
+            where: { id, user_id: req.user.id }
         });
 
         if (!stock) {
-            return res.status(404).json({
-                message: 'Item não encontrado'
-            });
+            throw AppError.notFound('Item não encontrado', { id });
         }
 
         await stock.destroy();
 
-        return res.status(200).json({
+        res.status(200).json({
+            success: true,
             message: 'Item removido com sucesso'
         });
+
     } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno do servidor: ' + error.message
+        next(error);
+    }
+};
+
+exports.addQuantity = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { quantity } = req.body;
+
+        validators.positiveInteger(quantity, 'quantidade');
+
+        const stock = await db.Stock.findOne({
+            where: { id, user_id: req.user.id }
         });
+
+        if (!stock) {
+            throw AppError.notFound('Item não encontrado', { id });
+        }
+
+        await stock.update({
+            quantity: stock.quantity + parseInt(quantity)
+        });
+
+        res.status(200).json({
+            success: true,
+            data: stock
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+exports.lowStock = async (req, res, next) => {
+    try {
+        const threshold = parseInt(req.query.threshold) || 10;
+
+        const stocks = await db.Stock.findAll({
+            where: {
+                user_id: req.user.id,
+                quantity: { [db.Sequelize.Op.lt]: threshold }
+            },
+            order: [['quantity', 'ASC']]
+        });
+
+        res.status(200).json({
+            success: true,
+            data: stocks,
+            count: stocks.length
+        });
+
+    } catch (error) {
+        next(error);
     }
 };

@@ -1,6 +1,6 @@
 const db = require('../models');
+const AppError = require('../utils/AppError');
 
-// Função auxiliar para criar logs (usada internamente)
 exports.createLog = async (data) => {
     try {
         return await db.AuditLog.create({
@@ -18,8 +18,7 @@ exports.createLog = async (data) => {
     }
 };
 
-// Listar todos os logs
-exports.findAll = async (req, res) => {
+exports.findAll = async (req, res, next) => {
     try {
         const logs = await db.AuditLog.findAll({
             where: { user_id: req.user.id },
@@ -31,16 +30,16 @@ exports.findAll = async (req, res) => {
             order: [['createdAt', 'DESC']]
         });
 
-        return res.status(200).json(logs);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno: ' + error.message
+        return res.status(200).json({
+            success: true,
+            data: logs
         });
+    } catch (error) {
+        next(error);
     }
 };
 
-// Buscar um log específico
-exports.findOne = async (req, res) => {
+exports.findOne = async (req, res, next) => {
     try {
         const { id } = req.params;
 
@@ -57,21 +56,19 @@ exports.findOne = async (req, res) => {
         });
 
         if (!log) {
-            return res.status(404).json({
-                message: 'Log não encontrado'
-            });
+            throw AppError.notFound('Log não encontrado', { id });
         }
 
-        return res.status(200).json(log);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno: ' + error.message
+        return res.status(200).json({
+            success: true,
+            data: log
         });
+    } catch (error) {
+        next(error);
     }
 };
 
-// Buscar logs por tabela
-exports.findByTable = async (req, res) => {
+exports.findByTable = async (req, res, next) => {
     try {
         const { table_name } = req.params;
 
@@ -83,16 +80,16 @@ exports.findByTable = async (req, res) => {
             order: [['createdAt', 'DESC']]
         });
 
-        return res.status(200).json(logs);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno: ' + error.message
+        return res.status(200).json({
+            success: true,
+            data: logs
         });
+    } catch (error) {
+        next(error);
     }
 };
 
-// Buscar logs por ação
-exports.findByAction = async (req, res) => {
+exports.findByAction = async (req, res, next) => {
     try {
         const { action } = req.params;
 
@@ -104,10 +101,11 @@ exports.findByAction = async (req, res) => {
             order: [['createdAt', 'DESC']]
         });
 
-        return res.status(200).json(logs);
-    } catch (error) {
-        return res.status(500).json({
-            message: 'Erro interno: ' + error.message
+        return res.status(200).json({
+            success: true,
+            data: logs
         });
+    } catch (error) {
+        next(error);
     }
 };

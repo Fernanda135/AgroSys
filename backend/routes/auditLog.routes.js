@@ -1,13 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { verifyToken } = require('../middlewares/auth.middleware');
-const auditlogController = require('../controllers/auditlog.controller.js');
+const auditController = require('../controllers/auditlog.controller');
 
-
-router.get('/auditlogs', verifyToken, auditlogController.findAll);
-router.get('/auditlogs/:id', verifyToken, auditlogController.findOne);
-router.get('/auditlogs/table/:table_name', verifyToken, auditlogController.findByTable);
-router.get('/auditlogs/action/:action', verifyToken, auditlogController.findByAction);
-
+router.get('/auditlogs', auditController.findAll);
+router.get('/auditlogs/:id', auditController.findOne);
+router.get('/auditlogs/table/:table_name', auditController.findByTable);
+router.get('/auditlogs/action/:action', auditController.findByAction);
 
 module.exports = router;

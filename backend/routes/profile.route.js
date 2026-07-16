@@ -1,9 +1,8 @@
 const express = require('express');
-const { fetchUserData } = require('../controllers/profile.controller');
-const { verifyToken } = require('../middlewares/auth.middleware');
 const router = express.Router();
+const profileController = require('../controllers/profile.controller');
 
-// Route to fetch user profile info
-router.get('/profile', verifyToken, fetchUserData);
+router.get('/', profileController.fetchUserData);
+router.put('/', profileController.updateProfile);
 
 module.exports = router;

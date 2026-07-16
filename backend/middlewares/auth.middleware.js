@@ -1,38 +1,53 @@
-const jwt = require("jsonwebtoken");
-const jwtDataOptions = {
-    secret: process.env.JWT_SECRET,
-    jwtExpiration: process.env.JWT_EXPIRATION,
-    jwtRefreshExpiration: process.env.JWT_REFRESH_EXPIRATION,
-}
-const { TokenExpiredError } = jwt;
-const catchError = (err, res) => {
-    if (err instanceof TokenExpiredError) {
-        return res.status(401).send({ message: "Unauthorized! Access Token expired!" });
-    }
-    return res.status(401).send({ message: "Unauthorized!" });
-};
-
+const jwt = require('jsonwebtoken');
+const AppError = require('../utils/AppError');
 
 const verifyToken = (req, res, next) => {
-    const authHeader = req.headers.authorization;
+    try {
+        const authHeader = req.headers.authorization;
 
-    if (!authHeader) {
-        return res.status(403).send({
-            message: "No token provided!"
+        if (!authHeader) {
+            throw AppError.unauthorized('Token não fornecido');
+        }
+
+        let token = authHeader;
+        if (authHeader.startsWith('Bearer ')) {
+            token = authHeader.split(' ')[1];
+        }
+
+        if (!token) {
+            throw AppError.unauthorized('Token não fornecido');
+        }
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+            if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    throw AppError.unauthorized('Token expirado');
+                }
+                if (err.name === 'JsonWebTokenError') {
+                    throw AppError.unauthorized('Token inválido');
+                }
+                throw AppError.unauthorized('Erro na autenticação');
+            }
+            
+            req.user = decoded;
+            next();
         });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+const isAdmin = (req, res, next) => {
+    if (!req.user) {
+        throw AppError.unauthorized('Usuário não autenticado');
     }
 
-    const token = authHeader.split(' ')[1];
+    if (req.user.role !== 'admin') {
+        throw AppError.forbidden('Acesso negado. Permissão de administrador necessária.');
+    }
 
-    jwt.verify(token, jwtDataOptions.secret, (err, decoded) => {
-        if (err) {
-            return catchError(err, res);
-        }
-        req.user = decoded;
-        next();
-    });
+    next();
 };
 
-module.exports = {
-    verifyToken,
-};
+module.exports = { verifyToken, isAdmin };
