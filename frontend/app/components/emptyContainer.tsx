@@ -19,11 +19,11 @@ export default function EmptyContainer({
 }: EmptyContainerProps) {
     return (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-300 bg-white px-8 py-12 text-center">
-            {icon && <div className="mb-5 text-(--green-500)">{icon}</div>}
+            {icon && <div className="mb-5 text-(--gray-2)">{icon}</div>}
 
-            <h2 className="text-2xl font-bold text-(--black)">{title}</h2>
+            <h2 className="text-lg font-semibold text-(--black)">{title}</h2>
 
-            <p className="mt-2 max-w-md text-sm text-(--gray-2)">{description}</p>
+            <p className="text-sm text-(--gray-2)">{description}</p>
 
             {buttonText && onButtonClick && (
                 <button

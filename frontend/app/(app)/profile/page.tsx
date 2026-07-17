@@ -114,7 +114,7 @@ export default function ProfilePage() {
                   {!editing ? (
                     <button
                       onClick={() => setEditing(true)}
-                      className="rounded-sm bg-(--green-500) px-3 py-2 text-white transition-colors hover:bg-green-700"
+                      className="rounded-sm bg-(--green-500) px-3 py-2 text-white transition-colors hover:bg-green-700 cursor-pointer"
                     >
                       Editar Perfil
                     </button>
@@ -122,14 +122,14 @@ export default function ProfilePage() {
                     <>
                       <button
                         onClick={handleSave}
-                        className="rounded-sm bg-(--green-500) px-3 py-2 text-white transition-colors hover:bg-green-700"
+                        className="rounded-sm bg-(--green-500) px-3 py-2 text-white transition-colors hover:bg-green-700 cursor-pointer"
                       >
                         Salvar
                       </button>
 
                       <button
                         onClick={handleCancel}
-                        className="rounded-sm border border-gray-300 bg-white px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100"
+                        className="rounded-sm border border-gray-300 bg-white px-3 py-2 text-gray-700 transition-colors hover:bg-gray-100 cursor-pointer"
                       >
                         Cancelar
                       </button>

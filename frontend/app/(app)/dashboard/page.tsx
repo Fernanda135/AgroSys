@@ -30,9 +30,9 @@ export default function Dashboard() {
           stockService.getAll(),
         ]);
 
-        setPlantations(plantationsData);
-        setTodos(todosData);
-        setStocks(stocksData);
+        setPlantations(plantationsData.data || []);
+        setTodos(todosData.data || []);
+        setStocks(stocksData.data || []);
       } catch (error) {
         console.error("Erro ao carregar dashboard:", error);
       }
@@ -50,7 +50,7 @@ export default function Dashboard() {
             <SummaryCard
               value={plantations.length}
               title={"Plantações\nativas"}
-              icon={<Sprout className="text-(--green-500)" size={52} />}
+              icon={<Sprout size={52} />}
             />
           ) : (
             <EmptyContainer
@@ -63,7 +63,7 @@ export default function Dashboard() {
             <SummaryCard
               value={todos.length}
               title={"Tarefas\npendentes"}
-              icon={<ClipboardList className="text-(--green-500)" size={52} />}
+              icon={<ClipboardList size={52} />}
             />
           ) : (
             <EmptyContainer
@@ -76,7 +76,7 @@ export default function Dashboard() {
             <SummaryCard
               value={stocks.length}
               title={"Itens\nno estoque"}
-              icon={<Warehouse className="text-(--green-500)" size={52} />}
+              icon={<Warehouse size={52} />}
             />
           ) : (
             <EmptyContainer

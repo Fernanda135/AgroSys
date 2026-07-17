@@ -3,6 +3,7 @@
 import { Sprout, CircleCheckBig, SquarePen, Trash2 } from "lucide-react";
 import { Plantation } from "@/app/services/plantation.service";
 import { formatDate } from "@/app/utils/date";
+import EmptyContainer from "../EmptyContainer";
 
 interface PlantationTableProps {
     plantations: Plantation[];
@@ -20,15 +21,11 @@ export default function PlantationTable({
     if (plantations.length === 0) {
         return (
             <div className="mt-8 rounded-xl bg-white p-12 text-center shadow-lg">
-                <div className="flex flex-col items-center gap-3">
-                    <Sprout className="text-gray-300" size={52} />
-                    <h3 className="text-lg font-semibold text-gray-600">
-                        Nenhuma plantação encontrada
-                    </h3>
-                    <p className="text-sm text-gray-500">
-                        Clique em "Adicionar Plantação" para começar
-                    </p>
-                </div>
+                <EmptyContainer
+                    title="Nenhuma plantação encontrada"
+                    description='Clique em "Adicionar Plantação" para começar'
+                    icon={<Sprout/>}
+                />
             </div>
         );
     }
@@ -71,8 +68,8 @@ export default function PlantationTable({
                                 >
                                     <td
                                         className={`px-6 py-4 text-sm ${plantation.isHarvested
-                                                ? "text-gray-400 line-through"
-                                                : "font-medium text-gray-900"
+                                            ? "text-gray-400 line-through"
+                                            : "font-medium text-gray-900"
                                             }`}
                                     >
                                         {plantation.culture}
@@ -92,10 +89,10 @@ export default function PlantationTable({
                                     <td className="px-6 py-4">
                                         <span
                                             className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${plantation.isHarvested
-                                                    ? "bg-(--green-50) text-(--green-500)"
-                                                    : delayed
-                                                        ? "bg-red-100 text-red-700"
-                                                        : "bg-yellow-100 text-yellow-700"
+                                                ? "bg-(--green-50) text-(--green-500)"
+                                                : delayed
+                                                    ? "bg-red-100 text-red-700"
+                                                    : "bg-yellow-100 text-yellow-700"
                                                 }`}
                                         >
                                             {plantation.isHarvested
@@ -111,8 +108,8 @@ export default function PlantationTable({
                                                 onClick={() => onHarvest(plantation.id)}
                                                 disabled={plantation.isHarvested}
                                                 className={`rounded-lg p-2 transition-all cursor-pointer ${plantation.isHarvested
-                                                        ? "cursor-not-allowed text-gray-300"
-                                                        : "text-(--green-500) hover:bg-green-50 hover:text-green-900"
+                                                    ? "cursor-not-allowed text-gray-300"
+                                                    : "text-(--green-500) hover:bg-green-50 hover:text-green-900"
                                                     }`}
                                                 title="Marcar como colhida"
                                             >

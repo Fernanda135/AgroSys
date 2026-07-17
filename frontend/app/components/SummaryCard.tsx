@@ -30,7 +30,7 @@ export default function SummaryCard({
                 </p>
             </div>
 
-            <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-(--green-50)">
+            <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-(--green-50) text-(--green-500)">
                 {icon}
             </div>
         </div>

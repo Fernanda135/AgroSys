@@ -7,6 +7,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 
 import { authService } from "@/app/services/auth.service";
+import Logo from "@/app/components/Logo";
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -43,18 +45,13 @@ export default function Login() {
       <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl px-10 py-8 text-center">
 
         <div className="flex items-center justify-center gap-2 mb-5">
-          <Image
-            src="/rs-icon.png"
-            alt="AgroSys Icon"
-            width={90}
-            height={50}
-            className="object-contain"
-            priority
+          <Logo
+          size={100}
           />
           <div>
             <div className="flex" >
-              <h1 className="text-(--black) font-bold text-3xl underline decoration-(--gray-2)" >Agro</h1>
-              <h1 className="text-(--green-500) font-bold text-3xl underline decoration-(--gray-2)" >Sys</h1>
+              <h1 className="text-(--black) font-bold text-4xl underline decoration-(--gray-2)" >Agro</h1>
+              <h1 className="text-(--green-500) font-bold text-4xl underline decoration-(--gray-2)" >Sys</h1>
             </div>
             <p className="text-(--black) text-[10px]" >SISTEMA DE GESTÃO AGRÍCOLA</p>
           </div>

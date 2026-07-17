@@ -40,7 +40,7 @@ export default function FinancePage() {
           <SummaryCard
             value={formatCurrency(totalIncome)}
             title={"Receitas"}
-            icon={<ArrowUpCircle size={52} className="text-(--green-500)" />}
+            icon={<ArrowUpCircle size={52} />}
           />
 
           <SummaryCard
@@ -52,7 +52,7 @@ export default function FinancePage() {
           <SummaryCard
             value={formatCurrency(balance)}
             title={"Saldo total"}
-            icon={<Wallet size={52} className="text-(--green-500)" />}
+            icon={<Wallet size={52} />}
           />
 
         </div>

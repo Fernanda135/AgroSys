@@ -112,7 +112,7 @@ export default function PlantationsPage() {
             <SummaryCard
               value={totalCount}
               title="Total de plantações"
-              icon={<Sprout className="text-(--green-500)" size={52} />}
+              icon={<Sprout size={52} />}
             />
             <SummaryCard
               value={delayedCount}
@@ -122,7 +122,7 @@ export default function PlantationsPage() {
             <SummaryCard
               value={cultureCount}
               title="Tipos de culturas"
-              icon={<Shapes className="text-(--green-500)" size={52} />}
+              icon={<Shapes size={52} />}
             />
           </div>
 
@@ -137,7 +137,14 @@ export default function PlantationsPage() {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             onSave={handleSavePlantation}
-            initialData={editingPlantation || undefined}
+            initialData={
+              editingPlantation
+                ? {
+                    ...editingPlantation,
+                    harvestDate: editingPlantation.harvestDate ?? "",
+                  }
+                : undefined
+            }
             mode={modalMode}
           />
         </div>

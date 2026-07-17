@@ -98,7 +98,7 @@ export default function ToDo() {
             <SummaryCard
               value={totalCount}
               title="Total de tarefas"
-              icon={<ClipboardList className="text-(--green-500)" size={52} />}
+              icon={<ClipboardList size={52} />}
             />
             <SummaryCard
               value={pendingCount}
@@ -108,7 +108,7 @@ export default function ToDo() {
             <SummaryCard
               value={completedCount}
               title="Tarefas concluídas"
-              icon={<CircleCheckBig className="text-(--green-500)" size={52} />}
+              icon={<CircleCheckBig size={52} />}
             />
           </div>
 

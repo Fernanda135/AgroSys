@@ -32,13 +32,13 @@ export default function StockPage() {
           <SummaryCard
             value={totalProducts}
             title={"Produtos\ncadastrados"}
-            icon={<Package size={52} className="text-(--green-500)" />}
+            icon={<Package size={52} />}
           />
 
           <SummaryCard
             value={totalQuantity}
             title={"Itens em\nestoque"}
-            icon={<Boxes size={52} className="text-(--green-500)" />}
+            icon={<Boxes size={52} />}
           />
 
           <SummaryCard
