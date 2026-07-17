@@ -69,10 +69,12 @@ export default function PlantationModal({
         if (plantingDate && harvestDate && new Date(plantingDate) > new Date(harvestDate)) {
             newErrors.harvestDate = "A data de colheita deve ser após a data de plantio";
         }
-
         setErrors(newErrors);
-        toast.warning("Preencha os campos obrigatórios!");
-        return Object.keys(newErrors).length === 0;
+        if (Object.keys(newErrors).length > 0) {
+            toast.warning("Preencha todos os campos obrigatórios!");
+            return false;
+        }
+        return true;
     };
 
     const handleSubmit = (e: React.FormEvent) => {

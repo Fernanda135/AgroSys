@@ -25,7 +25,7 @@ export default function TodoTable({
                 <EmptyContainer
                     title="Nenhuma tarefa encontrada"
                     description='Clique em "Adicionar Tarefa" para começar'
-                    icon={<ClipboardList className="text-(--green-500)" size={52} />}
+                    icon={<ClipboardList size={52} />}
                 />
             </div>
         );

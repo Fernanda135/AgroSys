@@ -29,7 +29,7 @@ export default function TodoModal({
     useEffect(() => {
         if (initialData) {
             setTitle(initialData.title);
-            setDescription(initialData.description);
+            setDescription(initialData.description || "");
         } else {
             setTitle("");
             setDescription("");
@@ -40,15 +40,18 @@ export default function TodoModal({
     if (!isOpen) return null;
 
     const validate = () => {
-        const newErrors: { 
-            title?: string; 
-            description?: string 
+        const newErrors: {
+            title?: string;
+            description?: string
         } = {};
         if (!title.trim()) newErrors.title = "Título é obrigatório";
         if (!description.trim()) newErrors.description = "Descrição é obrigatória";
         setErrors(newErrors);
-        toast.warning("Preencha os campos obrigatórios!");
-        return Object.keys(newErrors).length === 0;
+        if (Object.keys(newErrors).length > 0) {
+            toast.warning("Preencha todos os campos obrigatórios!");
+            return false;
+        }
+        return true;
     };
 
     const handleSubmit = (e: React.FormEvent) => {
