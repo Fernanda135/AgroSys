@@ -45,20 +45,19 @@ export default function Login() {
         <div className="flex items-center justify-center gap-2 mb-5">
           <Image
             src="/rs-icon.png"
-            alt="RuralSys Icon"
+            alt="AgroSys Icon"
             width={90}
             height={50}
             className="object-contain"
             priority
           />
-          <Image
-            src="/rs-text.png"
-            alt="RuralSys"
-            width={140}
-            height={50}
-            className="object-contain"
-            priority
-          />
+          <div>
+            <div className="flex" >
+              <h1 className="text-(--black) font-bold text-3xl underline decoration-(--gray-2)" >Agro</h1>
+              <h1 className="text-(--green-500) font-bold text-3xl underline decoration-(--gray-2)" >Sys</h1>
+            </div>
+            <p className="text-(--black) text-[10px]" >SISTEMA DE GESTÃO AGRÍCOLA</p>
+          </div>
         </div>
 
         <h1 className="text-[36px] font-bold text-gray-900 mb-2">

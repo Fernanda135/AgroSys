@@ -53,11 +53,6 @@
  *           format: password
  *           description: Senha (minimo 6 caracteres)
  *           example: 123456
- *         confirmPassword:
- *           type: string
- *           format: password
- *           description: Confirmacao da senha
- *           example: 123456
  *     
  *     LoginRequest:
  *       type: object

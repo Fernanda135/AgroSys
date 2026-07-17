@@ -4,8 +4,8 @@ const options = {
     definition: {
         openapi: '3.0.0',
         info: {
-            title: 'RuralSys API',
-            description: 'API para sistema de gerenciamento rural',
+            title: 'AgroSys API',
+            description: 'API para sistema de gerenciamento agrícola',
             version: '1.0.0',
             license: {
                 name: 'MIT',
@@ -18,7 +18,7 @@ const options = {
                 description: 'Servidor de Desenvolvimento'
             },
             // {
-            //     url: 'https://api.ruralsys.com',
+            //     url: 'https://api.agrosys.com',
             //     description: 'Servidor de Produção'
             // }
         ],

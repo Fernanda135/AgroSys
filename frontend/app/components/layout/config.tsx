@@ -57,13 +57,6 @@ export default function NavItems() {
             position: 'top'
         },
         {
-            label: 'Clima',
-            path: '/weather',
-            icon: <Cloudy size={20} />,
-            active: isNavItemActive(pathname, '/weather'),
-            position: 'top'
-        },
-        {
             label: 'Perfil',
             path: '/profile',
             icon: <CircleUserRound size={20} />,

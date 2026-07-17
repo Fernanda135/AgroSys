@@ -1,10 +1,10 @@
 services:
   postgres:
     image: postgres:17
-    container_name: ruralsys-postgres
+    container_name: agrosys-postgres
 
     environment:
-      POSTGRES_DB: ruralsys
+      POSTGRES_DB: agrosys
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: makil22
 
@@ -16,7 +16,7 @@ services:
 
   backend:
     build: ./backend
-    container_name: ruralsys-backend
+    container_name: agrosys-backend
 
     ports:
       - "3001:3001"
@@ -29,7 +29,7 @@ services:
 
   frontend:
     build: ./frontend
-    container_name: ruralsys-frontend
+    container_name: agrosys-frontend
 
     ports:
       - "3000:3000"

@@ -33,7 +33,6 @@ export const authService = {
         name: string;
         email: string;
         password: string;
-        confirmPassword: string;
     }) {
         const response = await api.post<AuthResponse>("/auth/sign-up", data);
 

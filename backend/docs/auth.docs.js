@@ -25,7 +25,6 @@
  *                 name: Joao Silva
  *                 email: joao@email.com
  *                 password: 123456
- *                 confirmPassword: 123456
  *     responses:
  *       201:
  *         description: Usuario criado com sucesso

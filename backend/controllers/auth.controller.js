@@ -7,7 +7,7 @@ const { createToken, verifyExpiration } = db.authToken;
 
 exports.registerUser = async (req, res, next) => {
     try {
-        const { name, email, password, confirmPassword } = req.body;
+        const { name, email, password } = req.body;
 
         if (!name || name.trim().length === 0) {
             throw AppError.validation('Nome é obrigatório', [
@@ -24,12 +24,6 @@ exports.registerUser = async (req, res, next) => {
         if (!password || password.length < 6) {
             throw AppError.validation('Senha deve ter pelo menos 6 caracteres', [
                 { field: 'password', message: 'Senha deve ter pelo menos 6 caracteres' }
-            ]);
-        }
-
-        if (password !== confirmPassword) {
-            throw AppError.validation('Senhas não coincidem', [
-                { field: 'confirmPassword', message: 'Senhas não coincidem' }
             ]);
         }
 

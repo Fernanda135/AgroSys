@@ -8,8 +8,8 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "RuralSys",
-  description: "Sistema de gestão rural",
+  title: "AgroSys",
+  description: "Sistema de gestão agrícola",
   icons: {
     icon: "/rs-icon.png",
   },

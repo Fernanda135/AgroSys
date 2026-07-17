@@ -22,7 +22,7 @@ export default function Sidebar() {
   }
 
   return (
-    <div className="shrink-0 h-full w-[200] bg-(--black) border-r border-gray-200">
+    <div className="shrink-0 h-full w-[200] bg-white border-r border-(--gray)">
       <aside className="flex h-full flex-col w-full overflow-y-auto">
         <div className="flex-1">
           <div className="flex flex-col space-y-1">
@@ -87,7 +87,7 @@ export const SideNavItem: React.FC<{
     label === "Sair"
       ? "text-(--danger) hover:text-red-800"
       : active
-        ? "bg-(--green-500) text-white"
+        ? "bg-(--green-50) text-(--green-500) border-l-4 border-(--green-500) transition-colors duration-400"
         : "text-(--gray-2) hover:text-(--green-500)"
   }`;
 

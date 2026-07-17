@@ -18,10 +18,15 @@ export default function Register() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (password.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres");
+      return;
+    }
+
     toast.info("Validando dados...");
 
     try {
-      await authService.register({
+      const response = await authService.register({
         name,
         email,
         password,
@@ -35,28 +40,30 @@ export default function Register() {
     }
   }
 
+
   return (
     <div className="login-container flex items-center justify-center min-h-screen">
       <div className="bg-white w-full max-w-md rounded-3xl shadow-lg px-10 py-8 text-center">
-        
+
         <div className="flex items-center justify-center gap-2 mb-5">
-                  <Image
-                    src="/rs-icon.png"
-                    alt="RuralSys Icon"
-                    width={90}
-                    height={50}
-                    className="object-contain"
-                    priority
-                  />
-                  <Image
-                    src="/rs-text.png"
-                    alt="RuralSys"
-                    width={140}
-                    height={50}
-                    className="object-contain"
-                    priority
-                  />
-                </div>
+          <Image
+            src="/rs-icon.png"
+            alt="AgroSys Icon"
+            width={90}
+            height={50}
+            className="object-contain"
+            priority
+          />
+
+          <div>
+            <div className="flex" >
+              <h1 className="text-(--black) font-bold text-3xl underline decoration-(--gray-2)" >Agro</h1>
+              <h1 className="text-(--green-500) font-bold text-3xl underline decoration-(--gray-2)" >Sys</h1>
+            </div>
+            <p className="text-(--black) text-[10px]" >SISTEMA DE GESTÃO AGRÍCOLA</p>
+          </div>
+
+        </div>
 
         <h1 className="text-[36px] font-bold text-(--black)">
           Crie sua conta

@@ -47,7 +47,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
     explorer: true,
     customCss: '.swagger-ui .topbar { display: none }',
-    customSiteTitle: 'RuralSys API Docs',
+    customSiteTitle: 'AgroSys API Docs',
     swaggerOptions: {
         persistAuthorization: true,
         docExpansion: 'none',
