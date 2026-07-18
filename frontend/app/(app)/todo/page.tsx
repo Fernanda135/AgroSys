@@ -5,7 +5,7 @@ import { ClipboardList, Clock, CircleCheckBig } from "lucide-react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useTodos } from "@/app/hooks/useTodos";
-import { Todo } from "@/app/services/todo.service";
+import { Todo, CreateTodoData } from "@/app/services/todo.service";
 import SummaryCard from "@/app/components/SummaryCard";
 import TodoModal from "@/app/components/todo/TodoModal";
 import TodoTable from "@/app/components/todo/TodoTable";
@@ -41,13 +41,21 @@ export default function ToDo() {
     setIsModalOpen(true);
   };
 
-  const handleSaveTodo = (data: { title: string; description: string }) => {
-    if (modalMode === "add") {
-      addTodo(data);
-      toast.success(`Tarefa "${data.title}" criada com sucesso!`);
-    } else if (editingTodo) {
-      updateTodo(editingTodo.id, data);
-      toast.success(`Tarefa "${data.title}" atualizada com sucesso!`);
+  const handleSaveTodo = async (data: CreateTodoData) => {
+    try {
+      if (modalMode === "add") {
+        await addTodo(data);
+        toast.success(`Tarefa "${data.title}" criada com sucesso!`);
+      } else if (editingTodo) {
+        await updateTodo(editingTodo.id, data);
+        toast.success(`Tarefa "${data.title}" atualizada com sucesso!`);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"
+        } tarefa`
+      );
     }
   };
 
@@ -77,7 +85,7 @@ export default function ToDo() {
     <ProtectedRoute>
       <div className="min-h-screen bg-white p-6 md:p-10 rounded-xl">
         <div className="mx-auto max-w-7xl">
-          
+
           <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <h1 className="text-3xl font-bold text-(--black)">Tarefas</h1>

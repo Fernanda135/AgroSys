@@ -43,23 +43,19 @@ export default function StockPage() {
     try {
       if (modalMode === "add") {
         await addStock(data);
-
         toast.success(
           `Produto "${data.product_name}" adicionado com sucesso!`
         );
       } else if (editingStock) {
         await updateStock(editingStock.id, data);
-
         toast.success(
           `Produto "${data.product_name}" atualizado com sucesso!`
         );
       }
-
       setEditingStock(null);
       setIsModalOpen(false);
     } catch (error) {
       console.error(error);
-
       toast.error(
         `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"
         } produto`

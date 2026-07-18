@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import ProtectedRoute from '@/app/components/ProtectedRoute';
 import SummaryCard from '@/app/components/SummaryCard';
 import { usePlantations } from '@/app/hooks/usePlantation';
-import { Plantation } from "@/app/services/plantation.service";
+import { Plantation, CreatePlantationData } from "@/app/services/plantation.service";
 import PlantationModal from "@/app/components/plantations/PlantationModal";
 import PlantationTable from "@/app/components/plantations/PlantationTable";
 
@@ -39,11 +39,7 @@ export default function PlantationsPage() {
     setIsModalOpen(true);
   };
 
-  const handleSavePlantation = async (data: {
-    culture: string;
-    plantingDate: string;
-    harvestDate: string;
-  }) => {
+  const handleSavePlantation = async (data: CreatePlantationData) => {
     try {
       if (modalMode === "add") {
         await addPlantation(data);

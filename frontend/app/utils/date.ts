@@ -1,5 +1,13 @@
-export function formatDate(date: string | Date | null | undefined) {
-    if (!date) return "-";
+export function getToday(): string {
+    return new Date().toLocaleDateString("sv-SE");
+}
 
-    return new Date(date).toLocaleDateString("pt-BR");
+export function formatDate(date: string | Date): string {
+    return new Date(date).toLocaleDateString("pt-BR", {
+        timeZone: "UTC",
+    });
+}
+
+export function formatDateInput(date: string): string {
+    return date.split("T")[0];
 }

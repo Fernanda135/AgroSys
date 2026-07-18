@@ -11,7 +11,7 @@ interface TodoModalProps {
     onSave: (data: { title: string; description: string }) => void;
     initialData?: Todo;
     mode: "add" | "edit";
-}
+}   
 
 export default function TodoModal({
     isOpen,
