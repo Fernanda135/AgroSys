@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -27,11 +26,14 @@ export default function Register() {
     toast.info("Validando dados...");
 
     try {
-      const response = await authService.register({
+      const data = await authService.register({
         name,
         email,
         password,
       });
+
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
 
       toast.success("Cadastro realizado com sucesso!");
       router.push("/dashboard");
@@ -41,89 +43,105 @@ export default function Register() {
     }
   }
 
-
   return (
-    <div className="login-container flex items-center justify-center min-h-screen">
-      <div className="bg-white w-full max-w-md rounded-3xl shadow-lg px-10 py-8 text-center">
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-green-50 via-white to-green-50 p-4">
+      <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-6xl gap-12 md:gap-20">
 
-        <div className="flex items-center justify-center gap-2 mb-5">
-          <Logo
-            size={100}
-          />
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <div className="mb-6">
+            <Logo size={120} />
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-(--black) mb-4">
+            Gestão Rural Simplificada
+          </h2>
 
+          <p className="text-lg text-(--gray-2) max-w-md">
+            Desenvolvido para ajudar pequenos agricultores a controlar a produção e tomar melhores decisões.
+          </p>
+
+          <div className="hidden md:flex mt-8 gap-3">
+            <div className="w-3 h-3 rounded-full bg-green-600"></div>
+            <div className="w-3 h-3 rounded-full bg-green-500"></div>
+            <div className="w-3 h-3 rounded-full bg-green-400"></div>
+          </div>
         </div>
 
-        <h1 className="text-[36px] font-bold text-(--black)">
-          Crie sua conta
-        </h1>
+        <div className="w-full max-w-md">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl px-10 py-8 border border-white/20 text-center">
 
-        <p className="text-base text-(--black) mb-5">
-          Preencha os dados para se cadastrar
-        </p>
+            <h1 className="text-[36px] font-bold text-(--black) mb-2">
+              Crie sua conta
+            </h1>
 
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-          <div className="text-left">
-            <label htmlFor="name" className="block mb-2 font-semibold">
-              Nome
-            </label>
+            <p className="text-base text-(--gray-2) mb-10">
+              Preencha os dados para se cadastrar
+            </p>
 
-            <input
-              id="name"
-              type="text"
-              required
-              placeholder="Digite seu nome"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-300 outline-none focus:border-(--green-500)"
-              onChange={(e) => setName(e.target.value)}
-            />
+            <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+              <div className="text-left">
+                <label htmlFor="name" className="block mb-2 font-semibold text-(--black)">
+                  Nome
+                </label>
+
+                <input
+                  id="name"
+                  type="text"
+                  required
+                  placeholder="Digite seu nome"
+                  className="w-full h-12 px-4 rounded-xl bg-gray-50 border-2 border-gray-200 outline-none focus:border-(--green-500) focus:ring-4 focus:ring-(--green-50) transition-all duration-300 text-(--black) placeholder-(--gray-2)"
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+
+              <div className="text-left">
+                <label htmlFor="email" className="block mb-2 font-semibold text-(--black)">
+                  E-mail
+                </label>
+
+                <input
+                  id="email"
+                  type="email"
+                  required
+                  placeholder="Digite seu e-mail"
+                  className="w-full h-12 px-4 rounded-xl bg-gray-50 border-2 border-gray-200 outline-none focus:border-(--green-500) focus:ring-4 focus:ring-(--green-50) transition-all duration-300 text-(--black) placeholder-(--gray-2)"
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="text-left">
+                <label htmlFor="password" className="block mb-2 font-semibold text-(--black)">
+                  Senha
+                </label>
+
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  placeholder="Digite sua senha"
+                  className="w-full h-12 px-4 rounded-xl bg-gray-50 border-2 border-gray-200 outline-none focus:border-(--green-500) focus:ring-4 focus:ring-(--green-50) transition-all duration-300 text-(--black) placeholder-(--gray-2)"
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="cursor-pointer mt-4 h-12 bg-(--green-500) hover:bg-green-700 active:bg-green-800 text-white font-semibold rounded-xl transition duration-200 shadow-md hover:shadow-lg"
+              >
+                Cadastrar
+              </button>
+            </form>
+
+            <p className="mt-5 text-sm text-(--gray-2)">
+              Já possui conta?{" "}
+              <Link
+                href="/login"
+                className="text-(--green-500) font-semibold hover:text-green-700 hover:underline transition"
+              >
+                Entrar
+              </Link>
+            </p>
           </div>
-
-          <div className="text-left">
-            <label htmlFor="email" className="block mb-2 font-semibold">
-              E-mail
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              required
-              placeholder="Digite seu e-mail"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-300 outline-none focus:border-(--green-500)"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-
-          <div className="text-left">
-            <label htmlFor="password" className="block mb-2 font-semibold">
-              Senha
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              required
-              placeholder="Digite sua senha"
-              className="w-full h-12 px-4 rounded-xl bg-gray-100 border border-gray-300 outline-none focus:border-(--green-500)"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="cursor-pointer mt-4 h-12 bg-(--green-500) hover:bg-green-700 text-white font-semibold rounded-xl transition"
-          >
-            Cadastrar
-          </button>
-        </form>
-
-        <p className="mt-5 text-sm text-(--black)">
-          Já possui conta?{" "}
-          <Link
-            href="/login"
-            className="text-(--green-500) font-medium hover:underline"
-          >
-            Entrar
-          </Link>
-        </p>
+        </div>
       </div>
     </div>
   );
