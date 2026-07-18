@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
     user_id: DataTypes.INTEGER,
     isIncome: DataTypes.BOOLEAN,
     description: DataTypes.STRING,
+    category: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
     amount: DataTypes.DECIMAL,
     transactionDate: DataTypes.DATE
   }, {
