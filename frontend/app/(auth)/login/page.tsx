@@ -48,13 +48,7 @@ export default function Login() {
           <Logo
           size={100}
           />
-          <div>
-            <div className="flex" >
-              <h1 className="text-(--black) font-bold text-4xl underline decoration-(--gray-2)" >Agro</h1>
-              <h1 className="text-(--green-500) font-bold text-4xl underline decoration-(--gray-2)" >Sys</h1>
-            </div>
-            <p className="text-(--black) text-[10px]" >SISTEMA DE GESTÃO AGRÍCOLA</p>
-          </div>
+          
         </div>
 
         <h1 className="text-[36px] font-bold text-gray-900 mb-2">

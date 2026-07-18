@@ -1,36 +1,67 @@
 import { Leaf } from "lucide-react";
 
 export default function Logo({ size = 200, className = "" }) {
+    const titleSize = size * 0.4;
+    const subtitleSize = size * 0.105;
+
     return (
         <div
-            className={`relative inline-flex items-center justify-center ${className}`}
-            style={{ width: size, height: size }}
+            className={`flex items-center ${className}`}
+            style={{ gap: size * 0.04 }}
         >
-            <svg
-                viewBox="0 0 200 200"
-                width={size}
-                height={size}
-                xmlns="http://www.w3.org/2000/svg"
-                className="absolute inset-0"
+            <div
+                className="relative flex items-center justify-center"
+                style={{ width: size, height: size }}
             >
-                <polygon
-                    points="100,4 186.6,52 186.6,148 100,196 13.4,148 13.4,52"
-                    className="fill-(--black) stroke-(--green-500)"
-                    strokeWidth="4"
-                />
+                <svg
+                    viewBox="0 0 200 200"
+                    width={size}
+                    height={size}
+                    className="absolute inset-0"
+                >
+                    <polygon
+                        points="100,4 186.6,52 186.6,148 100,196 13.4,148 13.4,52"
+                        className="fill-(--black) stroke-(--green-500)"
+                        strokeWidth="4"
+                    />
+                    <polygon
+                        points="100,20 173.2,60 173.2,140 100,180 26.8,140 26.8,60"
+                        className="fill-none stroke-(--green-500)"
+                        strokeWidth="3"
+                    />
+                </svg>
 
-                <polygon
-                    points="100,20 173.2,60 173.2,140 100,180 26.8,140 26.8,60"
-                    className="fill-none stroke-(--green-500)"
-                    strokeWidth="3"
+                <Leaf
+                    className="relative text-(--green-500)"
+                    size={size * 0.4}
+                    strokeWidth={1}
                 />
-            </svg>
+            </div>
 
-            <Leaf
-                className="relative text-(--green-500)"
-                size={size * 0.4}
-                strokeWidth={1}
-            />
+            <div style={{ lineHeight: 1 }}>
+                <div
+                    className="flex items-end"
+                >
+                    <p
+                        className="font-bold underline decoration-(--gray-2)"
+                        style={{ fontSize: titleSize }}
+                    >
+                        <span className="text-(--black)">Agro</span>
+                        <span className="text-(--green-500)">Sys</span>
+                    </p>
+                </div>
+
+                <p
+                    className="text-(--black)"
+                    style={{
+                        fontSize: subtitleSize,
+                        letterSpacing: size * 0.004,
+                        marginTop: size * 0.055,
+                    }}
+                >
+                    SISTEMA DE GESTÃO AGRÍCOLA
+                </p>
+            </div>
         </div>
     );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 import { profileService } from "@/app/services/profile.service";
 import Logo from '../Logo';
@@ -49,13 +50,6 @@ export default function Header() {
                     size={70}
                 />
 
-                <div>
-                    <div className="flex" >
-                        <h1 className="text-(--black) font-bold text-3xl underline decoration-(--gray-2)" >Agro</h1>
-                        <h1 className="text-(--green-500) font-bold text-3xl underline decoration-(--gray-2)" >Sys</h1>
-                    </div>
-                    <p className="text-(--black) text-[8.5px]" >SISTEMA DE GESTÃO AGRÍCOLA</p>
-                </div>
 
             </div>
 
@@ -69,9 +63,11 @@ export default function Header() {
                     </span>
                 </div>
 
-                <div className='w-10 h-10 rounded-full bg-(--green-500) flex items-center justify-center text-white font-semibold text-sm hover:scale-105 transition-transform duration-200'>
-                    {user ? getInitial(user.name) : '?'}
-                </div>
+                <Link href="/profile">
+                    <div className='w-10 h-10 rounded-full bg-(--green-500) flex items-center justify-center text-white font-semibold text-sm hover:scale-105 transition-transform duration-200 cursor-pointer'>
+                        {user ? getInitial(user.name) : '?'}
+                    </div>
+                </Link>
             </div>
         </div>
     );
