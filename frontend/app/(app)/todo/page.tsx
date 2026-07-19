@@ -21,6 +21,8 @@ export default function ToDo() {
     updateTodo,
     deleteTodo,
     toggleTodo,
+    completeAllTodos,
+    deleteCompleted
   } = useTodos();
 
 
@@ -43,41 +45,97 @@ export default function ToDo() {
 
   const handleSaveTodo = async (data: CreateTodoData) => {
     try {
-      if (modalMode === "add") {
-        await addTodo(data);
-        toast.success(`Tarefa "${data.title}" criada com sucesso!`);
-      } else if (editingTodo) {
-        await updateTodo(editingTodo.id, data);
-        toast.success(`Tarefa "${data.title}" atualizada com sucesso!`);
-      }
+      const result =
+        modalMode === "add"
+          ? await addTodo(data)
+          : await updateTodo(editingTodo!.id, data);
+
+      toast.success(result.message);
+      setIsModalOpen(false);
     } catch (error) {
       console.error(error);
+
       toast.error(
-        `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"
-        } tarefa`
+        error instanceof Error
+          ? error.message
+          : `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"} tarefa`
       );
     }
   };
 
-  const handleCompleteClick = (id: number) => {
+  const handleCompleteClick = async (id: number) => {
     const todo = todos.find((t) => t.id === id);
-    if (todo && !todo.completed) {
-      const confirmMessage = `Tem certeza que deseja marcar "${todo.title}" como concluída?`;
-      if (confirm(confirmMessage)) {
-        toggleTodo(id);
-        toast.success(`Tarefa "${todo.title}" concluída com sucesso!`);
-      }
+
+    if (!todo || todo.completed) return;
+
+    const confirmMessage = `Tem certeza que deseja marcar "${todo.title}" como concluída?`;
+
+    if (!confirm(confirmMessage)) return;
+
+    try {
+      const result = await toggleTodo(id);
+      toast.success(result.message);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao alterar o status da tarefa"
+      );
     }
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = async (id: number) => {
     const todo = todos.find((t) => t.id === id);
-    if (todo) {
-      const confirmMessage = `Tem certeza que deseja excluir "${todo.title}"? Esta ação não pode ser desfeita.`;
-      if (confirm(confirmMessage)) {
-        deleteTodo(id);
-        toast.success(`Tarefa "${todo.title}" excluída com sucesso!`);
-      }
+
+    if (!todo) return;
+
+    const confirmMessage = `Tem certeza que deseja excluir "${todo.title}"? Esta ação não pode ser desfeita.`;
+
+    if (!confirm(confirmMessage)) return;
+
+    try {
+      const result = await deleteTodo(id);
+      toast.success(result.message);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao excluir a tarefa"
+      );
+    }
+  };
+
+  const handleCompleteAll = async () => {
+    try {
+      const result = await completeAllTodos();
+      toast.success(result.message);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao concluir todas as tarefas"
+      );
+    }
+  };
+
+  const handleDeleteCompleted = async () => {
+    try {
+      const result = await deleteCompleted();
+      toast.success(result.message);
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao excluir tarefas concluídas"
+      );
     }
   };
 
@@ -125,6 +183,8 @@ export default function ToDo() {
             onComplete={handleCompleteClick}
             onEdit={handleEditTodo}
             onDelete={handleDeleteClick}
+            onCompleteAll={handleCompleteAll}
+            onDeleteCompleted={handleDeleteCompleted}
           />
 
           <TodoModal

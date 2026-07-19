@@ -1,24 +1,27 @@
 "use client";
 
 import { CircleCheckBig, SquarePen, Trash2, ClipboardList, Check } from "lucide-react";
-import { Todo, todoService } from "@/app/services/todo.service";
+import { Todo } from "@/app/services/todo.service";
 import EmptyContainer from "../EmptyContainer";
-import { toast } from "react-toastify";
 import { useState } from "react";
 
 interface TodoTableProps {
     todos: Todo[];
     onComplete?: (id: number) => void;
+    onCompleteAll?: () => Promise<void>;
     onEdit?: (todo: Todo) => void;
     onDelete?: (id: number) => void;
+    onDeleteCompleted?: () => Promise<void>;
     showActions?: boolean;
 }
 
 export default function TodoTable({
     todos,
     onComplete,
+    onCompleteAll,
     onEdit,
     onDelete,
+    onDeleteCompleted,
     showActions = true
 }: TodoTableProps) {
     if (todos.length === 0) {
@@ -35,6 +38,8 @@ export default function TodoTable({
 
     const [selectedStatus, setSelectedStatus] = useState("all");
     const [search, setSearch] = useState("");
+    const pendingCount = todos.filter(t => !t.completed).length;
+    const completedCount = todos.filter(t => t.completed).length;
 
     const todoDisplay = todos.filter((todo) => {
         if (selectedStatus === "complete" && !todo.completed) return false;
@@ -60,49 +65,76 @@ export default function TodoTable({
     };
 
     const handleCompleteAll = async () => {
+        if (!confirm(`Deseja concluir todas as ${pendingCount} tarefas pendentes?`)) {
+            return;
+        }
+
         try {
-            await todoService.completeAll();
-            toast.success("Todas as tarefas foram concluídas!");
+            await onCompleteAll?.();
         } catch (error) {
-            toast.error("Erro ao concluir todas as tarefas");
+            console.error(error);
+        }
+    };
+
+    const handleDeleteCompleted = async () => {
+        if (!confirm(`Deseja deletar todas as ${completedCount} tarefas concluídas?`)) {
+            return;
+        }
+
+        try {
+            await onDeleteCompleted?.();
+        } catch (error) {
             console.error(error);
         }
     };
 
     return (
         <div>
-            <div className="mt-16 flex items-center justify-between">
 
-                <div className="flex gap-2.5">
-                    <input
-                        id="text"
-                        type="text"
-                        required
-                        placeholder="Pesquisat tarefa"
-                        className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
-                        value={search}
-                        onChange={handleSearch}
-                    />
+            {showActions && (
+                <div className="mt-16 flex items-center justify-between">
 
-                    <select
-                        id="status"
-                        className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer"
-                        onChange={handleFilter}
-                    >
-                        <option value="all">Todos as tarefas</option>
-                        <option value="complete">Concluídas</option>
-                        <option value="pending">Pendentes</option>
-                    </select>
+
+                    <div className="flex gap-2.5">
+                        <input
+                            id="text"
+                            type="text"
+                            required
+                            placeholder="Pesquisat tarefa"
+                            className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
+                            value={search}
+                            onChange={handleSearch}
+                        />
+
+                        <select
+                            id="status"
+                            className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer"
+                            onChange={handleFilter}
+                        >
+                            <option value="all">Todos as tarefas</option>
+                            <option value="complete">Concluídas</option>
+                            <option value="pending">Pendentes</option>
+                        </select>
+                    </div>
+
+                    <div className="flex gap-2.5" >
+                        <button
+                            onClick={handleCompleteAll}
+                            className="px-5 py-2 flex items-center gap-2 rounded-lg bg-(--green-500) text-sm font-medium text-white transition-all hover:bg-green-700 cursor-pointer"
+                        >
+                            <Check size={18} />
+                            Concluir tudo
+                        </button>
+                        <button
+                            onClick={handleDeleteCompleted}
+                            className="px-5 py-2 flex items-center gap-2 rounded-lg bg-(--danger) text-sm font-medium text-white transition-all hover:bg-red-800 cursor-pointer"
+                        >
+                            <Trash2 size={18} />
+                            Deletar concluídas
+                        </button>
+                    </div>
                 </div>
-
-                <button
-                    onClick={handleCompleteAll}
-                    className="px-5 py-2 flex items-center gap-2 rounded-lg bg-(--green-500) text-sm font-medium text-white transition-all hover:bg-green-700 cursor-pointer"
-                >
-                    <Check size={18} />
-                    Concluir tudo
-                </button>
-            </div>
+            )}
 
 
             <div className="mt-4 overflow-hidden rounded-xl bg-white shadow-lg">

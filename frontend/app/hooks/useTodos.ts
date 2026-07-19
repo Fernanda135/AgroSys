@@ -19,7 +19,12 @@ export function useTodos() {
             }
         } catch (err) {
             console.error(err);
-            setError("Erro ao carregar tarefas.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao carregar tarefas.");
+            }
         } finally {
             setLoading(false);
         }
@@ -34,12 +39,18 @@ export function useTodos() {
 
             if (response.success) {
                 setTodos((prev) => [response.data, ...prev]);
-                return response.data;
+                return response;
             }
-            throw new Error("Erro ao criar tarefa");
+            throw new Error(response.message || "Erro ao criar tarefa");
         } catch (err) {
             console.error(err);
-            setError("Erro ao criar tarefa.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao criar tarefa.");
+            }
+
             throw err;
         }
     }
@@ -55,12 +66,18 @@ export function useTodos() {
                 setTodos((prev) =>
                     prev.map((todo) => (todo.id === id ? response.data : todo))
                 );
-                return response.data;
+                return response;
             }
-            throw new Error("Erro ao atualizar tarefa");
+            throw new Error(response.message || "Erro ao atualizar tarefa");
         } catch (err) {
             console.error(err);
-            setError("Erro ao atualizar tarefa.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao atualizar tarefa.");
+            }
+
             throw err;
         }
     }
@@ -73,12 +90,18 @@ export function useTodos() {
                 setTodos((prev) =>
                     prev.map((t) => (t.id === id ? response.data : t))
                 );
-                return response.data;
+                return response;
             }
-            throw new Error("Erro ao alternar status");
+            throw new Error(response.message || "Erro ao alternar status");
         } catch (err) {
             console.error(err);
-            setError("Erro ao alternar status da tarefa.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao alternar status da tarefa.");
+            }
+
             throw err;
         }
     }
@@ -88,37 +111,67 @@ export function useTodos() {
             const response = await todoService.delete(id);
             if (response.success) {
                 setTodos((prev) => prev.filter((todo) => todo.id !== id));
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao deletar tarefa");
         } catch (err) {
             console.error(err);
-            setError("Erro ao deletar tarefa.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao deletar tarefa.");
+            }
+
             throw err;
         }
     }
 
     async function completeAllTodos() {
         try {
-            const pendingTodos = todos.filter(t => !t.completed);
+            const response = await todoService.completeAll();
 
-            if (pendingTodos.length === 0) {
-                return {
-                    success: true,
-                    message: "Não há tarefas pendentes",
-                    count: 0
-                };
+            if (response.success) {
+                setTodos(prev =>
+                    prev.map(todo => ({ ...todo, completed: true }))
+                );
+                return response;
             }
 
-            const promises = pendingTodos.map(todo => toggleTodo(todo.id));
-            await Promise.all(promises);
-
-            return {
-                success: true,
-                message: `${pendingTodos.length} tarefas concluídas com sucesso`,
-                count: pendingTodos.length
-            };
+            throw new Error(response.message || "Erro ao concluir todas as tarefas");
         } catch (err) {
             console.error(err);
-            setError("Erro ao concluir todas as tarefas.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao concluir todas as tarefas.");
+            }
+
+            throw err;
+        }
+    }
+
+    async function deleteCompleted() {
+        try {
+            const response = await todoService.deleteCompleted();
+
+            if (response.success) {
+                setTodos(prev => prev.filter(todo => !todo.completed));
+                return response;
+            }
+
+            throw new Error(response.message || "Erro ao excluir tarefas concluídas");
+        } catch (err) {
+            console.error(err);
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao excluir tarefas concluídas.");
+            }
+
             throw err;
         }
     }
@@ -154,6 +207,7 @@ export function useTodos() {
         toggleTodo,
         deleteTodo,
         completeAllTodos,
+        deleteCompleted,
         reload: loadTodos,
 
         pendingTodos,

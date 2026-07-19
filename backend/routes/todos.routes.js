@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const todoController = require('../controllers/todo.controller');
 
-router.get('/', todoController.findAll);
 router.post('/', todoController.create);
+router.get('/', todoController.findAll);
+router.patch('/complete-all', todoController.completeAll);
+router.delete('/delete-completed', todoController.deleteCompleted);
+
 router.get('/:id', todoController.findOne);
 router.put('/:id', todoController.update);
 router.delete('/:id', todoController.delete);

@@ -24,6 +24,7 @@ export interface UpdateTodoData {
 
 export interface TodoResponse {
     success: boolean;
+    message: string;
     data: Todo[];
     stats?: {
         total: number;
@@ -34,6 +35,7 @@ export interface TodoResponse {
 
 export interface SingleTodoResponse {
     success: boolean;
+    message: string;
     data: Todo;
 }
 
