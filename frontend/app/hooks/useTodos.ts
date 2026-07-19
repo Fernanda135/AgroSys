@@ -10,7 +10,7 @@ export function useTodos() {
         try {
             setLoading(true);
             const response = await todoService.getAll();
-            
+
             if (response.success) {
                 setTodos(response.data);
                 setError(null);
@@ -31,7 +31,7 @@ export function useTodos() {
                 title: data.title,
                 description: data.description || "",
             });
-            
+
             if (response.success) {
                 setTodos((prev) => [response.data, ...prev]);
                 return response.data;
@@ -50,7 +50,7 @@ export function useTodos() {
                 title: data.title,
                 description: data.description,
             });
-            
+
             if (response.success) {
                 setTodos((prev) =>
                     prev.map((todo) => (todo.id === id ? response.data : todo))
@@ -68,7 +68,7 @@ export function useTodos() {
     async function toggleTodo(id: number) {
         try {
             const response = await todoService.toggleStatus(id);
-            
+
             if (response.success) {
                 setTodos((prev) =>
                     prev.map((t) => (t.id === id ? response.data : t))
@@ -96,6 +96,34 @@ export function useTodos() {
         }
     }
 
+    async function completeAllTodos() {
+        try {
+            const pendingTodos = todos.filter(t => !t.completed);
+
+            if (pendingTodos.length === 0) {
+                return {
+                    success: true,
+                    message: "Não há tarefas pendentes",
+                    count: 0
+                };
+            }
+
+            const promises = pendingTodos.map(todo => toggleTodo(todo.id));
+            await Promise.all(promises);
+
+            return {
+                success: true,
+                message: `${pendingTodos.length} tarefas concluídas com sucesso`,
+                count: pendingTodos.length
+            };
+        } catch (err) {
+            console.error(err);
+            setError("Erro ao concluir todas as tarefas.");
+            throw err;
+        }
+    }
+
+
     useEffect(() => {
         loadTodos();
     }, []);
@@ -120,16 +148,17 @@ export function useTodos() {
         setTodos,
         loading,
         error,
-        
+
         addTodo,
         updateTodo,
         toggleTodo,
         deleteTodo,
+        completeAllTodos,
         reload: loadTodos,
-        
+
         pendingTodos,
         completedTodos,
-        
+
         totalCount: todos.length,
         pendingCount: pendingTodos.length,
         completedCount: completedTodos.length,

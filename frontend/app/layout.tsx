@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "AgroSys",
   description: "Sistema de gestão agrícola",
   icons: {
-    icon: "/rs-icon.png",
+    icon: "/icon-agrosys.svg",
   },
 };
 
