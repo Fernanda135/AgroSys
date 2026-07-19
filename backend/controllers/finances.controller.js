@@ -16,12 +16,13 @@ exports.create = async (req, res, next) => {
             isIncome: isIncome || false,
             description: description.trim(),
             amount: parseFloat(amount),
-            category: category || null,
+            category: category?.trim() || null,
             transactionDate: transactionDate || new Date()
         });
 
         res.status(201).json({
             success: true,
+            message: 'Transação cadastrada com sucesso',
             data: finance
         });
 
@@ -47,6 +48,7 @@ exports.findAll = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Transações listadas com sucesso',
             data: finances,
             summary: {
                 totalIncome,
@@ -54,6 +56,7 @@ exports.findAll = async (req, res, next) => {
                 balance: totalIncome - totalExpense
             }
         });
+
     } catch (error) {
         next(error);
     }
@@ -75,17 +78,21 @@ exports.update = async (req, res, next) => {
         if (description !== undefined) {
             validators.required(description, 'descrição');
         }
+
         if (amount !== undefined) {
             validators.positiveNumber(amount, 'valor');
         }
+
         if (isIncome !== undefined) {
             validators.validBoolean(isIncome, 'tipo');
         }
+
         if (transactionDate !== undefined) {
             validators.validDate(transactionDate, 'data da transação');
         }
 
         const updateData = {};
+
         if (isIncome !== undefined) updateData.isIncome = isIncome;
         if (description !== undefined) updateData.description = description.trim();
         if (amount !== undefined) updateData.amount = parseFloat(amount);
@@ -96,6 +103,7 @@ exports.update = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Transação atualizada com sucesso',
             data: finance
         });
 

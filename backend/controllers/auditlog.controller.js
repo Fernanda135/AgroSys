@@ -32,6 +32,7 @@ exports.findAll = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
+            message: 'Logs de auditoria listados com sucesso',
             data: logs
         });
     } catch (error) {
@@ -61,6 +62,7 @@ exports.findOne = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
+            message: 'Log de auditoria encontrado com sucesso',
             data: log
         });
     } catch (error) {
@@ -82,6 +84,7 @@ exports.findByTable = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
+            message: 'Logs da tabela listados com sucesso',
             data: logs
         });
     } catch (error) {
@@ -103,6 +106,7 @@ exports.findByAction = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
+            message: 'Logs da ação listados com sucesso',
             data: logs
         });
     } catch (error) {

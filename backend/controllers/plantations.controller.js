@@ -13,10 +13,17 @@ exports.create = async (req, res, next) => {
         if (plantingDate && harvestDate) {
             const plant = new Date(plantingDate);
             const harvest = new Date(harvestDate);
+
             if (harvest < plant) {
-                throw AppError.validation('Data de colheita deve ser após a data de plantio', [
-                    { field: 'harvestDate', message: 'Data de colheita deve ser após o plantio' }
-                ]);
+                throw AppError.validation(
+                    'Data de colheita deve ser após a data de plantio',
+                    [
+                        {
+                            field: 'harvestDate',
+                            message: 'Data de colheita deve ser após o plantio'
+                        }
+                    ]
+                );
             }
         }
 
@@ -30,6 +37,7 @@ exports.create = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
+            message: 'Plantação cadastrada com sucesso',
             data: plantation
         });
 
@@ -51,9 +59,15 @@ exports.findAll = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Plantações listadas com sucesso',
             data: plantations,
-            stats: { total, active, harvested }
+            stats: {
+                total,
+                active,
+                harvested
+            }
         });
+
     } catch (error) {
         next(error);
     }
@@ -65,7 +79,10 @@ exports.update = async (req, res, next) => {
         const { culture, plantingDate, harvestDate, isHarvested } = req.body;
 
         const plantation = await db.Plantations.findOne({
-            where: { id, user_id: req.user.id }
+            where: {
+                id,
+                user_id: req.user.id
+            }
         });
 
         if (!plantation) {
@@ -75,29 +92,41 @@ exports.update = async (req, res, next) => {
         if (culture !== undefined) {
             validators.required(culture, 'cultura');
         }
+
         if (plantingDate !== undefined) {
             validators.validDate(plantingDate, 'data de plantio');
         }
+
         if (harvestDate !== undefined) {
             validators.validDate(harvestDate, 'data de colheita');
         }
+
         if (isHarvested !== undefined) {
             validators.validBoolean(isHarvested, 'status de colheita');
         }
 
         const finalPlantingDate = plantingDate || plantation.plantingDate;
         const finalHarvestDate = harvestDate || plantation.harvestDate;
+
         if (finalPlantingDate && finalHarvestDate) {
             const plant = new Date(finalPlantingDate);
             const harvest = new Date(finalHarvestDate);
+
             if (harvest < plant) {
-                throw AppError.validation('Data de colheita deve ser após a data de plantio', [
-                    { field: 'harvestDate', message: 'Data de colheita deve ser após o plantio' }
-                ]);
+                throw AppError.validation(
+                    'Data de colheita deve ser após a data de plantio',
+                    [
+                        {
+                            field: 'harvestDate',
+                            message: 'Data de colheita deve ser após o plantio'
+                        }
+                    ]
+                );
             }
         }
 
         const updateData = {};
+
         if (culture !== undefined) updateData.culture = culture.trim();
         if (plantingDate !== undefined) updateData.plantingDate = plantingDate;
         if (harvestDate !== undefined) updateData.harvestDate = harvestDate;
@@ -107,6 +136,7 @@ exports.update = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Plantação atualizada com sucesso',
             data: plantation
         });
 
@@ -120,7 +150,10 @@ exports.delete = async (req, res, next) => {
         const { id } = req.params;
 
         const plantation = await db.Plantations.findOne({
-            where: { id, user_id: req.user.id }
+            where: {
+                id,
+                user_id: req.user.id
+            }
         });
 
         if (!plantation) {

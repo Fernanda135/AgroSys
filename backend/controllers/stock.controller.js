@@ -21,6 +21,7 @@ exports.create = async (req, res, next) => {
 
         res.status(201).json({
             success: true,
+            message: 'Item cadastrado no estoque com sucesso',
             data: stock
         });
 
@@ -42,9 +43,11 @@ exports.findAll = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Itens do estoque listados com sucesso',
             data: stocks,
-            totalValue: totalValue
+            totalValue
         });
+
     } catch (error) {
         next(error);
     }
@@ -66,14 +69,17 @@ exports.update = async (req, res, next) => {
         if (product_name !== undefined) {
             validators.required(product_name, 'nome do produto');
         }
+
         if (quantity !== undefined) {
             validators.positiveNumber(quantity, 'quantidade');
         }
+
         if (unit_price !== undefined) {
             validators.positiveNumber(unit_price, 'preço unitário');
         }
 
         const updateData = {};
+
         if (product_name !== undefined) updateData.product_name = product_name.trim();
         if (category !== undefined) updateData.category = category?.trim() || null;
         if (quantity !== undefined) updateData.quantity = parseInt(quantity);
@@ -84,6 +90,7 @@ exports.update = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Item do estoque atualizado com sucesso',
             data: stock
         });
 
@@ -108,7 +115,7 @@ exports.delete = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            message: 'Item removido com sucesso'
+            message: 'Item removido do estoque com sucesso'
         });
 
     } catch (error) {
@@ -137,6 +144,7 @@ exports.addQuantity = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
+            message: 'Quantidade do item atualizada com sucesso',
             data: stock
         });
 
@@ -152,13 +160,16 @@ exports.lowStock = async (req, res, next) => {
         const stocks = await db.Stock.findAll({
             where: {
                 user_id: req.user.id,
-                quantity: { [db.Sequelize.Op.lt]: threshold }
+                quantity: {
+                    [db.Sequelize.Op.lt]: threshold
+                }
             },
             order: [['quantity', 'ASC']]
         });
 
         res.status(200).json({
             success: true,
+            message: 'Itens com estoque baixo listados com sucesso',
             data: stocks,
             count: stocks.length
         });

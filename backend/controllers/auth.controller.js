@@ -28,8 +28,11 @@ exports.registerUser = async (req, res, next) => {
         }
 
         const userExists = await db.User.findOne({ where: { email } });
+
         if (userExists) {
-            throw AppError.conflict('Email já está associado a uma conta', { field: 'email' });
+            throw AppError.conflict('Email já está associado a uma conta', {
+                field: 'email'
+            });
         }
 
         const user = await db.User.create({
@@ -39,16 +42,16 @@ exports.registerUser = async (req, res, next) => {
         });
 
         const token = jwt.sign(
-            { id: user.id }, 
-            process.env.JWT_SECRET, 
+            { id: user.id },
+            process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRATION || '1d' }
         );
 
-        let refreshToken = await createToken(user);
+        const refreshToken = await createToken(user);
 
         res.status(201).json({
             success: true,
-            message: 'Registro realizado com sucesso',
+            message: 'Usuário registrado com sucesso',
             data: {
                 id: user.id,
                 name: user.name,
@@ -79,27 +82,31 @@ exports.signInUser = async (req, res, next) => {
             ]);
         }
 
-        const user = await db.User.findOne({ where: { email: email.toLowerCase().trim() } });
-        
+        const user = await db.User.findOne({
+            where: { email: email.toLowerCase().trim() }
+        });
+
         if (!user) {
             throw AppError.unauthorized('Email ou senha incorretos');
         }
 
         const passwordValid = await bcrypt.compare(password, user.password);
+
         if (!passwordValid) {
             throw AppError.unauthorized('Email ou senha incorretos');
         }
 
         const token = jwt.sign(
-            { id: user.id }, 
-            process.env.JWT_SECRET, 
+            { id: user.id },
+            process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRATION || '1d' }
         );
 
-        let refreshToken = await createToken(user);
+        const refreshToken = await createToken(user);
 
         res.status(200).json({
             success: true,
+            message: 'Login realizado com sucesso',
             data: {
                 id: user.id,
                 name: user.name,
@@ -122,8 +129,8 @@ exports.refreshToken = async (req, res, next) => {
             throw AppError.badRequest('Refresh token é obrigatório');
         }
 
-        let refreshToken = await db.authToken.findOne({ 
-            where: { token: requestToken } 
+        const refreshToken = await db.authToken.findOne({
+            where: { token: requestToken }
         });
 
         if (!refreshToken) {
@@ -131,8 +138,13 @@ exports.refreshToken = async (req, res, next) => {
         }
 
         if (verifyExpiration(refreshToken)) {
-            await db.authToken.destroy({ where: { id: refreshToken.id } });
-            throw AppError.unauthorized('Refresh token expirado. Faça login novamente');
+            await db.authToken.destroy({
+                where: { id: refreshToken.id }
+            });
+
+            throw AppError.unauthorized(
+                'Refresh token expirado. Faça login novamente'
+            );
         }
 
         const user = await db.User.findOne({
@@ -144,14 +156,15 @@ exports.refreshToken = async (req, res, next) => {
             throw AppError.unauthorized('Usuário não encontrado');
         }
 
-        let newAccessToken = jwt.sign(
-            { id: user.id }, 
+        const newAccessToken = jwt.sign(
+            { id: user.id },
             process.env.JWT_SECRET,
             { expiresIn: process.env.JWT_EXPIRATION || '1d' }
         );
 
         res.status(200).json({
             success: true,
+            message: 'Token atualizado com sucesso',
             data: {
                 accessToken: newAccessToken,
                 refreshToken: refreshToken.token
