@@ -45,6 +45,9 @@ app.use(cors({
         ];
         
         if (!origin) return callback(null, true);
+
+        console.log('Origin recebida:', origin);
+        console.log('Origins permitidas:', allowedOrigins);
         
         if (allowedOrigins.some(allowed => 
             typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
