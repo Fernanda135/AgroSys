@@ -58,14 +58,14 @@ export default function FinanceModal({
         description: "",
         amount: 0,
         category: "",
-        transactionDate: today,
+        transaction_date: today,
     });
 
     const [errors, setErrors] = useState<{
         description?: string;
         amount?: string;
         category?: string;
-        transactionDate?: string;
+        transaction_date?: string;
     }>({});
 
     useEffect(() => {
@@ -75,7 +75,7 @@ export default function FinanceModal({
                 description: initialData.description,
                 amount: initialData.amount,
                 category: initialData.category ?? "",
-                transactionDate: formatDateInput(initialData.transactionDate),
+                transaction_date: formatDateInput(initialData.transaction_date),
             });
         } else {
             setFormData({
@@ -83,7 +83,7 @@ export default function FinanceModal({
                 description: "",
                 amount: 0,
                 category: "",
-                transactionDate: today,
+                transaction_date: today,
             });
         }
 
@@ -97,12 +97,12 @@ export default function FinanceModal({
             description?: string;
             amount?: string;
             category?: string;
-            transactionDate?: string;
+            transaction_date?: string;
         } = {};
 
         if (!formData.description.trim()) newErrors.description = "Informe a descrição";
         if (formData.amount <= 0) newErrors.amount = "Informe um valor maior que zero";
-        if (!formData.transactionDate) newErrors.transactionDate = "Informe a data";
+        if (!formData.transaction_date) newErrors.transaction_date = "Informe a data";
         if (!formData.category) newErrors.category = "Selecione uma categoria";
         setErrors(newErrors);
         if (Object.keys(newErrors).length > 0) {
@@ -283,22 +283,22 @@ export default function FinanceModal({
 
                             <input
                                 type="date"
-                                value={formData.transactionDate}
+                                value={formData.transaction_date}
                                 onChange={(e) =>
                                     setFormData({
                                         ...formData,
-                                        transactionDate: e.target.value,
+                                        transaction_date: e.target.value,
                                     })
                                 }
-                                className={`mt-1 w-full rounded-lg border px-4 py-2.5 text-sm transition-colors ${errors.transactionDate
+                                className={`mt-1 w-full rounded-lg border px-4 py-2.5 text-sm transition-colors ${errors.transaction_date
                                     ? "border-(--danger)"
                                     : "border-gray-300"
                                     } focus:border-(--green-500) focus:outline-none focus:ring-2 focus:ring-(--green-50)`}
                             />
 
-                            {errors.transactionDate && (
+                            {errors.transaction_date && (
                                 <p className="mt-1 text-sm text-(--danger)">
-                                    {errors.transactionDate}
+                                    {errors.transaction_date}
                                 </p>
                             )}
                         </div>

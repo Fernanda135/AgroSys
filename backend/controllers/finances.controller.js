@@ -4,12 +4,12 @@ const validators = require('../utils/validators');
 
 exports.create = async (req, res, next) => {
     try {
-        const { isIncome, description, amount, transactionDate, category } = req.body;
+        const { isIncome, description, amount, transaction_date, category } = req.body;
 
         validators.required(description, 'descrição');
         validators.positiveNumber(amount, 'valor');
         validators.validBoolean(isIncome, 'tipo (receita/despesa)');
-        validators.validDate(transactionDate, 'data da transação');
+        validators.validDate(transaction_date, 'data da transação');
 
         const finance = await db.Finances.create({
             user_id: req.user.id,
@@ -17,7 +17,7 @@ exports.create = async (req, res, next) => {
             description: description.trim(),
             amount: parseFloat(amount),
             category: category?.trim() || null,
-            transactionDate: transactionDate || new Date()
+            transaction_date: transaction_date || new Date()
         });
 
         res.status(201).json({
@@ -35,7 +35,7 @@ exports.findAll = async (req, res, next) => {
     try {
         const finances = await db.Finances.findAll({
             where: { user_id: req.user.id },
-            order: [['transactionDate', 'DESC']]
+            order: [['transaction_date', 'DESC']]
         });
 
         const totalIncome = finances
@@ -65,7 +65,7 @@ exports.findAll = async (req, res, next) => {
 exports.update = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { isIncome, description, amount, transactionDate, category } = req.body;
+        const { isIncome, description, amount, transaction_date, category } = req.body;
 
         const finance = await db.Finances.findOne({
             where: { id, user_id: req.user.id }
@@ -87,8 +87,8 @@ exports.update = async (req, res, next) => {
             validators.validBoolean(isIncome, 'tipo');
         }
 
-        if (transactionDate !== undefined) {
-            validators.validDate(transactionDate, 'data da transação');
+        if (transaction_date !== undefined) {
+            validators.validDate(transaction_date, 'data da transação');
         }
 
         const updateData = {};
@@ -97,7 +97,7 @@ exports.update = async (req, res, next) => {
         if (description !== undefined) updateData.description = description.trim();
         if (amount !== undefined) updateData.amount = parseFloat(amount);
         if (category !== undefined) updateData.category = category?.trim() || null;
-        if (transactionDate !== undefined) updateData.transactionDate = transactionDate;
+        if (transaction_date !== undefined) updateData.transaction_date = transaction_date;
 
         await finance.update(updateData);
 

@@ -24,7 +24,7 @@ export default function PlantationTable({
                 <EmptyContainer
                     title="Nenhuma plantação encontrada"
                     description='Clique em "Adicionar Plantação" para começar'
-                    icon={<Sprout/>}
+                    icon={<Sprout />}
                 />
             </div>
         );
@@ -38,6 +38,9 @@ export default function PlantationTable({
                         <tr className="border-b border-(--gray-2) bg-(--gray)">
                             <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
                                 Cultura
+                            </th>
+                            <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
+                                Variedade
                             </th>
                             <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600">
                                 Plantio
@@ -56,18 +59,18 @@ export default function PlantationTable({
                     <tbody className="divide-y divide-gray-100">
                         {plantations.map((plantation) => {
                             const delayed =
-                                !plantation.isHarvested &&
-                                plantation.harvestDate &&
-                                new Date(plantation.harvestDate) < new Date();
+                                plantation.status !== "HARVESTED" &&
+                                plantation.harvest_date &&
+                                new Date(plantation.harvest_date) < new Date();
 
                             return (
                                 <tr
                                     key={plantation.id}
-                                    className={`transition-colors hover:bg-gray-50 ${plantation.isHarvested ? "bg-gray-50/50" : ""
+                                    className={`transition-colors hover:bg-gray-50 ${plantation.status === "HARVESTED" ? "bg-gray-50/50" : ""
                                         }`}
                                 >
                                     <td
-                                        className={`px-6 py-4 text-sm ${plantation.isHarvested
+                                        className={`px-6 py-4 text-sm ${plantation.status === "HARVESTED"
                                             ? "text-gray-400 line-through"
                                             : "font-medium text-gray-900"
                                             }`}
@@ -75,27 +78,35 @@ export default function PlantationTable({
                                         {plantation.culture}
                                     </td>
                                     <td
-                                        className={`px-6 py-4 text-sm ${plantation.isHarvested ? "text-gray-400" : "text-gray-600"
+                                        className={`px-6 py-4 text-sm ${plantation.status === "HARVESTED"
+                                            ? "text-gray-400 line-through"
+                                            : "font-medium text-gray-900"
                                             }`}
                                     >
-                                        {formatDate(plantation.plantingDate)}
+                                        {plantation.variety}
                                     </td>
                                     <td
-                                        className={`px-6 py-4 text-sm ${plantation.isHarvested ? "text-gray-400" : "text-gray-600"
+                                        className={`px-6 py-4 text-sm ${plantation.status === "HARVESTED" ? "text-gray-400" : "text-gray-600"
                                             }`}
                                     >
-                                        {plantation.harvestDate ? formatDate(plantation.harvestDate) : "-"}
+                                        {formatDate(plantation.planting_date)}
+                                    </td>
+                                    <td
+                                        className={`px-6 py-4 text-sm ${plantation.status === "HARVESTED" ? "text-gray-400" : "text-gray-600"
+                                            }`}
+                                    >
+                                        {plantation.harvest_date ? formatDate(plantation.harvest_date) : "-"}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span
-                                            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${plantation.isHarvested
+                                            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${plantation.status === "HARVESTED"
                                                 ? "bg-(--green-50) text-(--green-500)"
                                                 : delayed
                                                     ? "bg-red-100 text-red-700"
                                                     : "bg-yellow-100 text-yellow-700"
                                                 }`}
                                         >
-                                            {plantation.isHarvested
+                                            {plantation.status === "HARVESTED"
                                                 ? "Colhida"
                                                 : delayed
                                                     ? "Atrasada"
@@ -106,8 +117,8 @@ export default function PlantationTable({
                                         <div className="flex items-center justify-center gap-2">
                                             <button
                                                 onClick={() => onHarvest(plantation.id)}
-                                                disabled={plantation.isHarvested}
-                                                className={`rounded-lg p-2 transition-all cursor-pointer ${plantation.isHarvested
+                                                disabled={plantation.status === "HARVESTED"}
+                                                className={`rounded-lg p-2 transition-all cursor-pointer ${plantation.status === "HARVESTED"
                                                     ? "cursor-not-allowed text-gray-300"
                                                     : "text-(--green-500) hover:bg-green-50 hover:text-green-900"
                                                     }`}

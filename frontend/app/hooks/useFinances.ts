@@ -38,7 +38,7 @@ export function useFinances() {
         isIncome: boolean;
         description: string;
         amount: number;
-        transactionDate?: string;
+        transaction_date?: string;
         category?: string;
     }) {
         try {
@@ -46,8 +46,8 @@ export function useFinances() {
                 isIncome: data.isIncome,
                 description: data.description,
                 amount: data.amount,
-                transactionDate:
-                    data.transactionDate ||
+                transaction_date:
+                    data.transaction_date ||
                     new Date().toISOString().split("T")[0],
                 category: data.category,
             });
@@ -78,7 +78,7 @@ export function useFinances() {
             isIncome?: boolean;
             description?: string;
             amount?: number;
-            transactionDate?: string;
+            transaction_date?: string;
             category?: string;
         }
     ) {

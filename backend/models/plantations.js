@@ -20,9 +20,21 @@ module.exports = (sequelize, DataTypes) => {
   Plantations.init({
     user_id: DataTypes.INTEGER,
     culture: DataTypes.STRING,
-    plantingDate: DataTypes.DATE,
-    harvestDate: DataTypes.DATE,
-    isHarvested: DataTypes.BOOLEAN
+    planting_date: DataTypes.DATE,
+    harvest_date: DataTypes.DATE,
+    is_harvested: DataTypes.BOOLEAN,
+    variety: DataTypes.STRING,
+    quantity_planted: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
+    },
+    unit: DataTypes.STRING,
+    expected_production: DataTypes.DECIMAL(10, 2),
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'PLANTED'
+    },
+    notes: DataTypes.TEXT,
   }, {
     sequelize,
     modelName: 'Plantations',

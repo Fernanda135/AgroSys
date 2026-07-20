@@ -10,6 +10,8 @@ import { usePlantations } from '@/app/hooks/usePlantation';
 import { Plantation, CreatePlantationData } from "@/app/services/plantation.service";
 import PlantationModal from "@/app/components/plantations/PlantationModal";
 import PlantationTable from "@/app/components/plantations/PlantationTable";
+import PlantationStatusChart from "@/app/components/plantations/PlantationStatusChart";
+import CropGrowthMonitoring from "@/app/components/plantations/CropGrowthMonitoring";
 
 export default function PlantationsPage() {
   const {
@@ -21,6 +23,12 @@ export default function PlantationsPage() {
     updatePlantation,
     deletePlantation,
     harvestPlantation,
+    harvestRate,
+    upcomingHarvest,
+    growthStatus,
+    growthProgress,
+    totalExpectedProduction,
+    overdueHarvest,
   } = usePlantations();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,16 +74,15 @@ export default function PlantationsPage() {
   const handleHarvestClick = async (id: number) => {
     const plantation = plantations.find((p) => p.id === id);
 
-    if (plantation && !plantation.isHarvested) {
-      const confirmMessage = `Tem certeza que deseja marcar "${plantation.culture}" como colhida?`;
+    if (plantation && plantation.status !== "HARVESTED") {
+      const confirmMessage =
+        `Tem certeza que deseja marcar "${plantation.culture}" como colhida?`;
 
       if (confirm(confirmMessage)) {
         try {
           const response = await harvestPlantation(id);
           toast.success(response.message);
         } catch (error) {
-          console.error(error);
-
           toast.error(
             error instanceof Error
               ? error.message
@@ -130,23 +137,36 @@ export default function PlantationsPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-            <SummaryCard
-              value={totalCount}
-              title="Total de plantações"
-              icon={<Sprout size={50} />}
-            />
-            <SummaryCard
-              value={delayedCount}
-              title="Colheitas atrasadas"
-              icon={<TriangleAlert className="text-(--warning)" size={50} />}
-            />
-            <SummaryCard
-              value={cultureCount}
-              title="Tipos de culturas"
-              icon={<Shapes size={50} />}
-            />
+          <div className="flex flex-col lg:flex-row gap-6 justify-between">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2 flex-1">
+              <SummaryCard
+                value={totalCount}
+                title="Total de plantações"
+                icon={<Sprout size={50} />}
+              />
+              <SummaryCard
+                value={delayedCount}
+                title="Colheitas atrasadas"
+                icon={<TriangleAlert className="text-(--warning)" size={50} />}
+              />
+              <SummaryCard
+                value={cultureCount}
+                title="Tipos de culturas"
+                icon={<Shapes size={50} />}
+              />
+              <SummaryCard
+                value={upcomingHarvest}
+                title="Tipos de culturas"
+                icon={<Shapes size={50} />}
+              />
+            </div>
+
+            <div className="lg:w-100 xl:w-125 shrink-0">
+              <PlantationStatusChart data={growthStatus} />
+            </div>
           </div>
+
+          <CropGrowthMonitoring plantations={plantations} />
 
           <PlantationTable
             plantations={plantations}
@@ -162,8 +182,15 @@ export default function PlantationsPage() {
             initialData={
               editingPlantation
                 ? {
-                  ...editingPlantation,
-                  harvestDate: editingPlantation.harvestDate ?? "",
+                  id: editingPlantation.id,
+                  culture: editingPlantation.culture,
+                  planting_date: editingPlantation.planting_date,
+                  harvest_date: editingPlantation.harvest_date ?? "",
+                  variety: editingPlantation.variety ?? "",
+                  quantity_planted: editingPlantation.quantity_planted,
+                  unit: editingPlantation.unit ?? "",
+                  expected_production: editingPlantation.expected_production ?? 0,
+                  notes: editingPlantation.notes ?? "",
                 }
                 : undefined
             }

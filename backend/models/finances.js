@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true
     },
     amount: DataTypes.DECIMAL,
-    transactionDate: DataTypes.DATE
+    transaction_date: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'Finances',

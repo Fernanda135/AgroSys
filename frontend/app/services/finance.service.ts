@@ -7,7 +7,7 @@ export interface Finance {
     description: string;
     amount: number;
     category?: string;
-    transactionDate: string;
+    transaction_date: string;
     createdAt: string;
     updatedAt: string;
 }
@@ -17,7 +17,7 @@ export interface CreateFinanceData {
     description: string;
     amount: number;
     category?: string;
-    transactionDate?: string;
+    transaction_date?: string;
 }
 
 export interface UpdateFinanceData {
@@ -25,7 +25,7 @@ export interface UpdateFinanceData {
     description?: string;
     amount?: number;
     category?: string;
-    transactionDate?: string;
+    transaction_date?: string;
 }
 
 export interface FinanceSummary {
