@@ -36,7 +36,23 @@ const swaggerSpec = require('./docs/swagger');
 
 // CORS
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            process.env.FRONTEND_URL || 'http://localhost:3000',
+            'https://agrosys-frontend.vercel.app',
+            /\.vercel\.app$/
+        ];
+        
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.some(allowed => 
+            typeof allowed === 'string' ? allowed === origin : allowed.test(origin)
+        )) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
