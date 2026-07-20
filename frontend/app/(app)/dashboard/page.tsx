@@ -50,7 +50,7 @@ export default function Dashboard() {
             <SummaryCard
               value={plantations.length}
               title={"Plantações\nativas"}
-              icon={<Sprout size={52} />}
+              icon={<Sprout size={50} />}
             />
           ) : (
             <EmptyContainer
@@ -63,7 +63,7 @@ export default function Dashboard() {
             <SummaryCard
               value={todos.length}
               title={"Tarefas\npendentes"}
-              icon={<ClipboardList size={52} />}
+              icon={<ClipboardList size={50} />}
             />
           ) : (
             <EmptyContainer
@@ -76,7 +76,7 @@ export default function Dashboard() {
             <SummaryCard
               value={stocks.length}
               title={"Itens\nno estoque"}
-              icon={<Warehouse size={52} />}
+              icon={<Warehouse size={50} />}
             />
           ) : (
             <EmptyContainer
@@ -120,7 +120,7 @@ export default function Dashboard() {
                 <TodoTable
                   todos={todos}
                   showActions={false}
-                  />
+                />
 
               </div>
             ) : (

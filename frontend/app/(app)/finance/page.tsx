@@ -137,7 +137,7 @@ export default function FinancePage() {
             <SummaryCard
               value={formatCurrency(balance)}
               title="Saldo"
-              icon={<Wallet size={52} />}
+              icon={<Wallet size={50} />}
             />
 
             <SummaryCard
@@ -146,7 +146,7 @@ export default function FinancePage() {
               icon={
                 <ArrowUpCircle
                   className="text-(--green-500)"
-                  size={52}
+                  size={50}
                 />
               }
             />
@@ -157,7 +157,7 @@ export default function FinancePage() {
               icon={
                 <ArrowDownCircle
                   className="text-(--danger)"
-                  size={52}
+                  size={50}
                 />
               }
             />

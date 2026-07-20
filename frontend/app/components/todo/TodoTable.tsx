@@ -30,7 +30,7 @@ export default function TodoTable({
                 <EmptyContainer
                     title="Nenhuma tarefa encontrada"
                     description='Clique em "Adicionar Tarefa" para começar'
-                    icon={<ClipboardList size={52} />}
+                    icon={<ClipboardList size={50} />}
                 />
             </div>
         );
@@ -174,7 +174,7 @@ export default function TodoTable({
                                         {todo.title}
                                     </td>
                                     <td
-                                        className={`px-6 py-4 text-sm ${todo.completed ? "text-(--gray-2)" : "text-(--black)"
+                                        className={`px-6 py-4 text-sm ${todo.completed ? "text-(--gray-2) line-through" : "text-(--black)"
                                             }`}
                                     >
                                         {todo.description}

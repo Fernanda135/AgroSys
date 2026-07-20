@@ -26,7 +26,7 @@ export default function StockTable({
                 <EmptyContainer
                     title="Nenhum produto cadastrado"
                     description='Clique em "Adicionar Produto" para começar'
-                    icon={<Package size={52} />}
+                    icon={<Package size={50} />}
                 />
             </div>
         );
@@ -79,10 +79,10 @@ export default function StockTable({
                                 <td className="px-6 py-4 text-center">
                                     <span
                                         className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${stock.quantity === 0
-                                                ? "bg-red-100 text-(--danger)"
-                                                : stock.quantity <= 5
-                                                    ? "bg-yellow-100 text-(--warning)"
-                                                    : "bg-(--green-50) text-(--green-500)"
+                                            ? "bg-red-100 text-(--danger)"
+                                            : stock.quantity <= 5
+                                                ? "bg-yellow-100 text-(--warning)"
+                                                : "bg-(--green-50) text-(--green-500)"
                                             }`}
                                     >
                                         {stock.quantity === 0

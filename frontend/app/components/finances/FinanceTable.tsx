@@ -26,7 +26,7 @@ export default function FinanceTable({
                 <EmptyContainer
                     title="Nenhuma movimentação encontrada"
                     description='Clique em "Adicionar Movimentação" para começar'
-                    icon={<BanknoteArrowUp size={52} />}
+                    icon={<BanknoteArrowUp size={50} />}
                 />
             </div>
         );
@@ -73,8 +73,8 @@ export default function FinanceTable({
                                 <td className="px-6 py-4 text-center">
                                     <span
                                         className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${finance.isIncome
-                                                ? "bg-(--green-50) text-(--green-500)"
-                                                : "bg-red-100 text-(--danger)"
+                                            ? "bg-(--green-50) text-(--green-500)"
+                                            : "bg-red-100 text-(--danger)"
                                             }`}
                                     >
                                         {finance.isIncome ? (
@@ -98,8 +98,8 @@ export default function FinanceTable({
                                 </td>
                                 <td
                                     className={`px-6 py-4 text-center text-sm font-semibold ${finance.isIncome
-                                            ? "text-(--green-500)"
-                                            : "text-(--danger)"
+                                        ? "text-(--green-500)"
+                                        : "text-(--danger)"
                                         }`}
                                 >
                                     {formatCurrency(finance.amount)}

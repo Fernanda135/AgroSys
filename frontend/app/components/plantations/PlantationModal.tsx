@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { X, Sprout } from "lucide-react";
 import { toast } from "react-toastify";
 
+import { getToday, formatDate } from "@/app/utils/date";
+
 interface PlantationModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -36,6 +38,8 @@ export default function PlantationModal({
         plantingDate?: string;
         harvestDate?: string;
     }>({});
+
+    const today = getToday();
 
     useEffect(() => {
         if (initialData && mode === "edit") {
@@ -99,7 +103,6 @@ export default function PlantationModal({
                 className="mx-4 w-full max-w-lg rounded-2xl bg-white shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
             >
-                {/* Header */}
                 <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
                     <div className="flex items-center gap-3">
                         <div className="rounded-full bg-(--green-50) p-2">
@@ -117,10 +120,8 @@ export default function PlantationModal({
                     </button>
                 </div>
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="p-6">
                     <div className="space-y-4">
-                        {/* Cultura */}
                         <div>
                             <label htmlFor="culture" className="block text-sm font-medium text-(--black)">
                                 Cultura *
@@ -139,7 +140,6 @@ export default function PlantationModal({
                             )}
                         </div>
 
-                        {/* Data de Plantio */}
                         <div>
                             <label htmlFor="plantingDate" className="block text-sm font-medium text-(--black)">
                                 Data de Plantio *
@@ -147,7 +147,7 @@ export default function PlantationModal({
                             <input
                                 id="plantingDate"
                                 type="date"
-                                value={plantingDate}
+                                value={today}
                                 onChange={(e) => setPlantingDate(e.target.value)}
                                 className={`mt-1 w-full rounded-lg border ${errors.plantingDate ? "border-(--danger)" : "border-gray-300"
                                     } px-4 py-2.5 text-sm transition-colors focus:border-(--green-500) focus:outline-none focus:ring-2 focus:ring-(--green-50)`}
@@ -157,7 +157,6 @@ export default function PlantationModal({
                             )}
                         </div>
 
-                        {/* Data de Colheita */}
                         <div>
                             <label htmlFor="harvestDate" className="block text-sm font-medium text-(--black)">
                                 Data de Colheita *
@@ -165,7 +164,7 @@ export default function PlantationModal({
                             <input
                                 id="harvestDate"
                                 type="date"
-                                value={harvestDate}
+                                value={today}
                                 onChange={(e) => setHarvestDate(e.target.value)}
                                 className={`mt-1 w-full rounded-lg border ${errors.harvestDate ? "border-(--danger)" : "border-gray-300"
                                     } px-4 py-2.5 text-sm transition-colors focus:border-(--green-500) focus:outline-none focus:ring-2 focus:ring-(--green-50)`}

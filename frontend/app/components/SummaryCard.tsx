@@ -21,11 +21,11 @@ export default function SummaryCard({
     return (
         <div className="flex h-40 items-center justify-between rounded-2xl border-(--gray) bg-white px-6 shadow-sm">
             <div className="flex flex-col">
-                <h2 className="text-5xl font-bold text-(--black)">
+                <h2 className="text-[40px] font-semibold text-(--black)">
                     {displayValue}
                 </h2>
 
-                <p className="mt-2 whitespace-pre-line text-xl font-medium text-(--gray-2)">
+                <p className="mt-2 whitespace-pre-line text-[20px] font-medium text-(--gray-2)">
                     {title}
                 </p>
             </div>

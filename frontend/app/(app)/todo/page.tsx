@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ClipboardList, Clock, CircleCheckBig } from "lucide-react";
+import { ClipboardList, Clock, CircleCheckBig, ChartPie } from "lucide-react";
 
 import ProtectedRoute from "../../components/ProtectedRoute";
 import { useTodos } from "@/app/hooks/useTodos";
@@ -17,6 +17,7 @@ export default function ToDo() {
     totalCount,
     pendingCount,
     completedCount,
+    completionRate,
     addTodo,
     updateTodo,
     deleteTodo,
@@ -160,21 +161,26 @@ export default function ToDo() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <SummaryCard
               value={totalCount}
               title="Total de tarefas"
-              icon={<ClipboardList size={52} />}
+              icon={<ClipboardList size={50} />}
             />
             <SummaryCard
               value={pendingCount}
               title="Tarefas pendentes"
-              icon={<Clock className="text-(--warning)" size={52} />}
+              icon={<Clock className="text-(--warning)" size={50} />}
             />
             <SummaryCard
               value={completedCount}
               title="Tarefas concluídas"
-              icon={<CircleCheckBig size={52} />}
+              icon={<CircleCheckBig size={50} />}
+            />
+            <SummaryCard
+              value={`${completionRate}%`}
+              title="Concluídas"
+              icon={<ChartPie size={50} />}
             />
           </div>
 

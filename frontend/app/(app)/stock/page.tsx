@@ -119,17 +119,17 @@ export default function StockPage() {
             <SummaryCard
               value={totalProducts}
               title="Produtos cadastrados"
-              icon={<Package size={52} />}
+              icon={<Package size={50} />}
             />
             <SummaryCard
               value={totalQuantity}
               title="Itens em estoque"
-              icon={<Boxes size={52} />}
+              icon={<Boxes size={50} />}
             />
             <SummaryCard
               value={lowStockCount}
               title="Estoque baixo"
-              icon={<TriangleAlert className="text-(--warning)" size={52} />}
+              icon={<TriangleAlert className="text-(--warning)" size={50} />}
             />
           </div>
 

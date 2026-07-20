@@ -134,17 +134,17 @@ export default function PlantationsPage() {
             <SummaryCard
               value={totalCount}
               title="Total de plantações"
-              icon={<Sprout size={52} />}
+              icon={<Sprout size={50} />}
             />
             <SummaryCard
               value={delayedCount}
               title="Colheitas atrasadas"
-              icon={<TriangleAlert className="text-(--warning)" size={52} />}
+              icon={<TriangleAlert className="text-(--warning)" size={50} />}
             />
             <SummaryCard
               value={cultureCount}
               title="Tipos de culturas"
-              icon={<Shapes size={52} />}
+              icon={<Shapes size={50} />}
             />
           </div>
 
