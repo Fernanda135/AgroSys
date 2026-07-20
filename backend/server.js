@@ -40,6 +40,7 @@ app.use(cors({
         const allowedOrigins = [
             process.env.FRONTEND_URL || 'http://localhost:3000',
             'https://agrosys-frontend.vercel.app',
+            'https://agro-f9313m3im-fernanda135s-projects.vercel.app',
             /\.vercel\.app$/
         ];
         
