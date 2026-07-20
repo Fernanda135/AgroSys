@@ -15,6 +15,15 @@ const profileRoute = require('./routes/profile.route');
 const stockRoute = require('./routes/stock.route');
 const todoRoute = require('./routes/todos.routes');
 
+app.get("/", (req, res) => {
+    res.json({
+        success: true,
+        message: "API AgroSys está funcionando",
+        documentation: "/api-docs",
+        health: "/health"
+    });
+});
+
 // Importação dos middlewares
 const { verifyToken } = require('./middlewares/auth.middleware');
 const { auditLog } = require('./middlewares/audit.middleware');
