@@ -1,6 +1,5 @@
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 dotenv.config();
-
 
 module.exports = {
   development: {
@@ -13,12 +12,18 @@ module.exports = {
       ssl: false,
     },
   },
+
   production: {
     username: process.env.PGUSER,
     password: process.env.PGPASSWORD,
     database: process.env.PGDATABASE,
     host: process.env.PGHOST,
     dialect: "postgres",
-    ssl: 'require'
-  }
-}
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  },
+};
