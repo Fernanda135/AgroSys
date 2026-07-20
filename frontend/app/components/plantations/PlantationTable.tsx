@@ -84,7 +84,7 @@ export default function PlantationTable({
                                         className={`px-6 py-4 text-sm ${plantation.isHarvested ? "text-gray-400" : "text-gray-600"
                                             }`}
                                     >
-                                        {formatDate(plantation.harvestDate)}
+                                        {plantation.harvestDate ? formatDate(plantation.harvestDate) : "-"}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span

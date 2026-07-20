@@ -52,27 +52,43 @@ export default function StockPage() {
           `Produto "${data.product_name}" atualizado com sucesso!`
         );
       }
+
       setEditingStock(null);
       setIsModalOpen(false);
     } catch (error) {
       console.error(error);
-      toast.error(
-        `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"
-        } produto`
-      );
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error(
+          `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"
+          } produto.`
+        );
+      }
     }
   };
 
   const handleDeleteClick = async (id: number) => {
     const stock = stocks.find((s) => s.id === id);
-    if (stock) {
-      const confirmMessage = `Tem certeza que deseja excluir "${stock.product_name}"? Esta ação não pode ser desfeita.`;
-      if (confirm(confirmMessage)) {
-        try {
-          await deleteStock(id);
-          toast.success(`Produto "${stock.product_name}" excluído com sucesso!`);
-        } catch (error) {
-          toast.error("Erro ao excluir produto");
+
+    if (!stock) return;
+
+    const confirmMessage = `Tem certeza que deseja excluir "${stock.product_name}"? Esta ação não pode ser desfeita.`;
+
+    if (confirm(confirmMessage)) {
+      try {
+        await deleteStock(id);
+        toast.success(
+          `Produto "${stock.product_name}" excluído com sucesso!`
+        );
+      } catch (error) {
+        console.error(error);
+
+        if (error instanceof Error) {
+          toast.error(error.message);
+        } else {
+          toast.error("Erro ao excluir produto.");
         }
       }
     }

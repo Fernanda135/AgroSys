@@ -171,3 +171,37 @@ exports.delete = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.harvest = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+
+        const plantation = await db.Plantations.findOne({
+            where: {
+                id,
+                user_id: req.user.id
+            }
+        });
+
+        if (!plantation) {
+            throw AppError.notFound("Plantação não encontrada", { id });
+        }
+
+        if (plantation.isHarvested) {
+            throw AppError.badRequest("Esta plantação já foi colhida.");
+        }
+
+        await plantation.update({
+            isHarvested: true
+        });
+
+        res.status(200).json({
+            success: true,
+            message: "Plantação colhida com sucesso.",
+            data: plantation
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};

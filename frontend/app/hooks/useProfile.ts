@@ -9,35 +9,52 @@ export function useProfile() {
     async function loadProfile() {
         try {
             setLoading(true);
+
             const response = await profileService.getProfile();
-            
+
             if (response.success) {
                 setProfile(response.data);
                 setError(null);
-            } else {
-                setError("Erro ao carregar perfil");
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao carregar perfil.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao carregar o perfil.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao carregar perfil.");
+            }
         } finally {
             setLoading(false);
         }
     }
 
-    async function updateProfile(data: { name?: string; email?: string }) {
+    async function updateProfile(data: {
+        name?: string;
+        email?: string;
+    }) {
         try {
             const response = await profileService.updateProfile(data);
-            
+
             if (response.success) {
                 setProfile(response.data);
                 setError(null);
-                return response.data;
+                return response;
             }
-            throw new Error("Erro ao atualizar perfil");
+
+            throw new Error(response.message || "Erro ao atualizar perfil.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao atualizar o perfil.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao atualizar perfil.");
+            }
+
             throw err;
         }
     }
@@ -49,14 +66,22 @@ export function useProfile() {
     }) {
         try {
             const response = await profileService.changePassword(data);
+
             if (response.success) {
                 setError(null);
                 return response;
             }
-            throw new Error("Erro ao alterar senha");
+
+            throw new Error(response.message || "Erro ao alterar senha.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao alterar a senha.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao alterar senha.");
+            }
+
             throw err;
         }
     }
@@ -69,7 +94,9 @@ export function useProfile() {
         profile,
         loading,
         error,
+
         reload: loadProfile,
+
         updateProfile,
         changePassword,
     };

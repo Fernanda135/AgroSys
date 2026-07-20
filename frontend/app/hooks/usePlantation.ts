@@ -9,17 +9,26 @@ export function usePlantations() {
     async function loadPlantations() {
         try {
             setLoading(true);
+
             const response = await plantationService.getAll();
-            
+
             if (response.success) {
                 setPlantations(response.data);
                 setError(null);
-            } else {
-                setError("Erro ao carregar plantações");
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao carregar plantações");
         } catch (err) {
             console.error(err);
-            setError("Erro ao carregar plantações");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao carregar plantações.");
+            }
+
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -36,41 +45,61 @@ export function usePlantations() {
                 plantingDate: data.plantingDate,
                 harvestDate: data.harvestDate,
             });
-            
+
             if (response.success) {
-                setPlantations((prev) => [response.data, ...prev]);
-                return response.data;
+                setPlantations(prev => [response.data, ...prev]);
+                return response;
             }
-            throw new Error("Erro ao criar plantação");
+
+            throw new Error(response.message || "Erro ao criar plantação");
         } catch (err) {
             console.error(err);
-            setError("Erro ao criar plantação.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao criar plantação.");
+            }
+
             throw err;
         }
     }
 
-    async function updatePlantation(id: number, data: {
-        culture?: string;
-        plantingDate?: string;
-        harvestDate?: string;
-    }) {
+    async function updatePlantation(
+        id: number,
+        data: {
+            culture?: string;
+            plantingDate?: string;
+            harvestDate?: string;
+        }
+    ) {
         try {
             const response = await plantationService.update(id, {
                 culture: data.culture,
                 plantingDate: data.plantingDate,
                 harvestDate: data.harvestDate,
             });
-            
+
             if (response.success) {
-                setPlantations((prev) =>
-                    prev.map((plantation) => (plantation.id === id ? response.data : plantation))
+                setPlantations(prev =>
+                    prev.map(plantation =>
+                        plantation.id === id ? response.data : plantation
+                    )
                 );
-                return response.data;
+
+                return response;
             }
-            throw new Error("Erro ao atualizar plantação");
+
+            throw new Error(response.message || "Erro ao atualizar plantação");
         } catch (err) {
             console.error(err);
-            setError("Erro ao atualizar plantação.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao atualizar plantação.");
+            }
+
             throw err;
         }
     }
@@ -78,12 +107,25 @@ export function usePlantations() {
     async function deletePlantation(id: number) {
         try {
             const response = await plantationService.delete(id);
+
             if (response.success) {
-                setPlantations((prev) => prev.filter((plantation) => plantation.id !== id));
+                setPlantations(prev =>
+                    prev.filter(plantation => plantation.id !== id)
+                );
+
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao excluir plantação");
         } catch (err) {
             console.error(err);
-            setError("Erro ao deletar plantação.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao excluir plantação.");
+            }
+
             throw err;
         }
     }
@@ -91,17 +133,27 @@ export function usePlantations() {
     async function harvestPlantation(id: number) {
         try {
             const response = await plantationService.harvest(id);
-            
+
             if (response.success) {
-                setPlantations((prev) =>
-                    prev.map((plantation) => (plantation.id === id ? response.data : plantation))
+                setPlantations(prev =>
+                    prev.map(plantation =>
+                        plantation.id === id ? response.data : plantation
+                    )
                 );
-                return response.data;
+
+                return response;
             }
-            throw new Error("Erro ao colher plantação");
+
+            throw new Error(response.message || "Erro ao colher plantação");
         } catch (err) {
             console.error(err);
-            setError("Erro ao colher plantação.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao colher plantação.");
+            }
+
             throw err;
         }
     }
@@ -136,15 +188,18 @@ export function usePlantations() {
         const cultures = new Set(
             plantations.map(p => p.culture.trim().toLowerCase())
         );
+
         return cultures.size;
     }, [plantations]);
 
     const cultures = useMemo(() => {
         const result: Record<string, number> = {};
+
         plantations.forEach(p => {
             const key = p.culture.trim();
             result[key] = (result[key] || 0) + 1;
         });
+
         return Object.entries(result)
             .sort((a, b) => b[1] - a[1])
             .map(([name, count]) => ({ name, count }));
@@ -160,7 +215,7 @@ export function usePlantations() {
         deletePlantation,
         harvestPlantation,
         reload: loadPlantations,
-        
+
         totalCount,
         harvestedCount,
         pendingCount,

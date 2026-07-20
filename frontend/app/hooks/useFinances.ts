@@ -9,17 +9,26 @@ export function useFinances() {
     async function loadFinances() {
         try {
             setLoading(true);
+
             const response = await financeService.getAll();
-            
+
             if (response.success) {
                 setFinances(response.data);
                 setError(null);
-            } else {
-                setError("Erro ao carregar transações");
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao carregar transações.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao carregar transações.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao carregar transações.");
+            }
+
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -37,48 +46,66 @@ export function useFinances() {
                 isIncome: data.isIncome,
                 description: data.description,
                 amount: data.amount,
-                transactionDate: data.transactionDate || new Date().toISOString().split('T')[0],
+                transactionDate:
+                    data.transactionDate ||
+                    new Date().toISOString().split("T")[0],
                 category: data.category,
             });
-            
+
             if (response.success) {
-                setFinances((prev) => [response.data, ...prev]);
-                return response.data;
+                setFinances(prev => [response.data, ...prev]);
+                setError(null);
+                return response;
             }
-            throw new Error("Erro ao criar transação");
+
+            throw new Error(response.message || "Erro ao cadastrar transação.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao criar transação financeira.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao cadastrar transação.");
+            }
+
             throw err;
         }
     }
 
-    async function updateFinance(id: number, data: {
-        isIncome?: boolean;
-        description?: string;
-        amount?: number;
-        transactionDate?: string;
-        category?: string;
-    }) {
+    async function updateFinance(
+        id: number,
+        data: {
+            isIncome?: boolean;
+            description?: string;
+            amount?: number;
+            transactionDate?: string;
+            category?: string;
+        }
+    ) {
         try {
-            const response = await financeService.update(id, {
-                isIncome: data.isIncome,
-                description: data.description,
-                amount: data.amount,
-                transactionDate: data.transactionDate,
-                category: data.category,
-            });
-            
+            const response = await financeService.update(id, data);
+
             if (response.success) {
-                setFinances((prev) =>
-                    prev.map((finance) => (finance.id === id ? response.data : finance))
+                setFinances(prev =>
+                    prev.map(finance =>
+                        finance.id === id ? response.data : finance
+                    )
                 );
-                return response.data;
+
+                setError(null);
+                return response;
             }
-            throw new Error("Erro ao atualizar transação");
+
+            throw new Error(response.message || "Erro ao atualizar transação.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao atualizar transação financeira.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao atualizar transação.");
+            }
+
             throw err;
         }
     }
@@ -86,12 +113,26 @@ export function useFinances() {
     async function deleteFinance(id: number) {
         try {
             const response = await financeService.delete(id);
+
             if (response.success) {
-                setFinances((prev) => prev.filter((finance) => finance.id !== id));
+                setFinances(prev =>
+                    prev.filter(finance => finance.id !== id)
+                );
+
+                setError(null);
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao excluir transação.");
         } catch (err) {
             console.error(err);
-            setError("Erro ao deletar transação financeira.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao excluir transação.");
+            }
+
             throw err;
         }
     }
@@ -111,12 +152,20 @@ export function useFinances() {
     );
 
     const totalIncome = useMemo(
-        () => incomes.reduce((total, finance) => total + Number(finance.amount), 0),
+        () =>
+            incomes.reduce(
+                (total, finance) => total + Number(finance.amount),
+                0
+            ),
         [incomes]
     );
 
     const totalExpense = useMemo(
-        () => expenses.reduce((total, finance) => total + Number(finance.amount), 0),
+        () =>
+            expenses.reduce(
+                (total, finance) => total + Number(finance.amount),
+                0
+            ),
         [expenses]
     );
 
@@ -127,26 +176,33 @@ export function useFinances() {
 
     const categories = useMemo(() => {
         const uniqueCategories = new Set(
-            finances.map(f => f.category).filter(Boolean)
+            finances.map(finance => finance.category).filter(Boolean)
         );
+
         return Array.from(uniqueCategories);
     }, [finances]);
 
     const incomeByCategory = useMemo(() => {
         const result: Record<string, number> = {};
-        incomes.forEach(f => {
-            const cat = f.category || 'Sem categoria';
-            result[cat] = (result[cat] || 0) + Number(f.amount);
+
+        incomes.forEach(finance => {
+            const category = finance.category || "Sem categoria";
+            result[category] =
+                (result[category] || 0) + Number(finance.amount);
         });
+
         return result;
     }, [incomes]);
 
     const expenseByCategory = useMemo(() => {
         const result: Record<string, number> = {};
-        expenses.forEach(f => {
-            const cat = f.category || 'Sem categoria';
-            result[cat] = (result[cat] || 0) + Number(f.amount);
+
+        expenses.forEach(finance => {
+            const category = finance.category || "Sem categoria";
+            result[category] =
+                (result[category] || 0) + Number(finance.amount);
         });
+
         return result;
     }, [expenses]);
 
@@ -154,6 +210,7 @@ export function useFinances() {
         finances,
         loading,
         error,
+
         reload: loadFinances,
 
         addFinance,

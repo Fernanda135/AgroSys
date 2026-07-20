@@ -41,28 +41,46 @@ export default function PlantationsPage() {
 
   const handleSavePlantation = async (data: CreatePlantationData) => {
     try {
-      if (modalMode === "add") {
-        await addPlantation(data);
-        toast.success(`Plantação "${data.culture}" criada com sucesso!`);
-      } else if (editingPlantation) {
-        await updatePlantation(editingPlantation.id, data);
-        toast.success(`Plantação "${data.culture}" atualizada com sucesso!`);
+      const response =
+        modalMode === "add"
+          ? await addPlantation(data)
+          : editingPlantation
+            ? await updatePlantation(editingPlantation.id, data)
+            : null;
+
+      if (response) {
+        toast.success(response.message);
+        setIsModalOpen(false);
       }
     } catch (error) {
-      toast.error(`Erro ao ${modalMode === "add" ? "criar" : "atualizar"} plantação`);
+      console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : `Erro ao ${modalMode === "add" ? "criar" : "atualizar"} plantação`
+      );
     }
   };
 
   const handleHarvestClick = async (id: number) => {
     const plantation = plantations.find((p) => p.id === id);
+
     if (plantation && !plantation.isHarvested) {
       const confirmMessage = `Tem certeza que deseja marcar "${plantation.culture}" como colhida?`;
+
       if (confirm(confirmMessage)) {
         try {
-          await harvestPlantation(id);
-          toast.success(`Plantação "${plantation.culture}" colhida com sucesso!`);
+          const response = await harvestPlantation(id);
+          toast.success(response.message);
         } catch (error) {
-          toast.error("Erro ao colher plantação");
+          console.error(error);
+
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : "Erro ao colher plantação"
+          );
         }
       }
     }
@@ -70,14 +88,22 @@ export default function PlantationsPage() {
 
   const handleDeleteClick = async (id: number) => {
     const plantation = plantations.find((p) => p.id === id);
+
     if (plantation) {
       const confirmMessage = `Tem certeza que deseja excluir "${plantation.culture}"? Esta ação não pode ser desfeita.`;
+
       if (confirm(confirmMessage)) {
         try {
-          await deletePlantation(id);
-          toast.success(`Plantação "${plantation.culture}" excluída com sucesso!`);
+          const response = await deletePlantation(id);
+          toast.success(response.message);
         } catch (error) {
-          toast.error("Erro ao excluir plantação");
+          console.error(error);
+
+          toast.error(
+            error instanceof Error
+              ? error.message
+              : "Erro ao excluir plantação"
+          );
         }
       }
     }
@@ -87,7 +113,7 @@ export default function PlantationsPage() {
     <ProtectedRoute>
       <div className="min-h-screen bg-white p-6 md:p-10 rounded-xl">
         <div className="mx-auto max-w-7xl">
-          
+
           <div className="mb-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>
               <h1 className="text-3xl font-bold text-(--black)">Plantações</h1>
@@ -136,9 +162,9 @@ export default function PlantationsPage() {
             initialData={
               editingPlantation
                 ? {
-                    ...editingPlantation,
-                    harvestDate: editingPlantation.harvestDate ?? "",
-                  }
+                  ...editingPlantation,
+                  harvestDate: editingPlantation.harvestDate ?? "",
+                }
                 : undefined
             }
             mode={modalMode}

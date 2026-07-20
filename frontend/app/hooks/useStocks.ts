@@ -9,17 +9,26 @@ export function useStocks() {
     async function loadStocks() {
         try {
             setLoading(true);
+
             const response = await stockService.getAll();
-            
+
             if (response.success) {
                 setStocks(response.data);
                 setError(null);
-            } else {
-                setError("Erro ao carregar estoque");
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao carregar estoque");
         } catch (err) {
             console.error(err);
-            setError("Erro ao carregar o estoque.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao carregar estoque.");
+            }
+
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -40,15 +49,22 @@ export function useStocks() {
                 unit_price: data.unit_price,
                 unit: data.unit || "un",
             });
-            
+
             if (response.success) {
                 setStocks((prev) => [response.data, ...prev]);
-                return response.data;
+                return response;
             }
-            throw new Error("Erro ao adicionar item");
+
+            throw new Error(response.message || "Erro ao adicionar item");
         } catch (err) {
             console.error(err);
-            setError("Erro ao adicionar item no estoque.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao adicionar item ao estoque.");
+            }
+
             throw err;
         }
     }
@@ -61,24 +77,26 @@ export function useStocks() {
         unit?: string;
     }) {
         try {
-            const response = await stockService.update(id, {
-                product_name: data.product_name,
-                category: data.category,
-                quantity: data.quantity,
-                unit_price: data.unit_price,
-                unit: data.unit,
-            });
-            
+            const response = await stockService.update(id, data);
+
             if (response.success) {
-                setStocks((prev) =>
-                    prev.map((stock) => (stock.id === id ? response.data : stock))
+                setStocks(prev =>
+                    prev.map(stock => stock.id === id ? response.data : stock)
                 );
-                return response.data;
+
+                return response;
             }
-            throw new Error("Erro ao atualizar item");
+
+            throw new Error(response.message || "Erro ao atualizar item");
         } catch (err) {
             console.error(err);
-            setError("Erro ao atualizar item do estoque.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao atualizar item do estoque.");
+            }
+
             throw err;
         }
     }
@@ -86,17 +104,25 @@ export function useStocks() {
     async function addQuantity(id: number, quantity: number) {
         try {
             const response = await stockService.addQuantity(id, quantity);
-            
+
             if (response.success) {
-                setStocks((prev) =>
-                    prev.map((stock) => (stock.id === id ? response.data : stock))
+                setStocks(prev =>
+                    prev.map(stock => stock.id === id ? response.data : stock)
                 );
-                return response.data;
+
+                return response;
             }
-            throw new Error("Erro ao adicionar quantidade");
+
+            throw new Error(response.message || "Erro ao adicionar quantidade");
         } catch (err) {
             console.error(err);
-            setError("Erro ao adicionar quantidade ao estoque.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao adicionar quantidade ao estoque.");
+            }
+
             throw err;
         }
     }
@@ -104,12 +130,25 @@ export function useStocks() {
     async function deleteStock(id: number) {
         try {
             const response = await stockService.delete(id);
+
             if (response.success) {
-                setStocks((prev) => prev.filter((stock) => stock.id !== id));
+                setStocks(prev =>
+                    prev.filter(stock => stock.id !== id)
+                );
+
+                return response;
             }
+
+            throw new Error(response.message || "Erro ao excluir item");
         } catch (err) {
             console.error(err);
-            setError("Erro ao deletar item do estoque.");
+
+            if (err instanceof Error) {
+                setError(err.message);
+            } else {
+                setError("Erro ao excluir item do estoque.");
+            }
+
             throw err;
         }
     }
@@ -118,7 +157,10 @@ export function useStocks() {
         loadStocks();
     }, []);
 
-    const totalProducts = useMemo(() => stocks.length, [stocks]);
+    const totalProducts = useMemo(
+        () => stocks.length,
+        [stocks]
+    );
 
     const totalQuantity = useMemo(
         () => stocks.reduce((total, stock) => total + stock.quantity, 0),
@@ -126,7 +168,11 @@ export function useStocks() {
     );
 
     const totalValue = useMemo(
-        () => stocks.reduce((total, stock) => total + (stock.quantity * stock.unit_price), 0),
+        () =>
+            stocks.reduce(
+                (total, stock) => total + stock.quantity * stock.unit_price,
+                0
+            ),
         [stocks]
     );
 
@@ -142,8 +188,11 @@ export function useStocks() {
 
     const categories = useMemo(() => {
         const uniqueCategories = new Set(
-            stocks.map(s => s.category).filter(Boolean)
+            stocks
+                .map(stock => stock.category)
+                .filter(Boolean)
         );
+
         return Array.from(uniqueCategories);
     }, [stocks]);
 
@@ -152,6 +201,7 @@ export function useStocks() {
         setStocks,
         loading,
         error,
+
         reload: loadStocks,
 
         addStock,

@@ -28,6 +28,7 @@ export interface UpdatePlantationData {
 
 export interface PlantationResponse {
     success: boolean;
+    message: string;
     data: Plantation[];
     stats?: {
         total: number;
@@ -38,6 +39,7 @@ export interface PlantationResponse {
 
 export interface SinglePlantationResponse {
     success: boolean;
+    message: string;
     data: Plantation;
 }
 

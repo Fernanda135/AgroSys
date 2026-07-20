@@ -16,6 +16,7 @@ export interface AuditLog {
 
 export interface AuditLogResponse {
     success: boolean;
+    message: string;
     data: AuditLog[];
     total?: number;
     page?: number;

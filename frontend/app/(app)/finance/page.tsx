@@ -52,37 +52,59 @@ export default function FinancePage() {
 
   const handleSaveFinance = async (data: CreateFinanceData) => {
     try {
-      if (modalMode === "add") {
-        await addFinance(data);
-        toast.success("Movimentação adicionada com sucesso!");
-      } else if (editingFinance) {
-        await updateFinance(editingFinance.id, data);
-        toast.success("Movimentação atualizada com sucesso!");
-      }
+      const response =
+        modalMode === "add"
+          ? await addFinance(data)
+          : editingFinance
+            ? await updateFinance(editingFinance.id, data)
+            : null;
+
+      if (!response) return;
+
+      toast.success(
+        response.message ||
+        `Movimentação ${modalMode === "add" ? "adicionada" : "atualizada"
+        } com sucesso!`
+      );
+
       setEditingFinance(null);
       setIsModalOpen(false);
     } catch (error) {
       console.error(error);
+
       toast.error(
-        `Erro ao ${
-          modalMode === "add" ? "adicionar" : "atualizar"
-        } movimentação`
+        error instanceof Error
+          ? error.message
+          : `Erro ao ${modalMode === "add" ? "adicionar" : "atualizar"
+          } movimentação`
       );
     }
   };
 
   const handleDeleteClick = async (id: number) => {
     const finance = finances.find((f) => f.id === id);
+
     if (!finance) return;
-    if (confirm(`Tem certeza que deseja excluir "${finance.description}"?`)) {
-      try {
-        await deleteFinance(id);
-        toast.success(
-          `Movimentação "${finance.description}" excluída com sucesso!`
-        );
-      } catch {
-        toast.error("Erro ao excluir movimentação");
-      }
+
+    const confirmMessage = `Tem certeza que deseja excluir "${finance.description}"? Esta ação não pode ser desfeita.`;
+
+    if (!confirm(confirmMessage)) return;
+
+    try {
+      const response = await deleteFinance(id);
+
+      toast.success(
+        response.message ||
+        `Movimentação "${finance.description}" excluída com sucesso!`
+      );
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Erro ao excluir movimentação"
+      );
     }
   };
 

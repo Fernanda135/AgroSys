@@ -34,12 +34,14 @@ export interface AddQuantityData {
 
 export interface StockResponse {
   success: boolean;
+  message: string;
   data: Stock[];
   totalValue?: number;
 }
 
 export interface SingleStockResponse {
   success: boolean;
+  message: string;
   data: Stock;
 }
 

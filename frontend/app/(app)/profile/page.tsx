@@ -5,11 +5,15 @@ import { User, Mail } from "lucide-react";
 
 import ProtectedRoute from "@/app/components/ProtectedRoute";
 import { useProfile } from "@/app/hooks/useProfile";
-import { profileService } from "@/app/services/profile.service";
 import { toast } from "react-toastify";
 
 export default function ProfilePage() {
-  const { profile, loading, reload } = useProfile();
+  const {
+    profile,
+    loading,
+    reload,
+    updateProfile,
+  } = useProfile();
 
   const [editing, setEditing] = useState(false);
 
@@ -40,13 +44,19 @@ export default function ProfilePage() {
 
   async function handleSave() {
     try {
-      await profileService.updateProfile(form);
+      await updateProfile(form);
+
       toast.success("Perfil atualizado com sucesso!");
       await reload();
       setEditing(false);
     } catch (error) {
       console.error(error);
-      toast.error("Erro ao atualizar o perfil.");
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Erro ao atualizar o perfil.");
+      }
     }
   }
 

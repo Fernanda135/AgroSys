@@ -36,12 +36,14 @@ export interface FinanceSummary {
 
 export interface FinanceResponse {
     success: boolean;
+    message: string;
     data: Finance[];
     summary?: FinanceSummary;
 }
 
 export interface SingleFinanceResponse {
     success: boolean;
+    message: string;
     data: Finance;
 }
 
