@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-
+  // Proxy para evitar CORS
   async rewrites() {
     return [
       {
@@ -11,16 +11,12 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // Configuração de imagens (se necessário)
+  // Configuração de imagens (se fizer upload)
   images: {
-    domains: ['agrosys-l2ho.onrender.com'],
-    // Ou use remotePatterns (recomendado)
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'agrosys-l2ho.onrender.com',
-        port: '',
-        pathname: '/**',
+        hostname: '**.onrender.com', // Permite todas imagens do Render
       },
     ],
   },
@@ -28,7 +24,10 @@ const nextConfig: NextConfig = {
   // Otimizações
   reactStrictMode: true,
   poweredByHeader: false,
-  
+  compress: true,
+
+  // Build otimizado
+  output: 'standalone',
 };
 
 export default nextConfig;
