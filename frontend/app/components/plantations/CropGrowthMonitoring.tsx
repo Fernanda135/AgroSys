@@ -1,10 +1,12 @@
 // CropGrowthMonitoring.tsx - Versão Simplificada
 import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { formatKg, formatKgShort } from '@/app/utils/formatKg';
+import { ChartColumnBig } from 'lucide-react';
 
 import { Plantation } from '@/app/services/plantation.service';
 import EmptyContainer from '../EmptyContainer';
+import { formatKg, formatKgShort } from '@/app/utils/formatKg';
+import { PLANTATION_STATUS } from '@/app/constants/plantation-status';
 
 interface CropGrowthMonitoringProps {
     plantations: Plantation[];
@@ -17,13 +19,13 @@ export default function CropGrowthMonitoring({ plantations }: CropGrowthMonitori
             const existing = acc.find(item => item.name === p.culture);
             if (existing) {
                 existing.count += 1;
-                existing.production += p.expected_production || 0;
+                existing.production += Number(p.expected_production ?? 0);
                 existing.quantity += p.quantity_planted || 0;
             } else {
                 acc.push({
                     name: p.culture,
                     count: 1,
-                    production: p.expected_production || 0,
+                    production: Number(p.expected_production ?? 0),
                     quantity: p.quantity_planted || 0,
                 });
             }
@@ -33,15 +35,18 @@ export default function CropGrowthMonitoring({ plantations }: CropGrowthMonitori
 
     const totalPlantations = plantations.length;
     const totalCultures = data.length;
-    const totalProduction = formatKg(plantations.reduce((sum, p) => sum + (p.expected_production || 0), 0));
-    const harvested = plantations.filter(p => p.status === 'HARVESTED').length;
+    const totalProduction = formatKg(plantations.reduce((sum, p) => sum + Number(p.expected_production ?? 0), 0));
+    const harvested = plantations.filter(p => p.status === PLANTATION_STATUS.HARVESTED).length;
 
     if (plantations.length === 0) {
         return (
-            <EmptyContainer
-                title='Nehuma plantação cadastrada'
-                description='Cadastre novas plantações'
-            />
+            <div className='mt-8'>
+                <EmptyContainer
+                    title='Nehuma plantação cadastrada'
+                    description='Cadastre novas plantações'
+                    icon={<ChartColumnBig />}
+                />
+            </div>
         );
     }
 

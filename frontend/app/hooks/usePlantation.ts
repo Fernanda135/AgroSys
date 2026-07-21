@@ -2,6 +2,43 @@ import { useEffect, useMemo, useState } from "react";
 import { Plantation, plantationService, PlantationStatus } from "@/app/services/plantation.service";
 
 
+const HARVEST_DELAY_DAYS = 5;
+
+function getCurrentStatus(plantation: Plantation): PlantationStatus {
+    if (plantation.status === "HARVESTED") {
+        return "HARVESTED";
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const planting = new Date(plantation.planting_date);
+    const harvest = plantation.harvest_date
+        ? new Date(plantation.harvest_date)
+        : null;
+
+    if (!harvest) {
+        return plantation.status;
+    }
+
+    // Após 5 dias da data prevista
+    const delayedDate = new Date(harvest);
+    delayedDate.setDate(delayedDate.getDate() + HARVEST_DELAY_DAYS);
+
+    if (today > delayedDate) {
+        return "DELAYED";
+    }
+
+    const totalDays = harvest.getTime() - planting.getTime();
+    const elapsedDays = today.getTime() - planting.getTime();
+    const progress = elapsedDays / totalDays;
+
+    if (progress < 0.33) return "PLANTED";
+    if (progress < 0.8) return "GROWING";
+
+    return "READY";
+}
+
 export const mockPlantations: Plantation[] = [
     {
         id: 1,
@@ -181,14 +218,21 @@ export function usePlantations() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const plantationsWithStatus = useMemo(() => {
+        return plantations.map(p => ({
+            ...p,
+            status: getCurrentStatus(p),
+        }));
+    }, [plantations]);
+
 
     async function loadPlantations() {
         try {
             setLoading(true);
             const response = await plantationService.getAll();
             if (response.success) {
-                // setPlantations(response.data);
-                setPlantations(mockPlantations);
+                setPlantations(response.data);
+                // setPlantations(mockPlantations);
                 setError(null);
                 return response;
             }
@@ -260,6 +304,8 @@ export function usePlantations() {
         try {
             const response =
                 await plantationService.update(id, data);
+            console.log("Resposta completa:", response);
+            console.log("Plantação atualizada:", response.data);
             if (response.success) {
                 setPlantations(prev =>
                     prev.map(plantation =>
@@ -347,177 +393,169 @@ export function usePlantations() {
     }, []);
 
     const totalCount = useMemo(
-        () => plantations.length,
-        [plantations]
+        () => plantationsWithStatus.length,
+        [plantationsWithStatus]
     );
-
 
     const harvestedCount = useMemo(
         () =>
-            plantations.filter(
+            plantationsWithStatus.filter(
                 p => p.status === "HARVESTED"
             ).length,
-        [plantations]
+        [plantationsWithStatus]
     );
-
-
 
     const pendingCount = useMemo(
-        () => plantations.filter(
-            p => p.status !== "HARVESTED"
-        ).length,
-        [plantations]
+        () =>
+            plantationsWithStatus.filter(
+                p => p.status !== "HARVESTED"
+            ).length,
+        [plantationsWithStatus]
     );
 
-
-    const delayedCount = useMemo(() => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        return plantations.filter(p => {
-            if (p.status === "HARVESTED" || !p.harvest_date) return false;
-
-            return new Date(p.harvest_date) < today;
-        }).length;
-    }, [plantations]);
-
+    const delayedCount = useMemo(
+        () =>
+            plantationsWithStatus.filter(
+                p => p.status === "DELAYED"
+            ).length,
+        [plantationsWithStatus]
+    );
 
     const cultureCount = useMemo(() => {
-        const cultures = new Set(plantations.map(p => p.culture.trim().toLowerCase()));
+        const cultures = new Set(
+            plantationsWithStatus.map(p => p.culture.trim().toLowerCase())
+        );
 
         return cultures.size;
-    }, [plantations]);
-
+    }, [plantationsWithStatus]);
 
     const cultures = useMemo(() => {
         const result: Record<string, number> = {};
-        plantations.forEach(p => {
+
+        plantationsWithStatus.forEach(p => {
             const key = p.culture.trim();
-            result[key] =
-                (result[key] || 0) + 1;
+            result[key] = (result[key] || 0) + 1;
         });
 
         return Object.entries(result)
             .sort((a, b) => b[1] - a[1])
             .map(([name, count]) => ({
                 name,
-                count
+                count,
             }));
-    }, [plantations]);
-
+    }, [plantationsWithStatus]);
 
     const harvestRate = useMemo(() => {
-        if (plantations.length === 0) return 0;
-        return Math.round(
-            (harvestedCount / plantations.length) * 100
-        );
-    }, [plantations, harvestedCount]);
+        if (plantationsWithStatus.length === 0) return 0;
 
+        return Math.round(
+            (harvestedCount / plantationsWithStatus.length) * 100
+        );
+    }, [plantationsWithStatus, harvestedCount]);
 
     const upcomingHarvest = useMemo(() => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const limitDate = new Date();
-        limitDate.setDate(
-            limitDate.getDate() + 30
-        );
 
-        return plantations.filter(p => {
+        const limitDate = new Date(today);
+        limitDate.setDate(limitDate.getDate() + 30);
 
-            if (p.status === "HARVESTED" || !p.harvest_date) return false;
+        return plantationsWithStatus.filter(p => {
+            if (
+                p.status === "HARVESTED" ||
+                p.status === "DELAYED" ||
+                !p.harvest_date
+            ) {
+                return false;
+            }
 
             const harvestDate = new Date(p.harvest_date);
-            return (harvestDate >= today && harvestDate <= limitDate
-            );
+
+            return harvestDate >= today && harvestDate <= limitDate;
         }).length;
-    }, [plantations]);
+    }, [plantationsWithStatus]);
 
 
     const growthStatus = useMemo(() => {
-        const today = new Date();
         const status = {
             early: 0,
             growing: 0,
             mature: 0,
-            harvested: 0
+            harvested: 0,
+            delayed: 0,
         };
-        plantations.forEach(p => {
-            if (p.status === "HARVESTED") {
-                status.harvested++;
-                return;
-            }
 
-            if (!p.planting_date) return;
+        plantationsWithStatus.forEach(p => {
+            switch (p.status) {
+                case "PLANTED":
+                    status.early++;
+                    break;
 
-            const planted = new Date(p.planting_date);
-            const harvest = p.harvest_date ? new Date(p.harvest_date) : null;
+                case "GROWING":
+                    status.growing++;
+                    break;
 
-            if (!harvest) {
-                status.growing++;
-                return;
-            }
+                case "READY":
+                    status.mature++;
+                    break;
 
-            const totalDays = harvest.getTime() - planted.getTime();
-            const elapsedDays = today.getTime() - planted.getTime();
-            const progress = elapsedDays / totalDays;
+                case "HARVESTED":
+                    status.harvested++;
+                    break;
 
-            if (progress < 0.33) {
-                status.early++;
-            } else if (progress < 0.8) {
-                status.growing++;
-            } else {
-                status.mature++;
+                case "DELAYED":
+                    status.delayed++;
+                    break;
             }
         });
 
         return status;
-    }, [plantations]);
+    }, [plantationsWithStatus]);
 
 
     const growthProgress = useMemo(() => {
-        const progresses = plantations.filter(p => p.status !== "HARVESTED" && p.harvest_date).map(p => {
-            const start = new Date(p.planting_date).getTime();
-            const end = new Date(p.harvest_date!).getTime();
-            const today = Date.now();
-            const progress = ((today - start) / (end - start)) * 100;
+        const progresses = plantationsWithStatus
+            .filter(
+                p =>
+                    p.status !== "HARVESTED" &&
+                    p.status !== "DELAYED" &&
+                    p.harvest_date
+            )
+            .map(p => {
+                const start = new Date(p.planting_date).getTime();
+                const end = new Date(p.harvest_date!).getTime();
 
-            return Math.min(Math.max(progress, 0), 100);
-        });
-        if (progresses.length === 0)
-            return 0;
+                const progress = ((Date.now() - start) / (end - start)) * 100;
+
+                return Math.min(Math.max(progress, 0), 100);
+            });
+
+        if (!progresses.length) return 0;
+
         return Math.round(
-            progresses.reduce(
-                (a, b) => a + b,
-                0
-            ) / progresses.length
+            progresses.reduce((a, b) => a + b, 0) / progresses.length
         );
-    }, [plantations]);
+    }, [plantationsWithStatus]);
 
 
     const totalExpectedProduction = useMemo(() => {
-        return plantations.reduce(
+        return plantationsWithStatus.reduce(
             (total, plantation) =>
-                total +
-                (plantation.expected_production || 0),
+                total + (plantation.expected_production || 0),
             0
         );
-    }, [plantations]);
-
+    }, [plantationsWithStatus]);
 
     const overdueHarvest = useMemo(() => {
-        const today = new Date();
-
-        return plantations.filter(p => {
-            if (p.status === "HARVESTED" || !p.harvest_date) return false;
-
-            return (new Date(p.harvest_date) < today);
-        }).length;
-    }, [plantations]);
+        return plantationsWithStatus.filter(
+            p => p.status === "DELAYED"
+        ).length;
+    }, [plantationsWithStatus]);
 
 
 
     return {
-        plantations,
+        plantations: plantationsWithStatus,
         loading,
         error,
 

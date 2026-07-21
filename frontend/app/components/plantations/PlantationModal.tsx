@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { X, Sprout } from "lucide-react";
 import { toast } from "react-toastify";
 
-import { getToday } from "@/app/utils/date";
+import { getToday, formatDateInput } from "@/app/utils/date";
 
 interface PlantationModalProps {
     isOpen: boolean;
@@ -62,8 +62,8 @@ export default function PlantationModal({
     useEffect(() => {
         if (initialData && mode === "edit") {
             setCulture(initialData.culture);
-            setPlantingDate(initialData.planting_date);
-            setHarvestDate(initialData.harvest_date ?? "");
+            setPlantingDate(formatDateInput(initialData.planting_date));
+            setHarvestDate(initialData.harvest_date ? formatDateInput(initialData.harvest_date) : "");
             setVariety(initialData.variety ?? "");
             setQuantityPlanted(initialData.quantity_planted ?? 1);
             setUnit(initialData.unit ?? "");

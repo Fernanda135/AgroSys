@@ -5,8 +5,7 @@ export type PlantationStatus =
     | "GROWING"
     | "READY"
     | "HARVESTED"
-    | "CANCELLED";
-
+    | "DELAYED";
 export interface Plantation {
     id: number;
     user_id: number;
@@ -129,12 +128,36 @@ export const plantationService = {
     },
 
     async harvest(id: number) {
-        const { data } = await api.patch<SinglePlantationResponse>(
-            `/plantations/${id}/harvest`,
-        );
+        console.log('🌾 Harvesting plantation ID:', id);
+        console.log('🔗 URL:', `/plantations/${id}/harvest`);
 
-        return data;
+        try {
+            const { data } = await api.patch<SinglePlantationResponse>(
+                `/plantations/${id}/harvest`
+            );
+            console.log('✅ Harvest response:', data);
+            return data;
+        } catch (error: any) {
+            console.error('❌ Harvest error:', {
+                status: error.response?.status,
+                data: error.response?.data,
+                message: error.message,
+                config: error.config
+            });
+
+            // Se for 404, tenta com PUT como fallback
+            if (error.response?.status === 404) {
+                console.log('🔄 Tentando PUT como fallback...');
+                const { data } = await api.put<SinglePlantationResponse>(
+                    `/plantations/${id}/harvest`
+                );
+                return data;
+            }
+
+            throw new Error(error.response?.data?.message || 'Erro ao colher plantação');
+        }
     },
+
 
     async getActive() {
         const { data } = await api.get<PlantationResponse>("/plantations/active");

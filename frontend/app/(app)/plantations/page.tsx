@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Sprout, TriangleAlert, Shapes } from "lucide-react";
+import { Sprout, TriangleAlert, Shapes, Vegan } from "lucide-react";
 import { toast } from "react-toastify";
 
 import ProtectedRoute from '@/app/components/ProtectedRoute';
@@ -12,6 +12,7 @@ import PlantationModal from "@/app/components/plantations/PlantationModal";
 import PlantationTable from "@/app/components/plantations/PlantationTable";
 import PlantationStatusChart from "@/app/components/plantations/PlantationStatusChart";
 import CropGrowthMonitoring from "@/app/components/plantations/CropGrowthMonitoring";
+import { useStocks } from "@/app/hooks/useStocks";
 
 export default function PlantationsPage() {
   const {
@@ -30,6 +31,7 @@ export default function PlantationsPage() {
     totalExpectedProduction,
     overdueHarvest,
   } = usePlantations();
+  const { addStock } = useStocks();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"add" | "edit">("add");
@@ -71,24 +73,31 @@ export default function PlantationsPage() {
     }
   };
 
-  const handleHarvestClick = async (id: number) => {
+  const handleHarvestClick = async (id: number, stockData?: any) => {
     const plantation = plantations.find((p) => p.id === id);
 
     if (plantation && plantation.status !== "HARVESTED") {
-      const confirmMessage =
-        `Tem certeza que deseja marcar "${plantation.culture}" como colhida?`;
+      try {
+        const harvestResponse = await harvestPlantation(id);
 
-      if (confirm(confirmMessage)) {
-        try {
-          const response = await harvestPlantation(id);
-          toast.success(response.message);
-        } catch (error) {
-          toast.error(
-            error instanceof Error
-              ? error.message
-              : "Erro ao colher plantação"
-          );
+        if (stockData) {
+          try {
+            await addStock(stockData);
+            toast.success(`${harvestResponse.message} Produto adicionado ao estoque!`);
+          } catch (stockError) {
+            console.error("Erro ao adicionar ao estoque:", stockError);
+            toast.warning(`${harvestResponse.message} Mas houve erro ao adicionar ao estoque.`);
+          }
+        } else {
+          toast.success(harvestResponse.message);
         }
+
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Erro ao colher plantação"
+        );
       }
     }
   };
@@ -145,19 +154,19 @@ export default function PlantationsPage() {
                 icon={<Sprout size={50} />}
               />
               <SummaryCard
-                value={delayedCount}
-                title="Colheitas atrasadas"
-                icon={<TriangleAlert className="text-(--warning)" size={50} />}
-              />
-              <SummaryCard
                 value={cultureCount}
                 title="Tipos de culturas"
                 icon={<Shapes size={50} />}
               />
               <SummaryCard
-                value={upcomingHarvest}
-                title="Tipos de culturas"
-                icon={<Shapes size={50} />}
+                value={`${harvestRate}%`}
+                title="Das plantações colhidas"
+                icon={<Vegan size={50} />}
+              />
+              <SummaryCard
+                value={delayedCount}
+                title="Colheitas atrasadas"
+                icon={<TriangleAlert className="text-(--danger)" size={50} />}
               />
             </div>
 
@@ -166,7 +175,9 @@ export default function PlantationsPage() {
             </div>
           </div>
 
-          <CropGrowthMonitoring plantations={plantations} />
+          <div>
+            <CropGrowthMonitoring plantations={plantations} />
+          </div>
 
           <PlantationTable
             plantations={plantations}
