@@ -18,6 +18,7 @@ export default function StockPage() {
     totalProducts,
     totalQuantity,
     lowStockCount,
+    emptyStockCount,
     addStock,
     updateStock,
     deleteStock,
@@ -115,7 +116,7 @@ export default function StockPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <SummaryCard
               value={totalProducts}
               title="Produtos cadastrados"
@@ -130,6 +131,11 @@ export default function StockPage() {
               value={lowStockCount}
               title="Estoque baixo"
               icon={<TriangleAlert className="text-(--warning)" size={50} />}
+            />
+            <SummaryCard
+              value={emptyStockCount}
+              title="Sem estoque"
+              icon={<TriangleAlert className="text-(--danger)" size={50} />}
             />
           </div>
 
