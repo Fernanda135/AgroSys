@@ -13,6 +13,7 @@ interface StockTableProps {
     onEdit: (stock: Stock) => void;
     onDelete: (id: number) => void;
     onAddQuantity?: (id: number) => void;
+    showActions?: boolean;
 }
 
 export default function StockTable({
@@ -20,6 +21,7 @@ export default function StockTable({
     onEdit,
     onDelete,
     onAddQuantity,
+    showActions = true
 }: StockTableProps) {
 
     const [search, setSearch] = useState("");
@@ -27,7 +29,6 @@ export default function StockTable({
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [selectedUnit, setSelectedUnit] = useState("all");
 
-    // Extrair categorias e unidades únicas dos produtos
     const uniqueCategories = Array.from(
         new Set(
             stocks
@@ -44,18 +45,12 @@ export default function StockTable({
     );
 
     const filteredStocks = stocks.filter((stock) => {
-        // Filtro por status
         if (selectedStatus === "available" && stock.quantity <= 5) return false;
         if (selectedStatus === "low" && (stock.quantity === 0 || stock.quantity > 5)) return false;
         if (selectedStatus === "empty" && stock.quantity > 0) return false;
-
-        // Filtro por categoria
         if (selectedCategory !== "all" && stock.category !== selectedCategory) return false;
-
-        // Filtro por unidade
         if (selectedUnit !== "all" && stock.unit !== selectedUnit) return false;
 
-        // Filtro por busca
         if (search.trim() !== "") {
             const value = search.toLowerCase().trim();
             return (
@@ -81,7 +76,7 @@ export default function StockTable({
 
     return (
         <>
-            <div className="mt-8">
+            {showActions && (<div className="mt-8">
                 <div className="flex flex-wrap gap-4">
                     <input
                         type="text"
@@ -128,7 +123,8 @@ export default function StockTable({
                         ))}
                     </select>
                 </div>
-            </div>
+            </div>)}
+
             <div className="mt-2 overflow-hidden rounded-xl bg-white shadow-lg">
                 <div className="overflow-x-auto">
                     <table className="w-full">
@@ -137,21 +133,23 @@ export default function StockTable({
                                 <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
                                     Produto
                                 </th>
-                                <th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
+                                {showActions && (<th className="px-6 py-4 text-left text-sm font-semibold text-(--black)">
                                     Categoria
-                                </th>
+                                </th>)}
                                 <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
                                     Quantidade
                                 </th>
-                                <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
-                                    Preço Unitário
-                                </th>
-                                <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
-                                    Status
-                                </th>
-                                <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
-                                    Ações
-                                </th>
+                                {showActions && (<>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
+                                        Preço Unitário
+                                    </th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
+                                        Status
+                                    </th>
+                                    <th className="px-6 py-4 text-center text-sm font-semibold text-(--black)">
+                                        Ações
+                                    </th>
+                                </>)}
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-(--gray)">
@@ -163,58 +161,61 @@ export default function StockTable({
                                     <td className="px-6 py-4 text-sm font-medium text-(--black)">
                                         {stock.product_name}
                                     </td>
-                                    <td className="px-6 py-4 text-sm text-(--black)">
+                                    {showActions && (<td className="px-6 py-4 text-sm text-(--black)">
                                         {stock.category || "-"}
-                                    </td>
+                                    </td>)}
                                     <td className="px-6 py-4 text-center text-sm font-medium text-(--black)">
                                         {stock.quantity} {stock.unit || "un"}
                                     </td>
-                                    <td className="px-6 py-4 text-center text-sm font-medium text-(--black)">
-                                        {formatCurrency(stock.unit_price)}
-                                    </td>
-                                    <td className="px-6 py-4 text-center">
-                                        <span
-                                            className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${stock.quantity === 0
-                                                    ? "bg-red-100 text-(--danger)"
-                                                    : stock.quantity <= 5
-                                                        ? "bg-yellow-100 text-(--warning)"
-                                                        : "bg-(--green-50) text-(--green-500)"
-                                                }`}
-                                        >
-                                            {stock.quantity === 0
-                                                ? "Sem estoque"
-                                                : stock.quantity <= 5
-                                                    ? "Estoque baixo"
-                                                    : "Disponível"}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center justify-center gap-2">
-                                            {onAddQuantity && (
-                                                <button
-                                                    onClick={() => onAddQuantity(stock.id)}
-                                                    className="rounded-lg p-2 text-(--green-500) transition-all hover:bg-green-50 hover:text-green-900 cursor-pointer"
-                                                    title="Adicionar quantidade"
+                                    {showActions && (
+                                        <>
+                                            <td className="px-6 py-4 text-center text-sm font-medium text-(--black)">
+                                                {formatCurrency(stock.unit_price)}
+                                            </td>
+                                            <td className="px-6 py-4 text-center">
+                                                <span
+                                                    className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${stock.quantity === 0
+                                                        ? "bg-red-100 text-(--danger)"
+                                                        : stock.quantity <= 5
+                                                            ? "bg-yellow-100 text-(--warning)"
+                                                            : "bg-(--green-50) text-(--green-500)"
+                                                        }`}
                                                 >
-                                                    <Package size={20} />
-                                                </button>
-                                            )}
-                                            <button
-                                                onClick={() => onEdit(stock)}
-                                                className="rounded-lg p-2 text-(--info) transition-all hover:bg-blue-50 hover:text-blue-900 cursor-pointer"
-                                                title="Editar produto"
-                                            >
-                                                <SquarePen size={20} />
-                                            </button>
-                                            <button
-                                                onClick={() => onDelete(stock.id)}
-                                                className="rounded-lg p-2 text-(--danger) transition-all hover:bg-red-50 hover:text-red-900 cursor-pointer"
-                                                title="Excluir produto"
-                                            >
-                                                <Trash2 size={20} />
-                                            </button>
-                                        </div>
-                                    </td>
+                                                    {stock.quantity === 0
+                                                        ? "Sem estoque"
+                                                        : stock.quantity <= 5
+                                                            ? "Estoque baixo"
+                                                            : "Disponível"}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    {onAddQuantity && (
+                                                        <button
+                                                            onClick={() => onAddQuantity(stock.id)}
+                                                            className="rounded-lg p-2 text-(--green-500) transition-all hover:bg-green-50 hover:text-green-900 cursor-pointer"
+                                                            title="Adicionar quantidade"
+                                                        >
+                                                            <Package size={20} />
+                                                        </button>
+                                                    )}
+                                                    <button
+                                                        onClick={() => onEdit(stock)}
+                                                        className="rounded-lg p-2 text-(--info) transition-all hover:bg-blue-50 hover:text-blue-900 cursor-pointer"
+                                                        title="Editar produto"
+                                                    >
+                                                        <SquarePen size={20} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => onDelete(stock.id)}
+                                                        className="rounded-lg p-2 text-(--danger) transition-all hover:bg-red-50 hover:text-red-900 cursor-pointer"
+                                                        title="Excluir produto"
+                                                    >
+                                                        <Trash2 size={20} />
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </>)}
                                 </tr>
                             ))}
                         </tbody>

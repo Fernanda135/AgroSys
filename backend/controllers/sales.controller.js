@@ -277,27 +277,6 @@ exports.delete = async (req, res, next) => {
             );
         }
 
-        for (const item of sale.items) {
-            const stock =
-                await db.Stock.findByPk(
-                    item.stock_id,
-                    {
-                        transaction
-                    }
-                );
-
-            if (stock) {
-                await stock.update({
-                    quantity:
-                        Number(stock.quantity) +
-                        Number(item.quantity)
-                },
-                    {
-                        transaction
-                    });
-            }
-        }
-
         await sale.destroy({
             transaction
         });
