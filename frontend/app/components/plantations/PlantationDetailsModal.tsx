@@ -53,7 +53,7 @@ export default function PlantationDetailsModal({
                                 <Tag className="mt-0.5 text-gray-400" size={18} />
                                 <div>
                                     <p className="text-xs font-medium text-gray-500">Cultura</p>
-                                    <p className="text-sm font-semibold text-gray-900">
+                                    <p className="text-sm font-semibold text-(--black)">
                                         {plantation.culture}
                                     </p>
                                 </div>

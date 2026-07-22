@@ -50,10 +50,10 @@ export default function NavItems() {
             position: 'top'
         },
         {
-            label: 'Financeiro',
-            path: '/finance',
+            label: 'Vendas',
+            path: '/sale',
             icon: <Banknote size={20} />,
-            active: isNavItemActive(pathname, '/finance'),
+            active: isNavItemActive(pathname, '/sale'),
             position: 'top'
         },
         {

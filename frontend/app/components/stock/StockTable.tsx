@@ -24,15 +24,40 @@ export default function StockTable({
 
     const [search, setSearch] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("all");
+    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [selectedUnit, setSelectedUnit] = useState("all");
+
+    // Extrair categorias e unidades únicas dos produtos
+    const uniqueCategories = Array.from(
+        new Set(
+            stocks
+                .map((stock) => stock.category)
+                .filter((category): category is string => typeof category === "string")
+        )
+    );
+    const uniqueUnits = Array.from(
+        new Set(
+            stocks
+                .map((stock) => stock.unit)
+                .filter((unit): unit is string => typeof unit === "string")
+        )
+    );
 
     const filteredStocks = stocks.filter((stock) => {
+        // Filtro por status
         if (selectedStatus === "available" && stock.quantity <= 5) return false;
         if (selectedStatus === "low" && (stock.quantity === 0 || stock.quantity > 5)) return false;
         if (selectedStatus === "empty" && stock.quantity > 0) return false;
 
+        // Filtro por categoria
+        if (selectedCategory !== "all" && stock.category !== selectedCategory) return false;
+
+        // Filtro por unidade
+        if (selectedUnit !== "all" && stock.unit !== selectedUnit) return false;
+
+        // Filtro por busca
         if (search.trim() !== "") {
             const value = search.toLowerCase().trim();
-
             return (
                 stock.product_name.toLowerCase().includes(value) ||
                 stock.category?.toLowerCase().includes(value)
@@ -56,25 +81,51 @@ export default function StockTable({
 
     return (
         <>
-            <div className="mt-8 ">
-                <div className="flex justify-between gap-2.5">
+            <div className="mt-8">
+                <div className="flex flex-wrap gap-4">
                     <input
                         type="text"
                         placeholder="Pesquisar produto"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="rounded-lg border border-gray-300 px-5 py-2 text-sm outline-none"
+                        className="flex-1 min-w-50 px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
                     />
 
                     <select
                         value={selectedStatus}
                         onChange={(e) => setSelectedStatus(e.target.value)}
-                        className="cursor-pointer rounded-lg border border-gray-300 px-5 py-2 text-sm outline-none"
+                        className="cursor-pointer rounded-lg border border-gray-300 px-5 py-2 text-sm outline-none focus:border-(--green-500) focus:ring-2 focus:ring-(--green-50)"
                     >
-                        <option value="all">Todos</option>
+                        <option value="all">Todos os status</option>
                         <option value="available">Disponível</option>
                         <option value="low">Estoque baixo</option>
                         <option value="empty">Sem estoque</option>
+                    </select>
+
+                    <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="cursor-pointer rounded-lg border border-gray-300 px-5 py-2 text-sm outline-none focus:border-(--green-500) focus:ring-2 focus:ring-(--green-50)"
+                    >
+                        <option value="all">Todas categorias</option>
+                        {uniqueCategories.map((category) => (
+                            <option key={category} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
+
+                    <select
+                        value={selectedUnit}
+                        onChange={(e) => setSelectedUnit(e.target.value)}
+                        className="cursor-pointer rounded-lg border border-gray-300 px-5 py-2 text-sm outline-none focus:border-(--green-500) focus:ring-2 focus:ring-(--green-50)"
+                    >
+                        <option value="all">Todas unidades</option>
+                        {uniqueUnits.map((unit) => (
+                            <option key={unit} value={unit}>
+                                {unit}
+                            </option>
+                        ))}
                     </select>
                 </div>
             </div>
@@ -124,10 +175,10 @@ export default function StockTable({
                                     <td className="px-6 py-4 text-center">
                                         <span
                                             className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${stock.quantity === 0
-                                                ? "bg-red-100 text-(--danger)"
-                                                : stock.quantity <= 5
-                                                    ? "bg-yellow-100 text-(--warning)"
-                                                    : "bg-(--green-50) text-(--green-500)"
+                                                    ? "bg-red-100 text-(--danger)"
+                                                    : stock.quantity <= 5
+                                                        ? "bg-yellow-100 text-(--warning)"
+                                                        : "bg-(--green-50) text-(--green-500)"
                                                 }`}
                                         >
                                             {stock.quantity === 0

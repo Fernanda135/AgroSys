@@ -102,11 +102,11 @@ export default function PlantationTable({
     return (
         <>
             <div className="mt-10">
-                <div className="flex justify-between">
+                <div className="flex flex-wrap gap-4">
                     <input
                         type="text"
                         placeholder="Pesquisar cultura ou variedade"
-                        className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
+                        className="flex-1 min-w-50 px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
                         value={search}
                         onChange={handleSearch}
                     />

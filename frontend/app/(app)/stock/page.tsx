@@ -116,16 +116,11 @@ export default function StockPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             <SummaryCard
               value={totalProducts}
               title="Produtos cadastrados"
               icon={<Package size={50} />}
-            />
-            <SummaryCard
-              value={totalQuantity}
-              title="Itens em estoque"
-              icon={<Boxes size={50} />}
             />
             <SummaryCard
               value={lowStockCount}

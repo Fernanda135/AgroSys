@@ -150,12 +150,6 @@ export default function PlantationModal({
                             {mode === "add" ? "Nova Plantação" : "Editar Plantação"}
                         </h2>
                     </div>
-                    <button
-                        onClick={onClose}
-                        className="rounded-lg p-1.5 text-(--gray-2) transition-all hover:bg-(--gray) hover:text-(--black) cursor-pointer"
-                    >
-                        <X size={20} />
-                    </button>
                 </div>
 
                 <form onSubmit={handleSubmit} className="p-6">

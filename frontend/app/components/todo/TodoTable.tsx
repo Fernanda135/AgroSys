@@ -92,20 +92,21 @@ export default function TodoTable({
         <div>
 
             {showActions && (
-                <div className="mt-16 flex items-center justify-between">
+                <div className="mt-10">
 
 
-                    <div className="flex gap-2.5">
+                    <div className="flex flex-wrap gap-4">
                         <input
                             id="text"
                             type="text"
                             required
                             placeholder="Pesquisat tarefa"
-                            className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
+                            className="flex-1 min-w-50 px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none"
                             value={search}
                             onChange={handleSearch}
                         />
 
+                        <div className="flex gap-2.5" >
                         <select
                             id="status"
                             className="px-5 py-2 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer"
@@ -115,9 +116,6 @@ export default function TodoTable({
                             <option value="complete">Concluídas</option>
                             <option value="pending">Pendentes</option>
                         </select>
-                    </div>
-
-                    <div className="flex gap-2.5" >
                         <button
                             onClick={handleCompleteAll}
                             className="px-5 py-2 flex items-center gap-2 rounded-lg bg-(--green-500) text-sm font-medium text-white transition-all hover:bg-green-700 cursor-pointer"
@@ -132,6 +130,8 @@ export default function TodoTable({
                             <Trash2 size={18} />
                             Deletar concluídas
                         </button>
+                    </div>
+
                     </div>
                 </div>
             )}

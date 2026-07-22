@@ -9,7 +9,7 @@ const app = express();
 // Importação das rotas
 const auditLogRoute = require('./routes/auditLog.routes');
 const authRoute = require('./routes/auth.routes');
-const financeRoute = require('./routes/finances.routes');
+const saleRoute = require('./routes/sales.routes');
 const plantationRoute = require('./routes/plantations.routes');
 const profileRoute = require('./routes/profile.route');
 const stockRoute = require('./routes/stock.route');
@@ -101,8 +101,8 @@ app.use('/api/stocks', verifyToken, auditLog, stockRoute);
 // Plantations (plantações)
 app.use('/api/plantations', verifyToken, auditLog, plantationRoute);
 
-// Finances (finanças)
-app.use('/api/finances', verifyToken, auditLog, financeRoute);
+// Sales (vendas)
+app.use('/api/sales', verifyToken, auditLog, saleRoute);
 
 // Audit Logs (logs de auditoria)
 app.use('/api/audit-logs', verifyToken, auditLog, auditLogRoute);
